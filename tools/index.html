@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="fi"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elämys B&amp;E Tools</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:#1f2937; }
+  .container { width:100%; max-width:520px; padding:24px; }
+  .card { background:white; padding:36px 32px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
+  .lock-icon { width:48px; height:48px; margin:0 auto 14px; background:#eff6ff; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .lock-icon svg { width:22px; height:22px; stroke:#1e40af; }
+  h1 { margin:0 0 6px 0; font-size:22px; text-align:center; }
+  .sub { margin:0 0 22px 0; color:#6b7280; font-size:13px; text-align:center; }
+  input { width:100%; padding:12px 14px; font-size:15px; font-family:inherit; border:1px solid #d1d5db; border-radius:8px; outline:none; margin-bottom:12px; }
+  input:focus { border-color:#1e40af; box-shadow:0 0 0 3px rgba(30,64,175,0.12); }
+  button.primary { width:100%; padding:12px; background:#1e40af; color:white; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; }
+  button.primary:hover { background:#1e3a8a; }
+  button.primary:disabled { background:#9ca3af; cursor:not-allowed; }
+  .err { color:#dc2626; font-size:13px; margin-top:10px; min-height:18px; text-align:center; }
+  .picker { display:none; gap:14px; flex-direction:column; }
+  .picker.show { display:flex; }
+  .picker h2 { margin:0 0 8px 0; font-size:18px; }
+  .tool-card { display:flex; gap:16px; padding:18px; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; text-decoration:none; color:inherit; transition:all 0.15s; cursor:pointer; }
+  .tool-card:hover { background:#eff6ff; border-color:#1e40af; transform:translateY(-1px); }
+  .tool-icon { width:48px; height:48px; flex-shrink:0; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+  .tool-icon.dash { background:#dbeafe; color:#1e40af; }
+  .tool-icon.budj { background:#dcfce7; color:#059669; }
+  .tool-icon.gen { background:#fef3c7; color:#92400e; }
+  .tool-title { font-weight:600; font-size:15px; margin-bottom:2px; }
+  .tool-desc { font-size:12px; color:#6b7280; }
+  .form.hide { display:none; }
+  .footer { margin-top:18px; text-align:center; font-size:11px; color:#9ca3af; }
+  .lock-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .lock-row button { background:transparent; border:1px solid #d1d5db; color:#6b7280; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px; font-family:inherit; }
+  .lock-row button:hover { background:#f3f4f6; }
+</style></head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="lock-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <h1>Elämys B&amp;E Tools</h1>
+    <p class="sub">Sisäinen Business &amp; Events -työkalupakki. Anna salasana jatkaaksesi.</p>
+
+    <form class="form" id="loginForm" autocomplete="off">
+      <input type="password" id="pw" placeholder="Salasana" autofocus required>
+      <button type="submit" class="primary" id="btn">Avaa</button>
+      <div class="err" id="err"></div>
+    </form>
+
+    <div class="picker" id="picker">
+      <div class="lock-row">
+        <h2>Valitse työkalu</h2>
+        <button onclick="lockOut()">🔒 Lukitse</button>
+      </div>
+      <a href="/seuranta" class="tool-card">
+        <div class="tool-icon dash">📊</div>
+        <div>
+          <div class="tool-title">Seuranta — Myyntitilanne 25-26</div>
+          <div class="tool-desc">Liiketoimintayksiköiden myynti- ja katetoteumat tilikaudella, kvartaali- ja kuukausinäkymät, vertailut edelliseen vuoteen.</div>
+        </div>
+      </a>
+      <a href="/budjetti" class="tool-card">
+        <div class="tool-icon budj">🎯</div>
+        <div>
+          <div class="tool-title">Budjetti 2026 — Skenaariotyökalu</div>
+          <div class="tool-desc">H2 2026 (heinä-joulukuu) budjettiskenaariot per yksikkö, EBITDA-vaikutus reaaliajassa, vertailupohja H2 2025.</div>
+        </div>
+      </a>
+    </div>
+    <div class="footer">B&amp;E Tools · Sisäinen käyttö</div>
+  </div>
+</div>
+<script>
+const S = "LhUodKxzN+JGNEh8goPylg==", N = "kRkrlxHZkzAHbbJ3", C = "xTat/hleFer0vFuBwVsGx854rkdeag/dRXFcDZlDlMOKEFkk7g==", ITER = 100000;
+const ALLOWED = ["/seuranta", "/budjetti", "/seuranta.html", "/budjetti.html"];
+
+function b(x) { const s=atob(x); const a=new Uint8Array(s.length); for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i); return a; }
+async function dk(p, salt) {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(p), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name:"PBKDF2", salt, iterations:ITER, hash:"SHA-256" }, k, { name:"AES-GCM", length:256 }, false, ["decrypt"]);
+}
+async function verify(p) {
+  const key = await dk(p, b(S));
+  const plain = await crypto.subtle.decrypt({ name:"AES-GCM", iv:b(N) }, key, b(C));
+  return new TextDecoder().decode(plain) === "OK-BE-TOOLS-AUTH-2026";
+}
+
+function showPicker() {
+  document.getElementById("loginForm").classList.add("hide");
+  document.getElementById("picker").classList.add("show");
+  const params = new URLSearchParams(location.search);
+  const ret = params.get("return");
+  if (ret && ALLOWED.includes(ret)) location.href = ret;
+}
+
+window.lockOut = function() {
+  sessionStorage.removeItem("be_tools_pw");
+  location.href = "/";
+};
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById("btn"), err = document.getElementById("err");
+  const pw = document.getElementById("pw").value;
+  btn.disabled = true; btn.textContent = "Tarkistetaan…"; err.textContent = "";
+  try {
+    if (await verify(pw)) {
+      sessionStorage.setItem("be_tools_pw", pw);
+      showPicker();
+    } else { throw new Error("bad"); }
+  } catch (e) {
+    err.textContent = "Väärä salasana.";
+    btn.disabled = false; btn.textContent = "Avaa";
+    document.getElementById("pw").select();
+  }
+});
+
+(async () => {
+  const cached = sessionStorage.getItem("be_tools_pw");
+  if (cached) {
+    try { if (await verify(cached)) showPicker(); else sessionStorage.removeItem("be_tools_pw"); }
+    catch (_) { sessionStorage.removeItem("be_tools_pw"); }
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.get("error")) document.getElementById("err").textContent = "Istunto vanhentui. Kirjaudu uudelleen.";
+})();
+</script>
+</body></html>
