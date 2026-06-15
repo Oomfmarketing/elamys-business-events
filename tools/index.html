@@ -23,8 +23,8 @@
   .tool-card:hover { background:#eff6ff; border-color:#1e40af; transform:translateY(-1px); }
   .tool-icon { width:48px; height:48px; flex-shrink:0; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; }
   .tool-icon.dash { background:#dbeafe; color:#1e40af; }
-  .tool-icon.budj { background:#dcfce7; color:#059669; }
-  .tool-icon.gen { background:#fef3c7; color:#92400e; }
+  .tool-icon.myyn { background:#dcfce7; color:#059669; }
+  .tool-icon.budj { background:#fef3c7; color:#92400e; }
   .tool-title { font-weight:600; font-size:15px; margin-bottom:2px; }
   .tool-desc { font-size:12px; color:#6b7280; }
   .form.hide { display:none; }
@@ -58,24 +58,31 @@
       <a href="/seuranta" class="tool-card">
         <div class="tool-icon dash">📊</div>
         <div>
-          <div class="tool-title">Seuranta — Myyntitilanne 25-26</div>
-          <div class="tool-desc">Liiketoimintayksiköiden myynti- ja katetoteumat tilikaudella, kvartaali- ja kuukausinäkymät, vertailut edelliseen vuoteen.</div>
+          <div class="tool-title">Seuranta — Laskutus (Jul 25 – Dec 26)</div>
+          <div class="tool-desc">Pidennetty tilikausi 18 kk. Myynti- ja katetoteumat per yksikkö, kvartaalit, kuukausijakauma, vertailut edelliseen vuoteen.</div>
+        </div>
+      </a>
+      <a href="/myynti" class="tool-card">
+        <div class="tool-icon myyn">🎯</div>
+        <div>
+          <div class="tool-title">Myynti — CRM Pipeline</div>
+          <div class="tool-desc">Avoimet kaupat, voitot ja häviöt, uusasiakashankinta, top deals per yksikkö, myyjäkohtainen suoritus.</div>
         </div>
       </a>
       <a href="/budjetti" class="tool-card">
-        <div class="tool-icon budj">🎯</div>
+        <div class="tool-icon budj">📈</div>
         <div>
           <div class="tool-title">Budjetti 2026 — Skenaariotyökalu</div>
           <div class="tool-desc">H2 2026 (heinä-joulukuu) budjettiskenaariot per yksikkö, EBITDA-vaikutus reaaliajassa, vertailupohja H2 2025.</div>
         </div>
       </a>
     </div>
-    <div class="footer">B&amp;E Tools · Sisäinen käyttö</div>
+    <div class="footer">B&amp;E Tools · Sisäinen käyttö · Päivitetty 15.6.2026</div>
   </div>
 </div>
 <script>
-const S = "LhUodKxzN+JGNEh8goPylg==", N = "kRkrlxHZkzAHbbJ3", C = "xTat/hleFer0vFuBwVsGx854rkdeag/dRXFcDZlDlMOKEFkk7g==", ITER = 100000;
-const ALLOWED = ["/seuranta", "/budjetti", "/seuranta.html", "/budjetti.html"];
+const S = "g/uhx+gvA2d38VjUjNTcqQ==", N = "EtXmPbBGsCBl2OOl", C = "ZCsoItfc/zTVbIjgv4u71MomTeF/LoJkYKUj2YkE8I33iGRx0g==", ITER = 100000;
+const ALLOWED = ["/seuranta","/myynti","/budjetti","/seuranta.html","/myynti.html","/budjetti.html"];
 
 function b(x) { const s=atob(x); const a=new Uint8Array(s.length); for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i); return a; }
 async function dk(p, salt) {
