@@ -1,126 +1,210 @@
-<!DOCTYPE html><html lang="fi"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Elämys Internal Tools</title>
 <style>
   * { box-sizing: border-box; }
-  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:#1f2937; }
-  .container { width:100%; max-width:520px; padding:24px; }
-  .card { background:white; padding:36px 32px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
-  .lock-icon { width:48px; height:48px; margin:0 auto 14px; background:#eff6ff; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-  .lock-icon svg { width:22px; height:22px; stroke:#1E40AF; }
-  h1 { margin:0 0 6px 0; font-size:22px; text-align:center; }
-  .sub { margin:0 0 22px 0; color:#6b7280; font-size:13px; text-align:center; }
-  input { width:100%; padding:12px 14px; font-size:15px; font-family:inherit; border:1px solid #d1d5db; border-radius:8px; outline:none; margin-bottom:12px; }
-  input:focus { border-color:#1E40AF; box-shadow:0 0 0 3px rgba(30,64,175,0.12); }
-  button.primary { width:100%; padding:12px; background:#1E40AF; color:white; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; }
-  button.primary:hover { background:#1E3A8A; }
-  button.primary:disabled { background:#9ca3af; cursor:not-allowed; }
-  .err { color:#dc2626; font-size:13px; margin-top:10px; min-height:18px; text-align:center; }
-  .picker { display:none; gap:14px; flex-direction:column; }
-  .picker.show { display:flex; }
-  .picker h2 { margin:0 0 8px 0; font-size:18px; }
-  .tool-card { display:flex; gap:16px; padding:18px; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; text-decoration:none; color:inherit; transition:all 0.15s; cursor:pointer; }
-  .tool-card:hover { background:#eff6ff; border-color:#1E40AF; transform:translateY(-1px); }
-  .tool-icon { width:48px; height:48px; flex-shrink:0; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:white; }
-  .tool-icon.primary { background:#1E40AF; }
-  .tool-icon.success { background:#059669; }
-  .tool-icon.warn { background:#d97706; }
-  .tool-title { font-weight:600; font-size:15px; margin-bottom:2px; }
-  .tool-desc { font-size:12px; color:#6b7280; }
-  .form.hide { display:none; }
-  .footer { margin-top:18px; text-align:center; font-size:11px; color:#9ca3af; }
-  .lock-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-  .lock-row button { background:transparent; border:1px solid #d1d5db; color:#6b7280; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px; font-family:inherit; }
-  .lock-row button:hover { background:#f3f4f6; }
-</style></head>
+  body {
+    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color: #1f2937;
+    padding: 24px;
+  }
+  .gate {
+    background: white; padding: 36px 32px; border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25); width: 100%; max-width: 380px;
+    text-align: center;
+  }
+  .gate h1 { margin: 0 0 6px 0; font-size: 22px; color: #1e3a8a; }
+  .gate p { margin: 0 0 22px 0; color: #6b7280; font-size: 13px; }
+  .gate input {
+    width: 100%; padding: 12px 14px; font-size: 15px; font-family: inherit;
+    border: 1px solid #d1d5db; border-radius: 8px; outline: none; margin-bottom: 12px;
+  }
+  .gate input:focus { border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,0.12); }
+  .gate button {
+    width: 100%; padding: 12px; background: #1e40af; color: white; border: none;
+    border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .gate button:hover { background: #1e3a8a; }
+  .gate button:disabled { background: #9ca3af; cursor: not-allowed; }
+  .err { color: #dc2626; font-size: 13px; margin-top: 10px; min-height: 18px; }
+  .lock-icon {
+    width: 56px; height: 56px; margin: 0 auto 14px; background: #eff6ff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lock-icon svg { width: 26px; height: 26px; stroke: #1e40af; }
+
+  .picker {
+    background: white; padding: 32px; border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25); width: 100%; max-width: 760px;
+  }
+  .picker-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .picker h2 { margin: 0; font-size: 24px; color: #1e3a8a; }
+  .picker p.subtitle { margin: 0 0 22px; color: #6b7280; font-size: 13px; }
+  .lock-btn {
+    background: white; border: 1px solid #d1d5db; padding: 6px 12px;
+    border-radius: 6px; font-size: 12px; cursor: pointer; color: #374151;
+    font-family: inherit;
+  }
+  .lock-btn:hover { background: #f3f4f6; }
+
+  .tool-card {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px; border: 1px solid #e5e7eb; border-radius: 10px;
+    margin-bottom: 12px; text-decoration: none; color: #1f2937;
+    transition: all 0.15s ease;
+  }
+  .tool-card:hover {
+    border-color: #1e40af; background: #f0f7ff;
+    transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,64,175,0.08);
+  }
+  .tool-icon {
+    flex: 0 0 56px; height: 56px; background: #1e40af; color: white;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 700;
+  }
+  .tool-content { flex: 1; }
+  .tool-title { font-weight: 700; font-size: 16px; color: #1e3a8a; margin-bottom: 4px; }
+  .tool-desc { font-size: 13px; color: #6b7280; line-height: 1.5; }
+
+  footer {
+    text-align: center; margin-top: 20px; font-size: 11px; color: rgba(255,255,255,0.7);
+    width: 100%;
+  }
+  .wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+</style>
+</head>
 <body>
-<div class="container">
-  <div class="card">
+
+<div class="wrap">
+
+  <!-- ============ LOGIN GATE ============ -->
+  <div class="gate" id="gate">
     <div class="lock-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
     </div>
     <h1>Elämys Internal Tools</h1>
-    <p class="sub">Sisäinen työkalupakki. Anna salasana jatkaaksesi.</p>
-
-    <form class="form" id="loginForm" autocomplete="off">
+    <p>Sisäinen työkalupakki. Anna salasana jatkaaksesi.</p>
+    <form id="loginForm" autocomplete="off">
       <input type="password" id="pw" placeholder="Salasana" autofocus required>
-      <button type="submit" class="primary" id="btn">Avaa</button>
+      <button type="submit" id="btn">Avaa</button>
       <div class="err" id="err"></div>
     </form>
-
-    <div class="picker" id="picker">
-      <div class="lock-row">
-        <h2>Valitse työkalu</h2>
-        <button onclick="lockOut()">🔒 Lukitse</button>
-      </div>
-      <a href="/esimerkki" class="tool-card">
-        <div class="tool-icon primary">E</div>
-        <div>
-          <div class="tool-title">Esimerkki — tämä on placeholder</div>
-          <div class="tool-desc">Voit korvata tämän omalla työkalulla ajamalla encrypt-tool.py:tä.</div>
-        </div>
-      </a>
-    </div>
-    <div class="footer">Internal · sisäinen käyttö</div>
   </div>
-</div>
-<script>
-const S = "XAXVYnZl7g3495xKTaZkIQ==", N = "vlH+N6s4uYs5nqgs", C = "Lqb2DTLTubUj0ywybIhKWoQP3ELIBmgBy2HEEtom", ITER = 100000;
-const ALLOWED = ["/esimerkki", "/esimerkki.html"];
 
-function b(x) { const s=atob(x); const a=new Uint8Array(s.length); for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i); return a; }
-async function dk(p, salt) {
-  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(p), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({ name:"PBKDF2", salt, iterations:ITER, hash:"SHA-256" }, k, { name:"AES-GCM", length:256 }, false, ["decrypt"]);
-}
-async function verify(p) {
-  const key = await dk(p, b(S));
-  const plain = await crypto.subtle.decrypt({ name:"AES-GCM", iv:b(N) }, key, b(C));
-  return new TextDecoder().decode(plain) === "OK-AUTH-CANARY";
+  <!-- ============ PICKER (näkyvä vain salasanan jälkeen) ============ -->
+  <div class="picker" id="picker" style="display:none;">
+    <div class="picker-header">
+      <h2>Valitse työkalu</h2>
+      <button class="lock-btn" onclick="lockOut()">🔒 Lukitse</button>
+    </div>
+    <p class="subtitle">Klikkaa työkalua avataksesi sen.</p>
+
+    <a href="/tools/tarjouslaskuri" class="tool-card">
+      <div class="tool-icon" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);">🧮</div>
+      <div class="tool-content">
+        <div class="tool-title">Tarjouslaskuri AbbVie</div>
+        <div class="tool-desc">
+          Tarjousten laskenta MSA Exhibit 3 -hinnoittelulla. Lentosegmentit Amadeus-pastella,
+          monirivinen transferit/illalliset/sourcing, copy-pastettava sähköpostitarjous,
+          tallennus localStorageen.
+        </div>
+      </div>
+    </a>
+
+    <a href="/tools/esimerkki" class="tool-card">
+      <div class="tool-icon" style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);">E</div>
+      <div class="tool-content">
+        <div class="tool-title">Esimerkki — placeholder</div>
+        <div class="tool-desc">
+          Voit korvata tämän omalla työkalulla ajamalla encrypt-tool.py:tä.
+          Poista tämä kun et tarvitse.
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>Internal · sisäinen käyttö · Elämys Group</footer>
+
+</div>
+
+<script>
+// SHA-256 of password — generoitu Menestys2026!:lle
+const PW_HASH = "639a690cd830b8eca2f9ae25f48064dc704cf63ef5172e95971c3c9527a6e7ad";
+const SESSION_KEY = "elamys_internal_auth";
+
+async function hashPassword(pw) {
+  const buf = new TextEncoder().encode(pw);
+  const hash = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 function showPicker() {
-  document.getElementById("loginForm").classList.add("hide");
-  document.getElementById("picker").classList.add("show");
-  const params = new URLSearchParams(location.search);
-  const ret = params.get("return");
-  if (ret && ALLOWED.includes(ret)) location.href = ret;
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("picker").style.display = "block";
 }
 
-window.lockOut = function() {
-  sessionStorage.removeItem("tools_pw");
-  location.href = "/";
-};
+function showGate() {
+  document.getElementById("gate").style.display = "block";
+  document.getElementById("picker").style.display = "none";
+  document.getElementById("pw").focus();
+}
+
+function lockOut() {
+  sessionStorage.removeItem(SESSION_KEY);
+  showGate();
+}
+
+// Restore session
+if (sessionStorage.getItem(SESSION_KEY) === PW_HASH) {
+  showPicker();
+}
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const btn = document.getElementById("btn"), err = document.getElementById("err");
   const pw = document.getElementById("pw").value;
-  btn.disabled = true; btn.textContent = "Tarkistetaan…"; err.textContent = "";
+  const btn = document.getElementById("btn");
+  const err = document.getElementById("err");
+  btn.disabled = true; btn.textContent = "Tarkistetaan...";
+  err.textContent = "";
+
   try {
-    if (await verify(pw)) {
-      sessionStorage.setItem("tools_pw", pw);
+    const hash = await hashPassword(pw);
+    if (hash === PW_HASH) {
+      sessionStorage.setItem(SESSION_KEY, hash);
+      // Tarkista return-URL
+      const params = new URLSearchParams(window.location.search);
+      const ret = params.get("return");
+      if (ret && ret.startsWith("/")) {
+        window.location.href = ret;
+        return;
+      }
       showPicker();
-    } else { throw new Error("bad"); }
+    } else {
+      err.textContent = "Väärä salasana.";
+      document.getElementById("pw").value = "";
+      document.getElementById("pw").focus();
+    }
   } catch (e) {
-    err.textContent = "Väärä salasana.";
-    btn.disabled = false; btn.textContent = "Avaa";
-    document.getElementById("pw").select();
+    err.textContent = "Tarkistusvirhe.";
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Avaa";
   }
 });
-
-(async () => {
-  const cached = sessionStorage.getItem("tools_pw");
-  if (cached) {
-    try { if (await verify(cached)) showPicker(); else sessionStorage.removeItem("tools_pw"); }
-    catch (_) { sessionStorage.removeItem("tools_pw"); }
-  }
-  const params = new URLSearchParams(location.search);
-  if (params.get("error")) document.getElementById("err").textContent = "Istunto vanhentui. Kirjaudu uudelleen.";
-})();
 </script>
-</body></html>
+
+</body>
+</html>
