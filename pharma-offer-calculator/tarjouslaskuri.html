@@ -35,9 +35,10 @@
   .top {
     background: var(--navy);
     color: white;
-    padding: 18px 32px;
-    border-bottom: 4px solid var(--blue);
+    padding: 14px 24px;
+    border-bottom: 3px solid var(--blue);
     display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px;
   }
   .top h1 { font-size: 18px; font-weight: 700; }
   .top .sub { font-size: 11px; color: var(--ice); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
@@ -55,12 +56,14 @@
   .btn.outline:hover { background: rgba(255,255,255,0.1); }
 
   /* ====== Layout ====== */
+  /* Yhden sarakkeen layout oletuksena — paljon kompaktimpi useimmilla näytöillä */
   main {
-    max-width: 1280px; margin: 0 auto; padding: 20px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    max-width: 980px; margin: 0 auto; padding: 18px;
+    display: grid; grid-template-columns: 1fr; gap: 14px;
   }
-  @media (max-width: 1200px) {
-    main { grid-template-columns: 1fr; padding: 16px; gap: 14px; }
+  /* Vain todella leveille näytöille (1500+ pikseliä) kahden sarakkeen layout */
+  @media (min-width: 1500px) {
+    main { max-width: 1340px; grid-template-columns: 1fr 1fr; gap: 16px; }
   }
   @media (max-width: 900px) {
     /* Quick reference panel: stack columns */
