@@ -99,6 +99,23 @@
     display: flex; justify-content: space-between; align-items: center;
   }
   .card h2 .badge { background: var(--ice); color: var(--navy); padding: 3px 8px; border-radius: 999px; font-size: 11px; }
+
+  /* Status pills */
+  .status-pill {
+    padding: 8px 14px; border: 2px solid var(--rule); background: white;
+    color: var(--muted); border-radius: 999px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .status-pill:hover { border-color: var(--blue); color: var(--navy); }
+  .status-pill.active[data-status="draft"]    { background: #6B7280; border-color: #6B7280; color: white; }
+  .status-pill.active[data-status="sent"]     { background: var(--amber); border-color: var(--amber); color: white; }
+  .status-pill.active[data-status="approved"] { background: var(--green); border-color: var(--green); color: white; }
+  .status-pill.active[data-status="lost"]     { background: var(--red); border-color: var(--red); color: white; }
+  /* Status card border */
+  #statusCard[data-status="draft"]    { border-left: 5px solid #6B7280; }
+  #statusCard[data-status="sent"]     { border-left: 5px solid var(--amber); }
+  #statusCard[data-status="approved"] { border-left: 5px solid var(--green); }
+  #statusCard[data-status="lost"]     { border-left: 5px solid var(--red); }
   .card h3 { font-size: 13px; color: var(--blue); margin: 14px 0 6px; font-weight: 700; }
 
   /* ====== Forms ====== */
@@ -422,22 +439,49 @@
 
 <!-- ========= LEFT: INPUT ========= -->
 <div>
+  <div class="card" id="statusCard">
+    <h2>Tarjouksen status</h2>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;" id="statusPills">
+      <button class="status-pill" data-status="draft" onclick="setStatus('draft')">📝 Työn alla</button>
+      <button class="status-pill" data-status="sent" onclick="setStatus('sent')">📤 Lähetetty</button>
+      <button class="status-pill" data-status="approved" onclick="setStatus('approved')">✅ Hyväksytty</button>
+      <button class="status-pill" data-status="lost" onclick="setStatus('lost')" style="margin-left:auto;">✖ Menetetty</button>
+    </div>
+    <div id="statusDates" style="display:none;">
+      <div class="row r3">
+        <div>
+          <label>Tarjous lähetetty</label>
+          <input id="sentDate" type="date" oninput="calc()">
+        </div>
+        <div id="acceptedDateBlock">
+          <label>Hyväksytty / PO saatu</label>
+          <input id="acceptedDate" type="date" oninput="calc()">
+        </div>
+        <div id="poNumberBlock">
+          <label>PO-numero</label>
+          <input id="poNumber" type="text" placeholder="4500123456" oninput="calc()">
+        </div>
+      </div>
+    </div>
+    <div id="statusHint" class="hint"></div>
+  </div>
+
   <div class="card">
     <h2>Briiffi <span class="badge">AbbVien pyynnöstä</span></h2>
     <div class="row r2">
-      <div><label>Tapahtuman nimi</label><input id="eventName" type="text" value="UEGW 2026"></div>
-      <div><label>MAP-koodi</label><input id="mapCode" type="text" value="(saadaan AbbVielta)"></div>
+      <div><label>Tapahtuman nimi</label><input id="eventName" type="text" placeholder="Esim. UEGW 2026"></div>
+      <div><label>MAP-koodi</label><input id="mapCode" type="text" placeholder="Saadaan AbbVielta"></div>
     </div>
     <div class="row r3">
-      <div><label>Kohde</label><input id="dest" type="text" value="Barcelona"></div>
-      <div><label>Lähtö</label><input id="depDate" type="date" value="2026-10-16"></div>
-      <div><label>Paluu</label><input id="retDate" type="date" value="2026-10-21"></div>
+      <div><label>Kohde</label><input id="dest" type="text" placeholder="Esim. Barcelona"></div>
+      <div><label>Lähtö</label><input id="depDate" type="date"></div>
+      <div><label>Paluu</label><input id="retDate" type="date"></div>
     </div>
     <div class="row r4">
-      <div><label>HCP (lkm)</label><input id="paxHCP" type="number" min="0" value="9" oninput="calc()"></div>
-      <div><label>AbbVie staff (lkm)</label><input id="paxStaff" type="number" min="0" value="5" oninput="calc()"></div>
-      <div><label>Pyytäjä</label><input id="requestedBy" type="text" value="Päivi Mansikkaniemi"></div>
-      <div><label>Cost Center</label><input id="costCenter" type="text" value="IMM-FIN-0042"></div>
+      <div><label>HCP (lkm)</label><input id="paxHCP" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>AbbVie staff (lkm)</label><input id="paxStaff" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>Pyytäjä</label><input id="requestedBy" type="text" placeholder="Esim. Päivi Mansikkaniemi"></div>
+      <div><label>Cost Center</label><input id="costCenter" type="text" placeholder="Esim. IMM-FIN-0042"></div>
     </div>
   </div>
 
@@ -452,7 +496,7 @@
       <textarea id="amadeusPaste" placeholder="Liitä Amadeus-data tähän&#10;esim.&#10; 1 AY 165  Y 16OCT 5 HELBCN HK13   1705 2005&#10; 2 AY1653  Y 17OCT 6 HELBCN HK1    1705 2005&#10; 3 AY1654  Y 21OCT 3 BCNHEL HK14   1005 1510" style="min-height: 90px; font-family: monospace; font-size: 12px;"></textarea>
       <div style="display: flex; gap: 6px; margin-top: 8px;">
         <input id="amadeusYear" type="number" min="2026" max="2030" value="2026" style="width: 90px;" placeholder="Vuosi">
-        <input id="amadeusPrice" type="number" min="0" value="380" style="width: 100px;" placeholder="€/pax">
+        <input id="amadeusPrice" type="number" min="0" style="width: 100px;" placeholder="€/pax">
         <button class="btn green" onclick="parseAmadeus()">Pura segmentit</button>
         <button class="btn" onclick="document.getElementById('amadeusPaste').value=''">Tyhjennä</button>
       </div>
@@ -470,7 +514,7 @@
       </div>
       <div>
         <label>Liittymälennot / huomautukset</label>
-        <input id="flightExtras" type="text" value="Liittymälennot Oulu ja Kuopio · Paluutaksit Helsinki → Tampere, Turku">
+        <input id="flightExtras" type="text" placeholder="Esim. Liittymälennot Oulu, Kuopio · Paluutaksit Helsinki → Tampere">
       </div>
     </div>
     <div class="hint">Service fee Exhibit 3 mukaan: 30 € / lentolippu — lasketaan automaattisesti segmenttien pax-summasta.</div>
@@ -485,9 +529,9 @@
           <option>3★</option>
         </select>
       </div>
-      <div><label>Hinta / yö (€)</label><input id="hotelRate" type="number" min="0" value="200" oninput="calc()"></div>
-      <div><label>Yöt</label><input id="hotelNights" type="number" min="0" value="3" oninput="calc()"></div>
-      <div><label>Huoneita (pax)</label><input id="hotelRooms" type="number" min="0" value="14" oninput="calc()"></div>
+      <div><label>Hinta / yö (€)</label><input id="hotelRate" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>Yöt</label><input id="hotelNights" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>Huoneita (pax)</label><input id="hotelRooms" type="number" min="0" value="0" oninput="calc()"></div>
     </div>
     <div class="row r2">
       <div>
@@ -496,7 +540,7 @@
       </div>
       <div>
         <label>Sijainti</label>
-        <input id="hotelLocation" type="text" value="Ramblas-alue, käveltävissä kongressikeskukseen">
+        <input id="hotelLocation" type="text" placeholder="Esim. Ramblas-alue, käveltävissä kongressikeskukseen">
       </div>
     </div>
     <div class="row r2" style="margin-top: 8px;">
@@ -510,7 +554,7 @@
       </div>
     </div>
     <div class="row r2" style="margin-top: 8px;" id="hotelSourcingRow">
-      <div><label>Hotel Sourcing -tunnit (45 €/t)</label><input id="hotelSourcingHours" type="number" min="0" step="0.5" value="4" oninput="calc()"></div>
+      <div><label>Hotel Sourcing -tunnit (45 €/t)</label><input id="hotelSourcingHours" type="number" min="0" step="0.5" value="0" oninput="calc()"></div>
       <div></div>
     </div>
     <div class="hint">
@@ -522,8 +566,8 @@
   <div class="card">
     <h2>Kongressi-rekisteröityminen</h2>
     <div class="row r3">
-      <div><label>Hinta per pax (€)</label><input id="congressPrice" type="number" min="0" value="850" oninput="calc()"></div>
-      <div><label>Rekisteröitymisiä (lkm)</label><input id="congressCount" type="number" min="0" value="14" oninput="calc()"></div>
+      <div><label>Hinta per pax (€)</label><input id="congressPrice" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>Rekisteröitymisiä (lkm)</label><input id="congressCount" type="number" min="0" value="0" oninput="calc()"></div>
       <div><label>Early bird?</label>
         <select id="congressEB"><option>Kyllä</option><option>Ei</option></select>
       </div>
@@ -537,7 +581,7 @@
       </div>
     </details>
     <div class="row r2" style="margin-top: 8px;">
-      <div><label>Registration for Congresses -tunnit (Exhibit 3 rivi 12, 45 €/t)</label><input id="congressHours" type="number" min="0" step="0.5" value="3" oninput="calc()"></div>
+      <div><label>Registration for Congresses -tunnit (Exhibit 3 rivi 12, 45 €/t)</label><input id="congressHours" type="number" min="0" step="0.5" value="0" oninput="calc()"></div>
       <div></div>
     </div>
     <div class="hint">
@@ -566,7 +610,7 @@
           <option value="100" data-country="USA">USA (max 100 €/pax)</option>
         </select>
       </div>
-      <div><label>Restaurant Sourcing -tunnit (Exhibit 3 rivi 3, 45 €/t)</label><input id="dinnerSourcingHours" type="number" min="0" step="0.5" value="2" oninput="calc()"></div>
+      <div><label>Restaurant Sourcing -tunnit (Exhibit 3 rivi 3, 45 €/t)</label><input id="dinnerSourcingHours" type="number" min="0" step="0.5" value="0" oninput="calc()"></div>
     </div>
     <div id="dinnerRows"></div>
     <button class="btn" style="margin-top: 8px;" onclick="addDinnerRow()">+ Lisää illallinen</button>
@@ -576,8 +620,8 @@
   <div class="card">
     <h2>Lisäpalvelut</h2>
     <div class="row r4">
-      <div><label>Lounge per pax (€)</label><input id="loungePrice" type="number" min="0" value="35" oninput="calc()"></div>
-      <div><label>Lounge varauksia</label><input id="loungeCount" type="number" min="0" value="14" oninput="calc()"></div>
+      <div><label>Lounge per pax (€)</label><input id="loungePrice" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>Lounge varauksia</label><input id="loungeCount" type="number" min="0" value="0" oninput="calc()"></div>
       <div><label>Penkki/baggage per pax (€)</label><input id="ancPrice" type="number" min="0" value="0" oninput="calc()"></div>
       <div><label>Ancillary varauksia</label><input id="ancCount" type="number" min="0" value="0" oninput="calc()"></div>
     </div>
@@ -603,7 +647,7 @@
     <h2>Floating Fund -toimittajamaksut</h2>
     <div class="row r2">
       <div><label>Floating Fund -prosentti volyymista (%)</label><input id="ffPct" type="number" min="0" max="100" step="0.5" value="5" oninput="calc()"></div>
-      <div><label>Mihin volyymiin sovelletaan (€)</label><input id="ffVolume" type="number" min="0" value="25000" oninput="calc()"></div>
+      <div><label>Mihin volyymiin sovelletaan (€)</label><input id="ffVolume" type="number" min="0" value="0" oninput="calc()"></div>
     </div>
     <div class="hint">Esim. hotellit + transferit + kongressi — ei lentoihin. 5 % AbbVien volyymista on Menestyksen palvelumaksu (eli tuloa).</div>
   </div>
@@ -764,6 +808,46 @@
 <div class="toast" id="toast">Kopioitu leikepöydälle</div>
 
 <script>
+// ========= Status workflow =========
+let currentStatus = "draft";
+
+const STATUS_INFO = {
+  draft:    { emoji: "📝", label: "Työn alla",   hint: "Tarjous on vielä työstössä. Tarkista hinnoittelu ja viimeistele ennen lähetystä." },
+  sent:     { emoji: "📤", label: "Lähetetty",   hint: "Tarjous on lähetetty AbbVielle. Seuraa vastausta — jos ei vastausta 2 työpäivän sisällä, soita pyytäjälle." },
+  approved: { emoji: "✅", label: "Hyväksytty",  hint: "AbbVie on hyväksynyt tarjouksen ja PO saatu. Aloita varauksen tekeminen." },
+  lost:     { emoji: "✖",  label: "Menetetty",    hint: "Tarjous ei johtanut kauppaan. Kirjaa palaute Ninalle — opit seuraavaan." },
+};
+
+function setStatus(s) {
+  currentStatus = s;
+  // Päivitä pillien aktiivisuus
+  document.querySelectorAll(".status-pill").forEach(p => {
+    p.classList.toggle("active", p.dataset.status === s);
+  });
+  // Päivitä kortin reuna
+  document.getElementById("statusCard").setAttribute("data-status", s);
+  // Näytä/piilota päivämääräkentät
+  const showDates = s === "sent" || s === "approved";
+  document.getElementById("statusDates").style.display = showDates ? "" : "none";
+  // PO-numero ja hyväksyntäpvm vain hyväksytty-statessa
+  const isApproved = s === "approved";
+  document.getElementById("acceptedDateBlock").style.display = isApproved ? "" : "none";
+  document.getElementById("poNumberBlock").style.display = isApproved ? "" : "none";
+  // Jos lähetetty/hyväksytty ja päivä tyhjä, esitäytä tämä päivä
+  if (s === "sent" && !document.getElementById("sentDate").value) {
+    document.getElementById("sentDate").value = new Date().toISOString().slice(0,10);
+  }
+  if (s === "approved" && !document.getElementById("acceptedDate").value) {
+    document.getElementById("acceptedDate").value = new Date().toISOString().slice(0,10);
+    if (!document.getElementById("sentDate").value) {
+      document.getElementById("sentDate").value = new Date().toISOString().slice(0,10);
+    }
+  }
+  // Päivitä hint
+  document.getElementById("statusHint").textContent = STATUS_INFO[s].hint;
+  calc();
+}
+
 // ========= Transfer rows =========
 let transferSegs = [
   { desc: "Airport-hotel-airport", pricePerPax: 60, pax: 14, vip: false },
@@ -1480,7 +1564,8 @@ function collectState() {
     "congressHours","addonName","pgPrice","pgCount",
     "dinnerCountry","dinnerSourcingHours",
     "loungePrice","loungeCount","ancPrice","ancCount",
-    "ffPct","ffVolume","hotelComm","flightComm","transferComm"];
+    "ffPct","ffVolume","hotelComm","flightComm","transferComm",
+    "sentDate","acceptedDate","poNumber"];
   const state = {};
   fields.forEach(f => {
     const el = document.getElementById(f);
@@ -1490,13 +1575,14 @@ function collectState() {
   state.transferSegs = JSON.parse(JSON.stringify(transferSegs));
   state.dinnerSegs = JSON.parse(JSON.stringify(dinnerSegs));
   state.sourcingSegs = JSON.parse(JSON.stringify(sourcingSegs));
+  state.status = currentStatus;
   state._savedAt = new Date().toISOString();
   return state;
 }
 
 function applyState(state) {
   Object.entries(state).forEach(([k, v]) => {
-    if (["flightSegs","transferSegs","dinnerSegs","sourcingSegs"].includes(k) || k.startsWith("_")) return;
+    if (["flightSegs","transferSegs","dinnerSegs","sourcingSegs","status"].includes(k) || k.startsWith("_")) return;
     const el = document.getElementById(k);
     if (el) el.value = v;
   });
@@ -1504,6 +1590,8 @@ function applyState(state) {
   if (Array.isArray(state.transferSegs)) { transferSegs = state.transferSegs; renderTransferRows(); }
   if (Array.isArray(state.dinnerSegs)) { dinnerSegs = state.dinnerSegs; renderDinnerRows(); }
   if (Array.isArray(state.sourcingSegs)) { sourcingSegs = state.sourcingSegs; renderSourcingRows(); }
+  // Status — defaultaa draftiin jos ei ole tallennettu
+  setStatus(state.status || "draft");
   toggleHotelFee();
   updateDinnerLimit();
   calc();
@@ -1517,7 +1605,9 @@ function refreshSavedDropdown() {
   Object.keys(offers).sort().forEach(name => {
     const opt = document.createElement("option");
     opt.value = name;
-    opt.textContent = name;
+    const status = offers[name].status || "draft";
+    const emoji = (STATUS_INFO[status] || STATUS_INFO.draft).emoji;
+    opt.textContent = `${emoji} ${name}`;
     dd.appendChild(opt);
   });
   if (offers[current]) dd.value = current;
@@ -1602,6 +1692,7 @@ renderTransferRows();
 renderDinnerRows();
 renderSourcingRows();
 refreshSavedDropdown();
+setStatus("draft");
 calc();
 </script>
 
