@@ -42,8 +42,10 @@
   }
   .top h1 { font-size: 18px; font-weight: 700; }
   .top .sub { font-size: 11px; color: var(--ice); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
-  .top .right { font-size: 12px; color: var(--ice); text-align: right; }
-  .top .actions { display: flex; gap: 8px; }
+  .top .right { font-size: 12px; color: var(--ice); text-align: right; max-width: 100%; }
+  .top .actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .top .actions select { max-width: 200px; }
+  .top .actions .btn { padding: 6px 10px; font-size: 11.5px; }
   .btn {
     background: var(--blue); color: white; border: 0; padding: 8px 14px;
     border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
@@ -290,7 +292,6 @@
       <button class="btn outline" onclick="exportOffersJSON()">⬇ Vie JSON</button>
       <button class="btn outline" onclick="document.getElementById('importJSON').click()">⬆ Tuo JSON</button>
       <input type="file" id="importJSON" accept=".json" style="display:none" onchange="importOffersJSON(this.files[0])">
-      <button class="btn outline" onclick="resetExample()">UEGW esimerkki</button>
       <button class="btn outline" onclick="resetEmpty()">Tyhjennä</button>
     </div>
     <div style="margin-top:6px;">Hinnasto Exhibit 3 · v1.0 · 17.6.2026</div>
@@ -1467,69 +1468,7 @@ document.querySelectorAll(".tab").forEach(t => {
   });
 });
 
-// ========= Examples =========
-function resetExample() {
-  // UEGW Barcelona pre-fill (default values already set)
-  const defaults = {
-    eventName: "UEGW 2026",
-    mapCode: "(saadaan AbbVielta)",
-    dest: "Barcelona",
-    depDate: "2026-10-16",
-    retDate: "2026-10-21",
-    paxHCP: 9, paxStaff: 5,
-    requestedBy: "Päivi Mansikkaniemi",
-    costCenter: "IMM-FIN-0042",
-    hotelName: "", hotelRate: 200, hotelNights: 3, hotelRooms: 14,
-    hotelLocation: "Ramblas-alue, käveltävissä kongressikeskukseen",
-    hotelSourcingHours: 4,
-    congressPrice: 850, congressCount: 14,
-    congressHours: 3,
-    addonName: "", pgPrice: 0, pgCount: 0,
-    dinnerSourcingHours: 2,
-    loungePrice: 35, loungeCount: 14,
-    ancPrice: 0, ancCount: 0,
-    ffPct: 5, ffVolume: 25000,
-  };
-  Object.entries(defaults).forEach(([k, v]) => {
-    const el = document.getElementById(k);
-    if (el) el.value = v;
-  });
-  // Reset segments to UEGW Barcelona
-  flightSegs = [
-    { date: "2026-10-16", route: "HEL–BCN", flightNo: "AY 165",  depTime: "17:05", arrTime: "20:05", pax: 13, price: 380 },
-    { date: "2026-10-17", route: "HEL–BCN", flightNo: "AY 1653", depTime: "17:05", arrTime: "20:05", pax: 1,  price: 380 },
-    { date: "2026-10-21", route: "BCN–HEL", flightNo: "AY 1654", depTime: "10:05", arrTime: "15:10", pax: 14, price: 380 },
-  ];
-  transferSegs = [
-    { desc: "Lentokenttä → hotelli (saapuminen)", pricePerPax: 30, pax: 14, vip: false },
-    { desc: "Hotelli → lentokenttä (lähtö)", pricePerPax: 30, pax: 14, vip: false },
-  ];
-  dinnerSegs = [
-    { date: "2026-10-17", restaurant: "", pricePerPax: 70, pax: 14, notes: "" },
-    { date: "2026-10-18", restaurant: "", pricePerPax: 70, pax: 14, notes: "" },
-    { date: "2026-10-19", restaurant: "", pricePerPax: 70, pax: 14, notes: "" },
-    { date: "2026-10-20", restaurant: "", pricePerPax: 70, pax: 14, notes: "" },
-  ];
-  sourcingSegs = [
-    { task: "Event Project Management / Planning", rate: 85, hours: 4 },
-    { task: "Attendee Communications & Management", rate: 85, hours: 2 },
-  ];
-  renderFlightSegments();
-  renderTransferRows();
-  renderDinnerRows();
-  renderSourcingRows();
-  document.getElementById("flightExtras").value = "Liittymälennot Oulu ja Kuopio · Paluutaksit Helsinki → Tampere, Turku";
-  document.getElementById("flightClass").value = "Economy";
-  document.getElementById("hotelClass").value = "4★";
-  document.getElementById("hotelBreakfast").value = "Kyllä";
-  document.getElementById("dinnerCountry").value = "70";
-  document.getElementById("sourcingRole").value = "45";
-  document.getElementById("transferVIP").value = "0";
-  document.getElementById("congressEB").value = "Kyllä";
-  updateDinnerLimit();
-  calc();
-}
-
+// ========= Reset =========
 function resetEmpty() {
   ["eventName","mapCode","dest","requestedBy","costCenter","hotelName","addonName"].forEach(id => { const e=document.getElementById(id); if(e) e.value = ""; });
   ["paxHCP","paxStaff","hotelRate","hotelNights","hotelRooms","hotelSourcingHours",
