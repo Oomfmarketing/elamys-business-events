@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarjouslaskuri AbbVie — Menestys Travel</title>
+<style>
+  :root {
+    --navy: #1F4E79;
+    --blue: #2E75B6;
+    --ice: #DEEBF7;
+    --ice2: #F2F7FC;
+    --cream: #FAFBFC;
+    --text: #1F2937;
+    --muted: #6B7280;
+    --rule: #E5E7EB;
+    --red: #C0392B;
+    --redBg: #FDECEA;
+    --amber: #B7791F;
+    --amberBg: #FEF3C7;
+    --green: #2D7A4F;
+    --greenBg: #D1FAE5;
+    --white: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Calibri, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.5;
+    font-size: 14px;
+  }
+
+  /* ====== Header ====== */
+  .top {
+    background: var(--navy);
+    color: white;
+    padding: 18px 32px;
+    border-bottom: 4px solid var(--blue);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .top h1 { font-size: 18px; font-weight: 700; }
+  .top .sub { font-size: 11px; color: var(--ice); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
+  .top .right { font-size: 12px; color: var(--ice); text-align: right; }
+  .top .actions { display: flex; gap: 8px; }
+  .btn {
+    background: var(--blue); color: white; border: 0; padding: 8px 14px;
+    border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--navy); }
+  .btn.green { background: var(--green); }
+  .btn.green:hover { background: #1f5e3a; }
+  .btn.outline { background: transparent; border: 1px solid white; color: white; }
+  .btn.outline:hover { background: rgba(255,255,255,0.1); }
+
+  /* ====== Layout ====== */
+  main {
+    max-width: 1500px; margin: 0 auto; padding: 24px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  @media (max-width: 1100px) {
+    main { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: white; border-radius: 10px; padding: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 16px; color: var(--navy); margin-bottom: 12px; font-weight: 700;
+    border-bottom: 2px solid var(--ice); padding-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card h2 .badge { background: var(--ice); color: var(--navy); padding: 3px 8px; border-radius: 999px; font-size: 11px; }
+  .card h3 { font-size: 13px; color: var(--blue); margin: 14px 0 6px; font-weight: 700; }
+
+  /* ====== Forms ====== */
+  .row { display: grid; gap: 8px; margin-bottom: 10px; }
+  .row.r2 { grid-template-columns: 1fr 1fr; }
+  .row.r3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row.r4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  label { display: block; font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.3px; }
+  input, select, textarea {
+    width: 100%; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 5px;
+    font-size: 13px; font-family: inherit; background: white; color: var(--text);
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(46,117,182,0.15); }
+  textarea { resize: vertical; min-height: 60px; }
+  input[type="number"] { text-align: right; }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 3px; font-style: italic; }
+
+  /* ====== Result tables ====== */
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { background: var(--ice); color: var(--navy); font-weight: 700; padding: 8px 10px; text-align: left; font-size: 11px; }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.subtotal td { font-weight: 700; background: var(--ice2); }
+  tr.subtotal td.num { color: var(--navy); }
+  tr.total td { font-weight: 700; background: var(--navy); color: white; font-size: 13px; }
+  tr.total td.num { color: white; }
+
+  /* ====== Margin highlight ====== */
+  .margin-box {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: white; padding: 16px; border-radius: 8px; margin-top: 12px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .margin-box .num { font-size: 32px; font-weight: 700; line-height: 1; }
+  .margin-box .lbl { font-size: 11px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .margin-box .pct { font-size: 32px; font-weight: 700; line-height: 1; }
+  .margin-box.warn { background: linear-gradient(135deg, #b7791f 0%, #d4a45a 100%); }
+  .margin-box.bad { background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%); }
+
+  /* ====== Offer preview ====== */
+  .preview {
+    background: white; padding: 28px; border-radius: 8px;
+    font-family: "Calibri", "Helvetica Neue", Arial, sans-serif;
+    font-size: 12.5px; line-height: 1.55; color: #222;
+    border: 1px solid var(--rule);
+    white-space: pre-wrap; max-height: 600px; overflow-y: auto;
+  }
+  .preview h3 { color: var(--navy); margin: 14px 0 6px; font-size: 14px; }
+  .preview table { margin: 8px 0; font-size: 11.5px; }
+  .preview th, .preview td { border: 1px solid #ccc; padding: 5px 7px; }
+
+  /* ====== Toolbar ====== */
+  .toolbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; gap: 8px; }
+  .toolbar .left, .toolbar .right { display: flex; gap: 8px; }
+
+  /* ====== Tabs ====== */
+  .tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--rule); margin-bottom: 12px; }
+  .tab {
+    padding: 9px 14px; cursor: pointer; font-size: 13px; font-weight: 600;
+    color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px;
+  }
+  .tab.active { color: var(--navy); border-bottom-color: var(--blue); background: var(--ice2); }
+  .tab:hover { color: var(--navy); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--green); color: white; padding: 12px 18px;
+    border-radius: 6px; font-size: 13px; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transform: translateY(20px);
+    transition: all 0.3s;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media print {
+    .top, .toolbar, .tabs { display: none; }
+    main { grid-template-columns: 1fr; }
+    .card { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div>
+    <div class="sub">Menestys Travel · Sisäinen työkalu</div>
+    <h1>Tarjouslaskuri — AbbVie</h1>
+  </div>
+  <div class="right">
+    <div class="actions">
+      <button class="btn outline" onclick="resetExample()">Lataa UEGW Barcelona</button>
+      <button class="btn outline" onclick="resetEmpty()">Tyhjennä</button>
+    </div>
+    <div style="margin-top:6px;">Hinnasto Exhibit 3 · v1.0 · 17.6.2026</div>
+  </div>
+</div>
+
+<main>
+
+<!-- Exhibit 3 reference card -->
+<div style="grid-column: 1 / -1;">
+  <details class="card" style="cursor: pointer;">
+    <summary style="font-size: 16px; font-weight: 700; color: var(--navy); padding: 4px 0;">
+      📋 MSA Exhibit 3 — täydellinen hinnasto (klikkaa avataksesi)
+    </summary>
+    <div style="margin-top: 12px;">
+      <table>
+        <thead>
+          <tr><th style="width:40px;">#</th><th>Palvelu</th><th>Yksikkö</th><th class="num" style="width:90px;">Hinta</th></tr>
+        </thead>
+        <tbody style="font-size: 12px;">
+          <tr><td>1</td><td>Hotel Sourcing / Group accommodation</td><td>hourly rate in LC</td><td class="num">45,00 €</td></tr>
+          <tr><td>2</td><td>Individual hotel booking</td><td>price per booking</td><td class="num">10,00 €</td></tr>
+          <tr><td>3</td><td>Restaurant Sourcing</td><td>hourly rate in LC</td><td class="num">45,00 €</td></tr>
+          <tr><td>4</td><td>Venue Sourcing / Research Event Location (sis. food, production, printing, badges)</td><td>hourly rate in LC</td><td class="num">85,00 €</td></tr>
+          <tr><td>5</td><td>Site Inspection (T&E separately)</td><td>hourly rate in LC</td><td class="num">85,00 €</td></tr>
+          <tr><td>6</td><td>Event Project Management, Event Planning (On Site Staff support, T&E sep.)</td><td>hourly rate in LC</td><td class="num">85,00 €</td></tr>
+          <tr><td>7</td><td>Group guide (T&E separately)</td><td>hourly rate in LC</td><td class="num">85,00 €</td></tr>
+          <tr><td>8</td><td>Attendee Communications & attendee management</td><td>cost per hourly in LC</td><td class="num">85,00 €</td></tr>
+          <tr><td>9</td><td>Creation of a Meeting/event Registration Website</td><td>hourly rate in LC</td><td class="num">85,00 €</td></tr>
+          <tr><td>10</td><td>Registration fee in Cvent</td><td>cost per hourly in LC</td><td class="num">45,00 €</td></tr>
+          <tr><td>11</td><td>Welcome letter to attendees</td><td>cost per hour in LC</td><td class="num">45,00 €</td></tr>
+          <tr><td>12</td><td>Registration for Congresses</td><td>cost per hour in LC</td><td class="num">45,00 €</td></tr>
+          <tr><td>13</td><td>Air Transportation - Air tickets</td><td>fixed price per ticket</td><td class="num">30,00 €</td></tr>
+          <tr><td>14</td><td>Air Transportation - Changes, cancellations, refunds, re-issues</td><td>fixed price per ticket</td><td class="num">30,00 €</td></tr>
+          <tr><td>15</td><td>Train transportation - Train tickets</td><td>fixed price per ticket</td><td class="num">20,00 €</td></tr>
+          <tr><td>16</td><td>Train transportation - Changes, cancellations, refunds, re-issues</td><td>fixed price per ticket</td><td class="num">20,00 €</td></tr>
+          <tr><td>17</td><td>Ancillary services (seat, bag, lounge)</td><td>price per service</td><td class="num">10,00 €</td></tr>
+          <tr><td>18</td><td>Individual ferry / cruise booking</td><td>price per booking</td><td class="num">10,00 €</td></tr>
+          <tr><td>19</td><td>Transfers / ground transportation</td><td>fixed price per ticket</td><td class="num">20,00 €</td></tr>
+          <tr><td>20</td><td>HCP reporting</td><td>hourly rate in LC</td><td class="num">80,00 €</td></tr>
+          <tr><td>21</td><td>Payments to suppliers on behalf of AbbVie</td><td>% of total value</td><td class="num">5 %</td></tr>
+          <tr><td>22</td><td>Visual creation</td><td>hourly rate in LC</td><td class="num">90,00 €</td></tr>
+          <tr><td>23</td><td>Planning and execution of event techniques</td><td>hourly rate in LC</td><td class="num">100,00 €</td></tr>
+          <tr><td>24</td><td>Streaming platform ON24 or some platform</td><td>hourly rate in LC</td><td class="num">100,00 €</td></tr>
+        </tbody>
+      </table>
+      <div class="hint" style="margin-top: 8px;">
+        LC = Local Currency. Kaikki hinnat ALV 0 %. Lähde: MSA Exhibit 3 (allekirjoitettu 17.6.2026).
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- Full-width principle banner -->
+<div style="grid-column: 1 / -1;">
+  <div class="card" style="border-left: 5px solid var(--red); background: var(--ice2);">
+    <h2 style="border:0; padding:0; color: var(--red);">⚠ Sopimusperiaate — nettohinnat + service fees ERIKSEEN</h2>
+    <p style="font-size: 13px; margin-bottom: 8px;">
+      MSA §1.4 vaatii laskuilta <strong>"breakdown of all pass-through expenses"</strong> ja <strong>"the service fee"</strong> erillisenä rivinä. Eli tarjouksessa ja laskussa AbbVie näkee aina:
+    </p>
+    <table style="width:100%; margin: 8px 0;">
+      <thead>
+        <tr><th>Mikä on SALLITTUA</th><th>Mikä ei ole SALLITTUA</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="background:#D1FAE5; vertical-align: top; padding:10px;">
+            ✓ Veloittaa Exhibit 3:n mukaiset service fees erillisinä riveinä<br>
+            ✓ Veloittaa sourcing-tunnit (Group Mgr 100 €/t · Senior 60 €/t · Junior 45 €/t)<br>
+            ✓ Veloittaa Floating Fund -toimittajamaksu 5 % volyymista<br>
+            ✓ Pitää itsellämme <strong>toimittajakommissiot</strong> (hotellit, GDS-bonukset) — eivät tule AbbVien rahasta<br>
+            ✓ Näyttää tarjouksessa lentohinnat <em>nettohintoina</em> joka lentoyhtiö perii
+          </td>
+          <td style="background:#FDECEA; vertical-align: top; padding:10px;">
+            ✗ Lisätä mark-up hotelliin/lentoon ja näyttää AbbVielle korotettua hintaa<br>
+            ✗ Piilottaa service fee:tä kokonaishinnan sisään<br>
+            ✗ Antaa AbbVielle vain "yhden lopullisen summan" ilman erittelyä<br>
+            ✗ Veloittaa katteellisia hintoja pass-through-komponenteista
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted); margin-top: 8px;">
+      <strong>Toimittajakommissiot:</strong> sopimuksessa ei ole velvoitetta ilmoittaa niistä AbbVielle.
+      Ne tulevat toimittajalta meille (ei AbbVien rahasta). Jos Elena tai Päivi K kysyy suoraan, vastaamme rehellisesti.
+    </p>
+  </div>
+</div>
+
+<!-- ========= LEFT: INPUT ========= -->
+<div>
+  <div class="card">
+    <h2>Briiffi <span class="badge">AbbVien pyynnöstä</span></h2>
+    <div class="row r2">
+      <div><label>Tapahtuman nimi</label><input id="eventName" type="text" value="UEGW 2026"></div>
+      <div><label>MAP-koodi</label><input id="mapCode" type="text" value="(saadaan AbbVielta)"></div>
+    </div>
+    <div class="row r3">
+      <div><label>Kohde</label><input id="dest" type="text" value="Barcelona"></div>
+      <div><label>Lähtö</label><input id="depDate" type="date" value="2026-10-16"></div>
+      <div><label>Paluu</label><input id="retDate" type="date" value="2026-10-21"></div>
+    </div>
+    <div class="row r4">
+      <div><label>HCP (lkm)</label><input id="paxHCP" type="number" min="0" value="9" oninput="calc()"></div>
+      <div><label>AbbVie staff (lkm)</label><input id="paxStaff" type="number" min="0" value="5" oninput="calc()"></div>
+      <div><label>Pyytäjä</label><input id="requestedBy" type="text" value="Päivi Mansikkaniemi"></div>
+      <div><label>Cost Center</label><input id="costCenter" type="text" value="IMM-FIN-0042"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Lennot — yksittäiset segmentit</h2>
+    <div id="flightSegments"></div>
+    <button class="btn" style="margin-top: 8px;" onclick="addFlightSegment()">+ Lisää lentosegmentti</button>
+    <div class="row r2" style="margin-top: 12px;">
+      <div>
+        <label>Yleinen luokka</label>
+        <select id="flightClass" onchange="calc()">
+          <option>Economy</option>
+          <option>Business (vaatii hyväksynnän)</option>
+        </select>
+      </div>
+      <div>
+        <label>Liittymälennot / huomautukset</label>
+        <input id="flightExtras" type="text" value="Liittymälennot Oulu ja Kuopio · Paluutaksit Helsinki → Tampere, Turku">
+      </div>
+    </div>
+    <div class="hint">Service fee Exhibit 3 mukaan: 30 € / lentolippu — lasketaan automaattisesti segmenttien pax-summasta.</div>
+  </div>
+
+  <div class="card">
+    <h2>Hotelli</h2>
+    <div class="row r4">
+      <div><label>Tähtiluokka</label>
+        <select id="hotelClass" onchange="calc()">
+          <option>4★</option>
+          <option>3★</option>
+        </select>
+      </div>
+      <div><label>Hinta / yö (€)</label><input id="hotelRate" type="number" min="0" value="200" oninput="calc()"></div>
+      <div><label>Yöt</label><input id="hotelNights" type="number" min="0" value="3" oninput="calc()"></div>
+      <div><label>Huoneita (pax)</label><input id="hotelRooms" type="number" min="0" value="14" oninput="calc()"></div>
+    </div>
+    <div class="row r2">
+      <div>
+        <label>Aamiainen mukana</label>
+        <select id="hotelBreakfast"><option>Kyllä</option><option>Ei</option></select>
+      </div>
+      <div>
+        <label>Sijainti</label>
+        <input id="hotelLocation" type="text" value="Ramblas-alue, käveltävissä kongressikeskukseen">
+      </div>
+    </div>
+    <div class="hint">Service fee Exhibit 3: 10 € / hotellivaraus · Oletettu hotellikommissio 8 % (vaihtelee)</div>
+  </div>
+
+  <div class="card">
+    <h2>Kongressi-rekisteröityminen</h2>
+    <div class="row r3">
+      <div><label>Hinta per pax (€)</label><input id="congressPrice" type="number" min="0" value="850" oninput="calc()"></div>
+      <div><label>Rekisteröitymisiä (lkm)</label><input id="congressCount" type="number" min="0" value="14" oninput="calc()"></div>
+      <div><label>Early bird?</label>
+        <select id="congressEB"><option>Kyllä</option><option>Ei</option></select>
+      </div>
+    </div>
+    <div class="row r2">
+      <div><label>Post-graduate -kurssin hinta (€)</label><input id="pgPrice" type="number" min="0" value="350" oninput="calc()"></div>
+      <div><label>PG-osallistujia (lkm)</label><input id="pgCount" type="number" min="0" value="13" oninput="calc()"></div>
+    </div>
+    <div class="hint">Service fee: 10 € / rekisteröityminen</div>
+  </div>
+
+  <div class="card">
+    <h2>Transferit ja maakuljetus</h2>
+    <div class="row r3">
+      <div><label>Hinta per pax (€) — koko paketti</label><input id="transferPrice" type="number" min="0" value="60" oninput="calc()"></div>
+      <div><label>Transfereitä (lkm)</label><input id="transferCount" type="number" min="0" value="14" oninput="calc()"></div>
+      <div><label>Premium / VIP</label>
+        <select id="transferVIP" onchange="calc()">
+          <option value="0">Standard (Menevä)</option>
+          <option value="50">VIP (Blacklane, +50 €/pax)</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint">Service fee: 20 € / kuljetusvaraus</div>
+  </div>
+
+  <div class="card">
+    <h2>Illalliset (compliance — maakohtainen raja!)</h2>
+    <div class="row r4">
+      <div><label>Maa</label>
+        <select id="dinnerCountry" onchange="updateDinnerLimit()">
+          <option value="70" data-country="Espanja">Espanja (max 70 €/pax)</option>
+          <option value="80" data-country="Italia">Italia (max 80 €/pax)</option>
+          <option value="100" data-country="Britannia">Britannia (max 100 €/pax)</option>
+          <option value="90" data-country="Ranska">Ranska (max 90 €/pax)</option>
+          <option value="80" data-country="Saksa">Saksa (max 80 €/pax)</option>
+          <option value="100" data-country="USA">USA (max 100 €/pax)</option>
+        </select>
+      </div>
+      <div><label>Hinta per pax (€)</label><input id="dinnerPrice" type="number" min="0" value="70" oninput="calc()"></div>
+      <div><label>Illallisia</label><input id="dinnerCount" type="number" min="0" value="4" oninput="calc()"></div>
+      <div><label>Osallistujia / illallinen</label><input id="dinnerPax" type="number" min="0" value="14" oninput="calc()"></div>
+    </div>
+    <div class="hint" id="dinnerLimitHint">⚠ Espanja: max 70 €/pax/illallinen (ml. ruoka + juomat + vesi + kaikki lisäpalvelut)</div>
+  </div>
+
+  <div class="card">
+    <h2>Lisäpalvelut</h2>
+    <div class="row r4">
+      <div><label>Lounge per pax (€)</label><input id="loungePrice" type="number" min="0" value="35" oninput="calc()"></div>
+      <div><label>Lounge varauksia</label><input id="loungeCount" type="number" min="0" value="14" oninput="calc()"></div>
+      <div><label>Penkki/baggage per pax (€)</label><input id="ancPrice" type="number" min="0" value="0" oninput="calc()"></div>
+      <div><label>Ancillary varauksia</label><input id="ancCount" type="number" min="0" value="0" oninput="calc()"></div>
+    </div>
+    <div class="hint">Service fee: 10 € / lisäpalveluvaraus</div>
+  </div>
+
+  <div class="card">
+    <h2>Sourcing-tunnit (Exhibit 3) <span class="badge">Nepton-kirjaus</span></h2>
+    <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">
+      MSA Exhibit 3 määrittelee tuntihinnat <strong>tehtäväkohtaisesti</strong>, ei rooli-pohjaisesti. Valitse oikea tehtävä — hinta päivittyy automaattisesti.
+    </p>
+    <div class="row r3">
+      <div><label>Tehtävä (Exhibit 3)</label>
+        <select id="sourcingRole" onchange="updateSourcingRate()">
+          <optgroup label="45 €/t — sourcing & rekisteröitymiset">
+            <option value="45" data-task="Hotel Sourcing / Group accommodation">Hotel sourcing / Group accom (45 €/t)</option>
+            <option value="45" data-task="Restaurant Sourcing">Restaurant sourcing (45 €/t)</option>
+            <option value="45" data-task="Registration for Congresses">Registration for Congresses (45 €/t)</option>
+            <option value="45" data-task="Cvent registration fee">Cvent registration fee (45 €/t)</option>
+            <option value="45" data-task="Welcome letter to attendees">Welcome letter to attendees (45 €/t)</option>
+          </optgroup>
+          <optgroup label="80 €/t — raportointi">
+            <option value="80" data-task="HCP reporting">HCP reporting (80 €/t)</option>
+          </optgroup>
+          <optgroup label="85 €/t — event management & venue">
+            <option value="85" data-task="Venue Sourcing / Research Event Location">Venue sourcing / Event location (85 €/t)</option>
+            <option value="85" data-task="Site Inspection">Site inspection (85 €/t)</option>
+            <option value="85" data-task="Event Project Management / Planning">Event Project Management (85 €/t)</option>
+            <option value="85" data-task="Group guide">Group guide (85 €/t)</option>
+            <option value="85" data-task="Attendee Communications & Management">Attendee communications (85 €/t)</option>
+            <option value="85" data-task="Creation of Meeting/event Registration Website">Registration website (85 €/t)</option>
+          </optgroup>
+          <optgroup label="90 €/t — visuaalinen">
+            <option value="90" data-task="Visual creation">Visual creation (90 €/t)</option>
+          </optgroup>
+          <optgroup label="100 €/t — tekniikka & streaming">
+            <option value="100" data-task="Planning and execution of event techniques">Event techniques (100 €/t)</option>
+            <option value="100" data-task="Streaming platform">Streaming platform (100 €/t)</option>
+          </optgroup>
+        </select>
+      </div>
+      <div><label>Hinta / tunti (€)</label><input id="sourcingRate" type="number" min="0" value="45" oninput="calc()"></div>
+      <div><label>Tunteja</label><input id="sourcingHours" type="number" min="0" step="0.5" value="12" oninput="calc()"></div>
+    </div>
+    <div class="hint">
+      Tunnit kirjataan <strong>Nepton-järjestelmään</strong> 24 h sisällä työn tekemisestä — PO-kohtaisesti, tehtäväkohtaisesti.
+      Sourcing voi koostua useista tehtävistä eri hintaluokassa — laske erikseen ja summaa.
+      Nettokate vaihtelee tehtävän hinnan mukaan (45 €/t kapeampi, 85–100 €/t leveämpi).
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Toimittajakommissiot (lisäkate — ei näy AbbVielle)</h2>
+    <div class="row r3">
+      <div><label>Hotellikommissio % (yleinen 0–12 %)</label><input id="hotelComm" type="number" min="0" max="20" step="0.5" value="8" oninput="calc()"></div>
+      <div><label>Lentokommissio / GDS-bonus %</label><input id="flightComm" type="number" min="0" max="10" step="0.1" value="1" oninput="calc()"></div>
+      <div><label>Transfer-toimittajakommissio %</label><input id="transferComm" type="number" min="0" max="15" step="0.5" value="5" oninput="calc()"></div>
+    </div>
+    <div class="hint">
+      Toimittajakommissio tulee toimittajalta meille — EI AbbVien rahasta. Sitä ei tarvitse ilmoittaa AbbVielle.
+      Vaihtelevat suuresti per toimittaja: GDS-bonukset vain pieniä, hotellikommissiot tyypillisesti 8–12 %, joissain 0.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Sourcing-tuntien sisäinen kate-% (Nepton-pohjainen)</h2>
+    <div class="row r2">
+      <div><label>Nettokate sourcing-tunnista (%)</label><input id="sourcingMargin" type="number" min="0" max="100" step="1" value="65" oninput="calc()"></div>
+      <div><label>Henkilöstö­kustannus / tunti (€)</label><input id="sourcingCost" type="number" min="0" value="35" oninput="calc()" disabled style="background:#f3f4f6;"></div>
+    </div>
+    <div class="hint">
+      Henkilöstökustannus lasketaan automaattisesti tuntiveloituksesta (100 – nettokate-% = kustannus-%).
+      Nepton-tuntierittely näyttää todelliset kustannukset jälkikäteen.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Floating Fund -toimittajamaksut</h2>
+    <div class="row r2">
+      <div><label>Floating Fund -prosentti volyymista (%)</label><input id="ffPct" type="number" min="0" max="100" step="0.5" value="5" oninput="calc()"></div>
+      <div><label>Mihin volyymiin sovelletaan (€)</label><input id="ffVolume" type="number" min="0" value="25000" oninput="calc()"></div>
+    </div>
+    <div class="hint">Esim. hotellit + transferit + kongressi — ei lentoihin. 5 % AbbVien volyymista on Menestyksen palvelumaksu (eli tuloa).</div>
+  </div>
+</div>
+
+<!-- ========= RIGHT: RESULT ========= -->
+<div>
+
+<!-- Calculation result -->
+<div class="card">
+  <h2>Hinnoittelu — reaaliaikainen <span class="badge" id="paxBadge">14 pax</span></h2>
+
+  <h3>1. Pass-through -kustannukset (mitä AbbVie maksaa palveluntarjoajille)</h3>
+  <table id="costTable">
+    <thead><tr><th>Komponentti</th><th>Lkm × hinta</th><th class="num">Yhteensä (€)</th></tr></thead>
+    <tbody id="costBody"></tbody>
+  </table>
+
+  <h3>2. Menestyksen palvelumaksut (Exhibit 3)</h3>
+  <table id="feeTable">
+    <thead><tr><th>Palvelumaksu</th><th>Yksikkö</th><th class="num">Yhteensä (€)</th></tr></thead>
+    <tbody id="feeBody"></tbody>
+  </table>
+
+  <h3>3. Yhteenveto AbbVielle (tarjouksen kokonaishinta)</h3>
+  <table>
+    <tbody>
+      <tr><td>Pass-through -kustannukset</td><td class="num" id="sumCost">0 €</td></tr>
+      <tr><td>Menestys palvelumaksut</td><td class="num" id="sumFees">0 €</td></tr>
+      <tr class="total"><td>TARJOUS YHTEENSÄ AbbVielle</td><td class="num" id="sumTotal">0 €</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Margin -->
+<div class="card">
+  <h2>Meidän katerakenne — kolme kerrosta</h2>
+  <p style="font-size:12px; color: var(--muted); margin-bottom: 10px;">
+    AbbVie näkee vain "Tarjous yhteensä" -summan (cost + service fees). Toimittajakommissiot ovat lisäkate joka ei näy AbbVielle.
+  </p>
+
+  <h3>Kerros 1 — Suora kate (100 %, Exhibit 3 mukaan)</h3>
+  <table>
+    <tbody>
+      <tr><td>Service fees (lentoliput, hotellit, kongressi, transferit, lounge, ancillary)</td><td class="num" id="mServiceFees">0 €</td></tr>
+      <tr><td>Floating Fund -toimittajamaksu</td><td class="num" id="mFloating">0 €</td></tr>
+      <tr class="subtotal"><td>Kerros 1 yhteensä</td><td class="num" id="mLayer1">0 €</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Kerros 2 — Sourcing-tuntien nettokate (Nepton)</h3>
+  <table>
+    <tbody>
+      <tr><td>Tuntimyynti AbbVielle (Exhibit 3 hinta × tunnit)</td><td class="num" id="mSourcingGross">0 €</td></tr>
+      <tr><td>– Sisäinen henkilöstökustannus (oletus 35 %)</td><td class="num" id="mSourcingCost">0 €</td></tr>
+      <tr class="subtotal"><td>Kerros 2 yhteensä (nettokate sourcingista)</td><td class="num" id="mLayer2">0 €</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Kerros 3 — Toimittajakommissiot (lisäkate, ei näy AbbVielle)</h3>
+  <table>
+    <tbody>
+      <tr><td>Hotellikommissio (% pass-through-volyymista)</td><td class="num" id="mHotelComm">0 €</td></tr>
+      <tr><td>Lentokommissio / GDS-bonus</td><td class="num" id="mFlightComm">0 €</td></tr>
+      <tr><td>Transfer-toimittajakommissio</td><td class="num" id="mTransferComm">0 €</td></tr>
+      <tr class="subtotal"><td>Kerros 3 yhteensä</td><td class="num" id="mLayer3">0 €</td></tr>
+    </tbody>
+  </table>
+
+  <div class="margin-box" id="marginBox">
+    <div>
+      <div class="num" id="marginAmount">0 €</div>
+      <div class="lbl">Kokonaiskate yhteensä (kerrokset 1 + 2 + 3)</div>
+    </div>
+    <div>
+      <div class="pct" id="marginPct">0 %</div>
+      <div class="lbl">Katemarginaali kokonaishinnasta</div>
+    </div>
+  </div>
+
+  <div class="hint" style="margin-top:8px;">
+    <strong>AbbVien näkemä raportointitaso:</strong> AbbVie näkee laskussa erikseen pass-through-kustannukset (kerros 1 + 2 erittäin kuvattuna)
+    ja palvelumaksut (Exhibit 3). Sopimus ei velvoita ilmoittamaan kerrosta 3 (toimittajakommissioita).
+  </div>
+</div>
+
+<!-- Offer preview -->
+<div class="card">
+  <h2>Tarjousnäkymä — kopioi suoraan sähköpostiin</h2>
+  <div class="tabs">
+    <div class="tab active" data-tab="email">Sähköpostiviesti</div>
+    <div class="tab" data-tab="full">Täysi tarjous</div>
+  </div>
+
+  <div class="panel active" id="panel-email">
+    <div class="toolbar">
+      <div class="left">
+        <button class="btn green" onclick="copyOffer('emailText')">📋 Kopioi sähköposti</button>
+      </div>
+    </div>
+    <div class="preview" id="emailText"></div>
+  </div>
+
+  <div class="panel" id="panel-full">
+    <div class="toolbar">
+      <div class="left">
+        <button class="btn green" onclick="copyOffer('fullText')">📋 Kopioi täysi tarjous</button>
+        <button class="btn" onclick="window.print()">🖨 Tulosta</button>
+      </div>
+    </div>
+    <div class="preview" id="fullText"></div>
+  </div>
+</div>
+
+</div>
+</main>
+
+<div class="toast" id="toast">Kopioitu leikepöydälle</div>
+
+<script>
+// ========= Flight segments =========
+let flightSegs = [
+  { date: "2026-10-16", route: "HEL–BCN", flightNo: "AY 165",  depTime: "17:05", arrTime: "20:05", pax: 13, price: 380 },
+  { date: "2026-10-17", route: "HEL–BCN", flightNo: "AY 1653", depTime: "17:05", arrTime: "20:05", pax: 1,  price: 380 },
+  { date: "2026-10-21", route: "BCN–HEL", flightNo: "AY 1654", depTime: "10:05", arrTime: "15:10", pax: 14, price: 380 },
+];
+
+function renderFlightSegments() {
+  const c = document.getElementById("flightSegments");
+  c.innerHTML = "";
+  flightSegs.forEach((seg, idx) => {
+    const div = document.createElement("div");
+    div.style.cssText = "background: var(--ice2); border-left: 3px solid var(--blue); padding: 10px; border-radius: 5px; margin-bottom: 8px;";
+    div.innerHTML = `
+      <div style="display: grid; grid-template-columns: 110px 130px 110px 90px 90px 70px 90px 30px; gap: 6px; align-items: end;">
+        <div><label>Päivä</label><input type="date" value="${seg.date}" onchange="updateSeg(${idx},'date',this.value)"></div>
+        <div><label>Reitti</label><input type="text" value="${seg.route}" onchange="updateSeg(${idx},'route',this.value)"></div>
+        <div><label>Lentonumero</label><input type="text" value="${seg.flightNo}" onchange="updateSeg(${idx},'flightNo',this.value)"></div>
+        <div><label>Lähtö</label><input type="time" value="${seg.depTime}" onchange="updateSeg(${idx},'depTime',this.value)"></div>
+        <div><label>Saapuu</label><input type="time" value="${seg.arrTime}" onchange="updateSeg(${idx},'arrTime',this.value)"></div>
+        <div><label>Pax</label><input type="number" min="0" value="${seg.pax}" onchange="updateSeg(${idx},'pax',this.value)"></div>
+        <div><label>€/pax</label><input type="number" min="0" value="${seg.price}" onchange="updateSeg(${idx},'price',this.value)"></div>
+        <div><button class="btn" style="background: var(--red); padding: 6px 10px;" onclick="removeFlightSegment(${idx})">×</button></div>
+      </div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function updateSeg(idx, key, val) {
+  if (key === "pax" || key === "price") val = parseFloat(val) || 0;
+  flightSegs[idx][key] = val;
+  calc();
+}
+function addFlightSegment() {
+  flightSegs.push({ date: "", route: "", flightNo: "", depTime: "", arrTime: "", pax: 0, price: 380 });
+  renderFlightSegments();
+  calc();
+}
+function removeFlightSegment(idx) {
+  flightSegs.splice(idx, 1);
+  renderFlightSegments();
+  calc();
+}
+function flightTotalPax() { return flightSegs.reduce((a, s) => a + (s.pax || 0), 0); }
+function flightTotalCost() { return flightSegs.reduce((a, s) => a + (s.pax || 0) * (s.price || 0), 0); }
+
+// ========= Helpers =========
+function n(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function s(id) { return document.getElementById(id).value; }
+function eur(x) {
+  return (Math.round(x * 100) / 100).toLocaleString("fi-FI", { maximumFractionDigits: 0 }) + " €";
+}
+function fmtDate(d) {
+  if (!d) return "";
+  const dt = new Date(d);
+  return dt.toLocaleDateString("fi-FI", { day: "numeric", month: "numeric", year: "numeric" });
+}
+function fmtDateShort(d) {
+  if (!d) return "";
+  const dt = new Date(d);
+  return dt.toLocaleDateString("fi-FI", { day: "numeric", month: "numeric" });
+}
+
+function updateDinnerLimit() {
+  const sel = document.getElementById("dinnerCountry");
+  const opt = sel.options[sel.selectedIndex];
+  const country = opt.getAttribute("data-country");
+  const max = sel.value;
+  document.getElementById("dinnerLimitHint").textContent =
+    `⚠ ${country}: max ${max} €/pax/illallinen (ml. ruoka + juomat + vesi + kaikki lisäpalvelut)`;
+  if (n("dinnerPrice") > parseFloat(max)) {
+    document.getElementById("dinnerPrice").value = max;
+  }
+  calc();
+}
+
+function updateSourcingRate() {
+  document.getElementById("sourcingRate").value = document.getElementById("sourcingRole").value;
+  calc();
+}
+
+// ========= Main calculation =========
+function calc() {
+  const paxHCP = n("paxHCP"), paxStaff = n("paxStaff");
+  const totalPax = paxHCP + paxStaff;
+  document.getElementById("paxBadge").textContent = totalPax + " pax (" + paxHCP + " HCP + " + paxStaff + " staff)";
+
+  // Pass-through
+  const flightCost = flightTotalCost();
+  const flightCount = flightTotalPax();
+  const hotelCost = n("hotelRate") * n("hotelNights") * n("hotelRooms");
+  const congressCost = n("congressPrice") * n("congressCount");
+  const pgCost = n("pgPrice") * n("pgCount");
+  const transferBase = n("transferPrice") * n("transferCount");
+  const transferVIPExtra = parseFloat(s("transferVIP")) * n("transferCount");
+  const transferCost = transferBase + transferVIPExtra;
+  const dinnerCost = n("dinnerPrice") * n("dinnerCount") * n("dinnerPax");
+  const loungeCost = n("loungePrice") * n("loungeCount");
+  const ancCost = n("ancPrice") * n("ancCount");
+
+  // Flight summary rows — one row per segment
+  const flightRows = flightSegs.map(seg => {
+    const cost = (seg.pax || 0) * (seg.price || 0);
+    const label = `Lennot ${seg.flightNo} ${seg.route} (${fmtDateShort(seg.date)} ${seg.depTime})`;
+    return [label, `${seg.pax} × ${eur(seg.price)}`, cost];
+  });
+  const costRows = [
+    ...flightRows,
+    ["Hotelli " + s("hotelClass") + " (" + n("hotelNights") + " yötä)", n("hotelRooms") + " × " + n("hotelNights") + " × " + eur(n("hotelRate")), hotelCost],
+    ["Kongressi-rekisteröityminen", n("congressCount") + " × " + eur(n("congressPrice")), congressCost],
+    ["Post-graduate -kurssi", n("pgCount") + " × " + eur(n("pgPrice")), pgCost],
+    ["Transferit & maakuljetus", n("transferCount") + " × " + eur(n("transferPrice") + parseFloat(s("transferVIP"))), transferCost],
+    ["Illalliset (" + n("dinnerCount") + " × " + n("dinnerPax") + " hlö)", n("dinnerCount") * n("dinnerPax") + " × " + eur(n("dinnerPrice")), dinnerCost],
+    ["Lounge", n("loungeCount") + " × " + eur(n("loungePrice")), loungeCost],
+    ["Lisäpalvelut (penkki/baggage)", n("ancCount") + " × " + eur(n("ancPrice")), ancCost],
+  ].filter(r => r[2] > 0);
+
+  const totalCost = costRows.reduce((a, r) => a + r[2], 0);
+
+  const costBody = document.getElementById("costBody");
+  costBody.innerHTML = costRows.map(r =>
+    `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num">${eur(r[2])}</td></tr>`
+  ).join("") + `<tr class="subtotal"><td colspan="2">Pass-through yhteensä</td><td class="num">${eur(totalCost)}</td></tr>`;
+
+  // Service fees (Exhibit 3)
+  const feeFlights = 30 * flightCount;
+  const feeHotel = 10 * n("hotelRooms");
+  const feeCongress = 10 * (n("congressCount") + n("pgCount"));
+  const feeTransfer = 20 * n("transferCount");
+  const feeLounge = 10 * n("loungeCount");
+  const feeAnc = 10 * n("ancCount");
+  const feeSourcing = n("sourcingRate") * n("sourcingHours");
+  const feeFF = n("ffVolume") * (n("ffPct") / 100);
+
+  const feeRows = [
+    ["Lentoliput", "30 € × " + flightCount, feeFlights],
+    ["Hotellivaraukset", "10 € × " + n("hotelRooms"), feeHotel],
+    ["Kongressi + PG -rekisteröitymiset", "10 € × " + (n("congressCount") + n("pgCount")), feeCongress],
+    ["Transfer-varaukset", "20 € × " + n("transferCount"), feeTransfer],
+    ["Lounge", "10 € × " + n("loungeCount"), feeLounge],
+    ["Lisäpalvelut (ancillary)", "10 € × " + n("ancCount"), feeAnc],
+    ["Sourcing (" + n("sourcingHours") + " t × " + eur(n("sourcingRate")) + ")", n("sourcingHours") + " × " + eur(n("sourcingRate")), feeSourcing],
+    ["Floating Fund (" + n("ffPct") + " % × " + eur(n("ffVolume")) + ")", n("ffPct") + " % × volyymi", feeFF],
+  ].filter(r => r[2] > 0);
+
+  const totalFees = feeRows.reduce((a, r) => a + r[2], 0);
+
+  const feeBody = document.getElementById("feeBody");
+  feeBody.innerHTML = feeRows.map(r =>
+    `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num">${eur(r[2])}</td></tr>`
+  ).join("") + `<tr class="subtotal"><td colspan="2">Palvelumaksut yhteensä</td><td class="num">${eur(totalFees)}</td></tr>`;
+
+  // Summary
+  document.getElementById("sumCost").textContent = eur(totalCost);
+  document.getElementById("sumFees").textContent = eur(totalFees);
+  document.getElementById("sumTotal").textContent = eur(totalCost + totalFees);
+
+  // === Margin breakdown — 3 layers ===
+
+  // Update sourcing cost display from margin %
+  const sourcingMarginPct = n("sourcingMargin");
+  const sourcingCostPct = 100 - sourcingMarginPct;
+  const sourcingCostPerHour = n("sourcingRate") * sourcingCostPct / 100;
+  document.getElementById("sourcingCost").value = sourcingCostPerHour.toFixed(0);
+
+  // Layer 1: Direct margin (Exhibit 3 service fees + Floating Fund)
+  const mServiceFees = feeFlights + feeHotel + feeCongress + feeTransfer + feeLounge + feeAnc;
+  const mFloating = feeFF;
+  const mLayer1 = mServiceFees + mFloating;
+
+  // Layer 2: Sourcing net margin (gross - personnel cost)
+  const mSourcingGross = feeSourcing;
+  const mSourcingCost = mSourcingGross * sourcingCostPct / 100;
+  const mLayer2 = mSourcingGross - mSourcingCost;
+
+  // Layer 3: Supplier commissions (estimated, not visible to AbbVie)
+  const mHotelComm = hotelCost * (n("hotelComm") / 100);
+  const mFlightComm = flightCost * (n("flightComm") / 100);
+  const mTransferComm = transferCost * (n("transferComm") / 100);
+  const mLayer3 = mHotelComm + mFlightComm + mTransferComm;
+
+  const mTotal = mLayer1 + mLayer2 + mLayer3;
+
+  document.getElementById("mServiceFees").textContent = eur(mServiceFees);
+  document.getElementById("mFloating").textContent = eur(mFloating);
+  document.getElementById("mLayer1").textContent = eur(mLayer1);
+
+  document.getElementById("mSourcingGross").textContent = eur(mSourcingGross);
+  document.getElementById("mSourcingCost").textContent = "- " + eur(mSourcingCost);
+  document.getElementById("mLayer2").textContent = eur(mLayer2);
+
+  document.getElementById("mHotelComm").textContent = eur(mHotelComm);
+  document.getElementById("mFlightComm").textContent = eur(mFlightComm);
+  document.getElementById("mTransferComm").textContent = eur(mTransferComm);
+  document.getElementById("mLayer3").textContent = eur(mLayer3);
+
+  const grandTotal = totalCost + totalFees;
+  const marginPct = grandTotal > 0 ? (mTotal / grandTotal * 100) : 0;
+  document.getElementById("marginAmount").textContent = eur(mTotal);
+  document.getElementById("marginPct").textContent = marginPct.toFixed(1).replace(".", ",") + " %";
+
+  const mb = document.getElementById("marginBox");
+  mb.classList.remove("warn", "bad");
+  if (marginPct < 5) mb.classList.add("bad");
+  else if (marginPct < 10) mb.classList.add("warn");
+
+  // Offer text generation
+  updateOfferText({
+    paxHCP, paxStaff, totalPax,
+    flightCost, hotelCost, congressCost, pgCost, transferCost, dinnerCost, loungeCost, ancCost,
+    feeFlights, feeHotel, feeCongress, feeTransfer, feeLounge, feeAnc, feeSourcing, feeFF,
+    totalCost, totalFees, grandTotal, mTotal, marginPct
+  });
+}
+
+// ========= Offer text =========
+function updateOfferText(c) {
+  const event = s("eventName");
+  const dest = s("dest");
+  const dep = fmtDateShort(s("depDate"));
+  const ret = fmtDateShort(s("retDate"));
+  const requester = s("requestedBy") || "(pyytäjä)";
+  const firstName = requester.split(" ")[0];
+  const cc = s("costCenter");
+  const map = s("mapCode");
+
+  const dateRange = dep + ".–" + ret + ".";
+  const offerDate = new Date().toLocaleDateString("fi-FI", { day: "numeric", month: "numeric", year: "numeric" });
+  const validUntil = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+    .toLocaleDateString("fi-FI", { day: "numeric", month: "numeric", year: "numeric" });
+
+  // Flight segment string (for both email and full)
+  const flightSegStr = flightSegs.map(seg =>
+    `  ${fmtDateShort(seg.date)}  ${seg.route.padEnd(10," ")}${seg.flightNo.padEnd(9," ")}${seg.depTime}/${seg.arrTime}   ${seg.pax} pax @ ${eur(seg.price)}`
+  ).join("\n");
+  const flightExtras = s("flightExtras");
+
+  // Email version (short)
+  const email =
+`Hei ${firstName},
+
+Ohessa tarjouksemme ${event} -kongressimatkasta ${dest}aan ${dateRange} (${c.totalPax} pax: ${c.paxHCP} HCP + ${c.paxStaff} AbbVie staff).
+
+Tarjouksen kokonaishinta: ${eur(c.grandTotal)} (eritelty alla).
+
+LENNOT
+${flightSegStr}
+${flightExtras ? "  " + flightExtras + "\n" : ""}
+Pääperiaatteet:
+• Pass-through -kustannukset: ${eur(c.totalCost)} (lennot, hotelli, kongressi, transferit, ruokailut, lisäpalvelut)
+• Menestyksen palvelumaksut Exhibit 3 mukaisesti: ${eur(c.totalFees)}
+• Maksuehto: 45 päivää undisputed invoice, lasku Iron Mountainiin (abbvie.finland.6294@ironmountain.com)
+• PO-rakenne-ehdotus: erilliset PO:t HCP-osallistujille ja AbbVie staff:lle
+• Tarjous voimassa: ${validUntil} asti
+
+Eritelty hinnoittelu
+
+${tableForEmail(c)}
+
+Cost Center: ${cc}  ·  MAP-koodi: ${map}
+
+Tärkeää aikataulun kannalta: ${dest}n hotellikapasiteetti täyttyy nopeasti kongressin aikana. Sourcing alkaa heti kun saamme tarjouksen hyväksynnän ja PO-tiedon.
+
+Vastaan mielelläni kysymyksiin.
+
+Ystävällisin terveisin,
+[Etu Sukunimi]
+Menestys Travel
+reservations@menestystravel.fi · +358 9 2510 2099`;
+
+  document.getElementById("emailText").textContent = email;
+
+  // Full version
+  const full =
+`TARJOUS
+
+${event} – ${dest}, ${dateRange}
+Tarjouksen päivämäärä: ${offerDate}
+Voimassa: ${validUntil}
+Tarjousnumero: MT-${new Date().getFullYear()}-${Math.floor(Math.random()*900+100)}
+
+Asiakas
+─────────
+AbbVie Oy, AV 6294
+Veturitie 11 T 132, 00520 Helsinki
+Y-tunnus: 2470310-6
+Pyytäjä: ${requester}
+Cost Center: ${cc}
+MAP-koodi: ${map}
+
+Matkustajat
+─────────
+Yhteensä: ${c.totalPax} pax
+- HCP: ${c.paxHCP}
+- AbbVie staff: ${c.paxStaff}
+Nimisubstituutio sallittu kunkin lipun tariffin mukaan.
+
+Lennot (varatut segmentit)
+─────────
+${flightSegStr}
+${flightExtras ? flightExtras + "\n" : ""}
+Eritelty hinnoittelu
+─────────
+${tableForEmail(c)}
+
+PO-rakenne-ehdotus
+─────────
+PO 1 — HCP (${c.paxHCP} pax): lennot + hotelli + kongressi + transferit + illalliset + service fee
+PO 2 — AbbVie staff (${c.paxStaff} pax): sama erittely
+${c.feeSourcing > 0 ? "(Sourcing-tunnit voidaan yhdistää isompaan PO:hon tai laskuttaa erikseen.)\n" : ""}
+
+Maksuehdot
+─────────
+• Maksuaika 45 päivää undisputed invoice
+• Lasku Iron Mountain -järjestelmään: abbvie.finland.6294@ironmountain.com (PDF-liitteenä)
+• 1 PO per lasku — useita PO:ita tarjouksen yli
+• Cost breakdown per osallistuja sisältyy laskuun
+• Floating Fund mahdollinen käytettävissä palveluntarjoaja-maksuihin
+
+Cancellation policy
+─────────
+• Lennot: tariffin mukaan
+• Hotelli: peruutusoikeus 14 päivää ennen saapumista ilman maksua
+• Kongressi-rekisteröityminen: nimisubstituutio mahdollinen, peruutus ei tyypillisesti palauteta
+
+Compliance
+─────────
+Tarjous on laadittu PIF Code of Ethics 2026 -ohjeen sekä AbbVien Travel Policyn mukaisesti.
+Ravintoloiden voucherit pre-paid -muodossa, sisältäen dieettitiedot ja erikoispyynnöt.
+EFPIA / Transfer of Value -raportointitiedot toimitetaan laskun ohessa per HCP.
+
+Allekirjoittaja
+─────────
+[Etu Sukunimi], Menestys Travel
+reservations@menestystravel.fi · +358 9 2510 2099
+
+Account Director: Anssi Tapola
+anssi.tapola@elamysgroup.com · +358 41 515 1987`;
+
+  document.getElementById("fullText").textContent = full;
+}
+
+function tableForEmail(c) {
+  const rows = [];
+  function row(label, val) { rows.push(label.padEnd(50, " ") + (eur(val)).padStart(12, " ")); }
+  if (c.flightCost > 0) row("Lennot", c.flightCost);
+  if (c.hotelCost > 0) row("Hotelli (sis. aamiainen jos mainittu)", c.hotelCost);
+  if (c.congressCost > 0) row("Kongressi-rekisteröityminen", c.congressCost);
+  if (c.pgCost > 0) row("Post-graduate -kurssit", c.pgCost);
+  if (c.transferCost > 0) row("Transferit", c.transferCost);
+  if (c.dinnerCost > 0) row("Illalliset (pre-paid voucher, sis. dietit)", c.dinnerCost);
+  if (c.loungeCost > 0) row("Lounge", c.loungeCost);
+  if (c.ancCost > 0) row("Lisäpalvelut", c.ancCost);
+  rows.push("─".repeat(62));
+  row("Pass-through yhteensä", c.totalCost);
+  rows.push("");
+  if (c.feeFlights > 0) row("Service fee — lentoliput (30 €/lippu)", c.feeFlights);
+  if (c.feeHotel > 0) row("Service fee — hotellivaraukset (10 €/booking)", c.feeHotel);
+  if (c.feeCongress > 0) row("Service fee — kongressi (10 €/rek)", c.feeCongress);
+  if (c.feeTransfer > 0) row("Service fee — transferit (20 €/booking)", c.feeTransfer);
+  if (c.feeLounge > 0) row("Service fee — lounge (10 €/booking)", c.feeLounge);
+  if (c.feeAnc > 0) row("Service fee — lisäpalvelut (10 €/booking)", c.feeAnc);
+  if (c.feeSourcing > 0) row("Sourcing-tunnit", c.feeSourcing);
+  if (c.feeFF > 0) row("Floating Fund -toimittajamaksu", c.feeFF);
+  rows.push("─".repeat(62));
+  row("Palvelumaksut yhteensä", c.totalFees);
+  rows.push("═".repeat(62));
+  row("TARJOUS YHTEENSÄ", c.grandTotal);
+  return rows.join("\n");
+}
+
+// ========= Clipboard =========
+function copyOffer(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Kopioitu leikepöydälle");
+  }).catch(() => {
+    showToast("Kopiointi epäonnistui — valitse teksti ja paina Ctrl+C");
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2000);
+}
+
+// ========= Tabs =========
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("panel-" + t.dataset.tab).classList.add("active");
+  });
+});
+
+// ========= Examples =========
+function resetExample() {
+  // UEGW Barcelona pre-fill (default values already set)
+  const defaults = {
+    eventName: "UEGW 2026",
+    mapCode: "(saadaan AbbVielta)",
+    dest: "Barcelona",
+    depDate: "2026-10-16",
+    retDate: "2026-10-21",
+    paxHCP: 9, paxStaff: 5,
+    requestedBy: "Päivi Mansikkaniemi",
+    costCenter: "IMM-FIN-0042",
+    hotelRate: 200, hotelNights: 3, hotelRooms: 14,
+    hotelLocation: "Ramblas-alue, käveltävissä kongressikeskukseen",
+    congressPrice: 850, congressCount: 14,
+    pgPrice: 350, pgCount: 13,
+    transferPrice: 60, transferCount: 14,
+    dinnerPrice: 70, dinnerCount: 4, dinnerPax: 14,
+    loungePrice: 35, loungeCount: 14,
+    ancPrice: 0, ancCount: 0,
+    sourcingRate: 45, sourcingHours: 12,
+    ffPct: 5, ffVolume: 25000,
+  };
+  Object.entries(defaults).forEach(([k, v]) => {
+    const el = document.getElementById(k);
+    if (el) el.value = v;
+  });
+  // Reset flight segments to UEGW Barcelona
+  flightSegs = [
+    { date: "2026-10-16", route: "HEL–BCN", flightNo: "AY 165",  depTime: "17:05", arrTime: "20:05", pax: 13, price: 380 },
+    { date: "2026-10-17", route: "HEL–BCN", flightNo: "AY 1653", depTime: "17:05", arrTime: "20:05", pax: 1,  price: 380 },
+    { date: "2026-10-21", route: "BCN–HEL", flightNo: "AY 1654", depTime: "10:05", arrTime: "15:10", pax: 14, price: 380 },
+  ];
+  renderFlightSegments();
+  document.getElementById("flightExtras").value = "Liittymälennot Oulu ja Kuopio · Paluutaksit Helsinki → Tampere, Turku";
+  document.getElementById("flightClass").value = "Economy";
+  document.getElementById("hotelClass").value = "4★";
+  document.getElementById("hotelBreakfast").value = "Kyllä";
+  document.getElementById("dinnerCountry").value = "70";
+  document.getElementById("sourcingRole").value = "45";
+  document.getElementById("transferVIP").value = "0";
+  document.getElementById("congressEB").value = "Kyllä";
+  updateDinnerLimit();
+  calc();
+}
+
+function resetEmpty() {
+  ["eventName","mapCode","dest","requestedBy","costCenter"].forEach(id => document.getElementById(id).value = "");
+  flightSegs = [];
+  renderFlightSegments();
+  ["paxHCP","paxStaff","hotelRate","hotelNights","hotelRooms",
+   "congressPrice","congressCount","pgPrice","pgCount","transferPrice","transferCount",
+   "dinnerPrice","dinnerCount","dinnerPax","loungePrice","loungeCount","ancPrice","ancCount",
+   "sourcingHours","ffVolume"].forEach(id => document.getElementById(id).value = 0);
+  document.getElementById("sourcingRate").value = 45;
+  document.getElementById("ffPct").value = 5;
+  document.getElementById("depDate").value = "";
+  document.getElementById("retDate").value = "";
+  calc();
+}
+
+// Initialize
+renderFlightSegments();
+calc();
+</script>
+
+</body>
+</html>
