@@ -109,7 +109,7 @@
     </div>
     <p class="subtitle">Klikkaa työkalua avataksesi sen.</p>
 
-    <a href="/tools/tarjouslaskuri" class="tool-card">
+    <a href="/tarjouslaskuri" class="tool-card">
       <div class="tool-icon" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);">🧮</div>
       <div class="tool-content">
         <div class="tool-title">Tarjouslaskuri AbbVie</div>
@@ -162,12 +162,12 @@ function showGate() {
 }
 
 function lockOut() {
-  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(SESSION_KEY);
   showGate();
 }
 
 // Restore session
-if (sessionStorage.getItem(SESSION_KEY) === PW_HASH) {
+if (localStorage.getItem(SESSION_KEY) === PW_HASH) {
   showPicker();
 }
 
@@ -182,7 +182,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   try {
     const hash = await hashPassword(pw);
     if (hash === PW_HASH) {
-      sessionStorage.setItem(SESSION_KEY, hash);
+      localStorage.setItem(SESSION_KEY, hash);
       // Tarkista return-URL
       const params = new URLSearchParams(window.location.search);
       const ret = params.get("return");
