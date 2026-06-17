@@ -295,7 +295,7 @@
       <input type="file" id="importJSON" accept=".json" style="display:none" onchange="importOffersJSON(this.files[0])">
       <button class="btn outline" onclick="resetEmpty()">Tyhjennä</button>
     </div>
-    <div style="margin-top:6px;">Tarjouslaskuri v2.1 · 17.6.2026 · <span style="color:#FCD34D">3 tulovirta -malli</span></div>
+    <div style="margin-top:6px;">Tarjouslaskuri v2.2 · 17.6.2026 · <span style="color:#FCD34D">Lentokokonaisuudet + 3 tulovirtaa</span></div>
   </div>
 </div>
 
@@ -522,7 +522,7 @@
       <div id="amadeusResult" class="hint" style="margin-top: 6px;"></div>
     </details>
     <div id="flightSegments"></div>
-    <button class="btn" style="margin-top: 8px;" onclick="addFlightSegment()">+ Lisää lentosegmentti</button>
+    <button class="btn" style="margin-top: 8px;" onclick="addFlightItin()">+ Lisää lentokokonaisuus</button>
     <div class="row r2" style="margin-top: 12px;">
       <div>
         <label>Yleinen luokka</label>
@@ -1572,62 +1572,159 @@ function parseAmadeus() {
     return;
   }
 
-  flightSegs = parsed;
+  // Ryhmitellään kaikki parsittut segmentit YHDEKSI itineraryksi
+  // Pax = ensimmäisen segmentin pax (yleensä sama kaikissa)
+  // €/pax = käyttäjän antama tai 0
+  const itinPax = parsed[0].pax || 0;
+  const itinPrice = parsed[0].price || 0;
+  flightItins = [{
+    pax: itinPax,
+    pricePerPax: itinPrice,
+    segments: parsed.map(p => ({
+      date: p.date, route: p.route, flightNo: p.flightNo,
+      depTime: p.depTime, arrTime: p.arrTime
+    })),
+  }];
   renderFlightSegments();
   calc();
   resultEl.style.color = "var(--green)";
-  let msg = `✓ Purettu ${parsed.length} segmenttiä. Voit muokata yksittäisiä rivejä alta.`;
+  let msg = `✓ Purettu ${parsed.length} segmenttiä yhdeksi lentokokonaisuudeksi (pax=${itinPax}, €/pax=${itinPrice}). Splittaa erilliseen itineraryyn jos esim. eri matkustajilla eri liput.`;
   if (failedLines.length) msg += `  (${failedLines.length} riviä ei tunnistettu — voit lisätä ne käsin.)`;
   resultEl.textContent = msg;
-  addChangeLogEntry("auto", `Amadeus-segmentit purettu (${parsed.length} riviä)`);
+  addChangeLogEntry("auto", `Amadeus-segmentit purettu (${parsed.length} riviä, 1 itinerary)`);
 }
 
-// ========= Flight segments =========
-let flightSegs = [
-  { date: "2026-10-16", route: "HEL–BCN", flightNo: "AY 165",  depTime: "17:05", arrTime: "20:05", pax: 13, price: 380 },
-  { date: "2026-10-17", route: "HEL–BCN", flightNo: "AY 1653", depTime: "17:05", arrTime: "20:05", pax: 1,  price: 380 },
-  { date: "2026-10-21", route: "BCN–HEL", flightNo: "AY 1654", depTime: "10:05", arrTime: "15:10", pax: 14, price: 380 },
-];
+// ========= Lentokokonaisuudet (itineraryt) =========
+// Yksi itinerary = yksi lippu / yksi meno-paluu, sisältää N segmenttiä jotka jakavat hinnan.
+// Esim. HEL-BCN + BCN-HEL = 1 itinerary jolla pax=14 ja pricePerPax=380.
+let flightItins = [];
+
+// Legacy-compat: flightSegs flatten-kopio kaikkien itineraryjen segmenteistä (yhteensopivuus offer-textiin yms.)
+let flightSegs = [];
+
+function rebuildFlightSegsLegacy() {
+  flightSegs = [];
+  flightItins.forEach(itin => {
+    itin.segments.forEach(seg => {
+      flightSegs.push({
+        date: seg.date, route: seg.route, flightNo: seg.flightNo,
+        depTime: seg.depTime, arrTime: seg.arrTime,
+        pax: itin.pax, price: itin.pricePerPax,
+      });
+    });
+  });
+}
 
 function renderFlightSegments() {
   const c = document.getElementById("flightSegments");
   c.innerHTML = "";
-  flightSegs.forEach((seg, idx) => {
-    const div = document.createElement("div");
-    div.style.cssText = "background: var(--ice2); border-left: 3px solid var(--blue); padding: 10px; border-radius: 5px; margin-bottom: 8px;";
-    div.innerHTML = `
-      <div style="display: grid; grid-template-columns: minmax(110px,1fr) minmax(110px,1fr) minmax(100px,1fr) minmax(80px,1fr) minmax(80px,1fr) minmax(60px,80px) minmax(80px,1fr) 32px; gap: 6px; align-items: end;">
-        <div><label>Päivä <span style="font-size:10px; color:var(--muted); font-weight:400;">${seg.date ? "(" + fmtDateFi(seg.date) + ")" : ""}</span></label><input type="date" value="${seg.date}" onchange="updateSeg(${idx},'date',this.value); renderFlightSegments()"></div>
-        <div><label>Reitti</label><input type="text" value="${seg.route}" onchange="updateSeg(${idx},'route',this.value)"></div>
-        <div><label>Lentonumero</label><input type="text" value="${seg.flightNo}" onchange="updateSeg(${idx},'flightNo',this.value)"></div>
-        <div><label>Lähtö (24h)</label><input type="text" inputmode="numeric" pattern="[0-9]{1,2}[:\.][0-9]{2}" placeholder="HH:MM" value="${seg.depTime}" onchange="updateSeg(${idx},'depTime',normalizeTime(this.value))" oninput="this.value = this.value.replace(/[^0-9:.]/g,'')"></div>
-        <div><label>Saapuu (24h)</label><input type="text" inputmode="numeric" pattern="[0-9]{1,2}[:\.][0-9]{2}" placeholder="HH:MM" value="${seg.arrTime}" onchange="updateSeg(${idx},'arrTime',normalizeTime(this.value))" oninput="this.value = this.value.replace(/[^0-9:.]/g,'')"></div>
-        <div><label>Pax</label><input type="number" min="0" value="${seg.pax}" onchange="updateSeg(${idx},'pax',this.value)"></div>
-        <div><label>€/pax</label><input type="number" min="0" value="${seg.price}" onchange="updateSeg(${idx},'price',this.value)"></div>
-        <div><button class="btn" style="background: var(--red); padding: 6px 10px;" onclick="removeFlightSegment(${idx})">×</button></div>
+  if (flightItins.length === 0) {
+    c.innerHTML = '<div style="font-size: 12px; color: var(--muted); padding: 6px;">Ei lentokokonaisuuksia. Liimaa Amadeus-rivit yltä tai klikkaa "+ Lisää lentokokonaisuus".</div>';
+    rebuildFlightSegsLegacy();
+    return;
+  }
+  flightItins.forEach((itin, itinIdx) => {
+    const subtotal = (itin.pax || 0) * (itin.pricePerPax || 0);
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "background: var(--ice2); border-left: 4px solid var(--blue); padding: 12px; border-radius: 6px; margin-bottom: 10px;";
+
+    // Itinerary header (pax + €/pax + subtotal)
+    let html = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-weight:700; color:var(--navy); font-size:13px;">✈ Lentokokonaisuus ${itinIdx + 1} (yksi lippu per pax)</div>
+        <button class="btn" style="background:var(--red); padding:4px 10px;" onclick="rmFlightItin(${itinIdx})">× Poista koko itinerary</button>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 2fr; gap:8px; margin-bottom:10px; align-items:end;">
+        <div><label>Pax (yhteinen kaikille segmenteille)</label><input type="number" min="0" value="${itin.pax || 0}" oninput="updItin(${itinIdx},'pax',this.value)"></div>
+        <div><label>€ / pax (koko itinerary)</label><input type="number" min="0" value="${itin.pricePerPax || 0}" oninput="updItin(${itinIdx},'pricePerPax',this.value)"></div>
+        <div style="background:white; padding:6px 10px; border-radius:6px; text-align:right; font-weight:600;">
+          ${itin.pax || 0} × ${eur(itin.pricePerPax || 0)} = <span style="color:var(--green);">${eur(subtotal)}</span>
+        </div>
       </div>
     `;
-    c.appendChild(div);
+
+    // Segmentit
+    itin.segments.forEach((seg, segIdx) => {
+      html += `
+        <div style="background:white; padding:8px; border-radius:5px; margin-bottom:6px;">
+          <div style="display:grid; grid-template-columns: minmax(110px,1.1fr) minmax(110px,1fr) minmax(100px,1fr) minmax(80px,1fr) minmax(80px,1fr) 32px; gap:6px; align-items:end;">
+            <div><label>Päivä <span style="font-size:10px; color:var(--muted); font-weight:400;">${seg.date ? "(" + fmtDateFi(seg.date) + ")" : ""}</span></label><input type="date" value="${seg.date || ""}" onchange="updSeg(${itinIdx},${segIdx},'date',this.value); renderFlightSegments()"></div>
+            <div><label>Reitti</label><input type="text" value="${seg.route || ""}" onchange="updSeg(${itinIdx},${segIdx},'route',this.value)"></div>
+            <div><label>Lentonumero</label><input type="text" value="${seg.flightNo || ""}" onchange="updSeg(${itinIdx},${segIdx},'flightNo',this.value)"></div>
+            <div><label>Lähtö (24h)</label><input type="text" inputmode="numeric" placeholder="HH:MM" value="${seg.depTime || ""}" onchange="updSeg(${itinIdx},${segIdx},'depTime',normalizeTime(this.value)); renderFlightSegments()" oninput="this.value = this.value.replace(/[^0-9:.]/g,'')"></div>
+            <div><label>Saapuu (24h)</label><input type="text" inputmode="numeric" placeholder="HH:MM" value="${seg.arrTime || ""}" onchange="updSeg(${itinIdx},${segIdx},'arrTime',normalizeTime(this.value)); renderFlightSegments()" oninput="this.value = this.value.replace(/[^0-9:.]/g,'')"></div>
+            <div><button class="btn" style="background:var(--red); padding:6px 10px;" onclick="rmSeg(${itinIdx},${segIdx})">×</button></div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      <button class="btn outline" style="margin-top:4px; font-size:11px;" onclick="addSeg(${itinIdx})">+ Lisää segmentti tähän itineraryyn</button>
+    `;
+    wrap.innerHTML = html;
+    c.appendChild(wrap);
   });
+  rebuildFlightSegsLegacy();
 }
 
-function updateSeg(idx, key, val) {
-  if (key === "pax" || key === "price") val = parseFloat(val) || 0;
-  flightSegs[idx][key] = val;
+function updItin(idx, key, val) {
+  if (key === "pax" || key === "pricePerPax") val = parseFloat(val) || 0;
+  flightItins[idx][key] = val;
   calc();
 }
+function updSeg(itinIdx, segIdx, key, val) {
+  flightItins[itinIdx].segments[segIdx][key] = val;
+  calc();
+}
+function addFlightItin() {
+  flightItins.push({
+    pax: n("paxHCP") + n("paxStaff") || 0,
+    pricePerPax: 0,
+    segments: [{ date: "", route: "", flightNo: "", depTime: "", arrTime: "" }],
+  });
+  renderFlightSegments();
+  calc();
+  addChangeLogEntry("auto", "Lisätty lentokokonaisuus (itinerary)");
+}
+function rmFlightItin(idx) {
+  flightItins.splice(idx, 1);
+  renderFlightSegments();
+  calc();
+}
+function addSeg(itinIdx) {
+  flightItins[itinIdx].segments.push({ date: "", route: "", flightNo: "", depTime: "", arrTime: "" });
+  renderFlightSegments();
+  calc();
+}
+function rmSeg(itinIdx, segIdx) {
+  flightItins[itinIdx].segments.splice(segIdx, 1);
+  if (flightItins[itinIdx].segments.length === 0) {
+    flightItins.splice(itinIdx, 1);
+  }
+  renderFlightSegments();
+  calc();
+}
+
+function flightTotalPax() {
+  // Lippumäärä = yhteenlaskettu pax kaikista itineraryista (yksi itinerary = yksi lippu per pax)
+  return flightItins.reduce((a, it) => a + (it.pax || 0), 0);
+}
+function flightTotalCost() {
+  return flightItins.reduce((a, it) => a + (it.pax || 0) * (it.pricePerPax || 0), 0);
+}
+
+// Legacy compat — vanha addFlightSegment / removeFlightSegment / updateSeg
 function addFlightSegment() {
-  flightSegs.push({ date: "", route: "", flightNo: "", depTime: "", arrTime: "", pax: 0, price: 380 });
-  renderFlightSegments();
-  calc();
+  // Lisätään segmentti viimeiseen itineraryyn, tai luodaan uusi
+  if (flightItins.length === 0) {
+    addFlightItin();
+  } else {
+    addSeg(flightItins.length - 1);
+  }
 }
-function removeFlightSegment(idx) {
-  flightSegs.splice(idx, 1);
-  renderFlightSegments();
-  calc();
-}
-function flightTotalPax() { return flightSegs.reduce((a, s) => a + (s.pax || 0), 0); }
-function flightTotalCost() { return flightSegs.reduce((a, s) => a + (s.pax || 0) * (s.price || 0), 0); }
+function removeFlightSegment() { /* deprecated */ }
+function updateSeg() { /* deprecated */ }
 
 // ========= Helpers =========
 function n(id) { return parseFloat(document.getElementById(id).value) || 0; }
@@ -1712,12 +1809,22 @@ function calc() {
   const loungeCost = n("loungePrice") * n("loungeCount");
   const ancCost = n("ancPrice") * n("ancCount");
 
-  // Flight summary rows — one row per segment, kaupunkien nimet auki kirjoitettuna
-  const flightRows = flightSegs.map(seg => {
-    const cost = (seg.pax || 0) * (seg.price || 0);
-    const spelled = routeSpelled(seg.route);
-    const label = `Lento ${seg.flightNo} ${spelled} (${fmtDateShort(seg.date)} ${seg.depTime}–${seg.arrTime || ""})`;
-    return [label, `${seg.pax} × ${eur(seg.price)}`, cost];
+  // Flight summary rows — one row per itinerary (näkyy kompaktimpana kuin per-segment)
+  const flightRows = [];
+  flightItins.forEach((itin, idx) => {
+    const cost = (itin.pax || 0) * (itin.pricePerPax || 0);
+    if (itin.segments.length === 0) return;
+    // Otetaan otsikon ensimmäisestä ja viimeisestä segmentistä reitti
+    const firstSeg = itin.segments[0];
+    const lastSeg = itin.segments[itin.segments.length - 1];
+    const startCity = firstSeg.route ? firstSeg.route.split(/[-–—]/)[0] : "";
+    const endCity = lastSeg.route ? lastSeg.route.split(/[-–—]/).pop() : "";
+    const spelled = startCity && endCity ? routeSpelled(startCity + "-" + endCity) : "Lentokokonaisuus";
+    const dateRange = firstSeg.date ? fmtDateShort(firstSeg.date) : "";
+    const dateEnd = lastSeg.date && lastSeg.date !== firstSeg.date ? "–" + fmtDateShort(lastSeg.date) : "";
+    const segDesc = itin.segments.map(seg => seg.flightNo).filter(Boolean).join(", ");
+    const label = `Lentokokonaisuus ${idx + 1}: ${spelled} (${dateRange}${dateEnd}) · ${segDesc}`;
+    flightRows.push([label, `${itin.pax || 0} × ${eur(itin.pricePerPax || 0)}`, cost]);
   });
   const hotelLabel = "Hotelli " + (s("hotelName") ? s("hotelName") + " " : "") + s("hotelClass") + (hotelBlocks.length > 1 ? " (" + hotelBlocks.length + " majoitusryhmää)" : (" (" + n("hotelNights") + " yötä)"));
   const transferRowsForCost = transferSegs.map(t => {
@@ -2111,7 +2218,7 @@ function resetEmpty() {
   document.getElementById("ffPct").value = 5;
   document.getElementById("depDate").value = "";
   document.getElementById("retDate").value = "";
-  flightSegs = []; renderFlightSegments();
+  flightItins = []; flightSegs = []; renderFlightSegments();
   transferSegs = []; renderTransferRows();
   dinnerSegs = []; renderDinnerRows();
   sourcingSegs = []; renderSourcingRows();
@@ -2151,7 +2258,8 @@ function collectState() {
     const el = document.getElementById(f);
     if (el) state[f] = el.value;
   });
-  state.flightSegs = JSON.parse(JSON.stringify(flightSegs));
+  state.flightItins = JSON.parse(JSON.stringify(flightItins));
+  state.flightSegs = JSON.parse(JSON.stringify(flightSegs)); // legacy-compat
   state.transferSegs = JSON.parse(JSON.stringify(transferSegs));
   state.dinnerSegs = JSON.parse(JSON.stringify(dinnerSegs));
   state.sourcingSegs = JSON.parse(JSON.stringify(sourcingSegs));
@@ -2165,7 +2273,7 @@ function collectState() {
 
 function applyState(state) {
   Object.entries(state).forEach(([k, v]) => {
-    if (["flightSegs","transferSegs","dinnerSegs","sourcingSegs","extraSegs","hotelBlocks","timeEntries","changeLog","status"].includes(k) || k.startsWith("_")) return;
+    if (["flightItins","flightSegs","transferSegs","dinnerSegs","sourcingSegs","extraSegs","hotelBlocks","timeEntries","changeLog","status"].includes(k) || k.startsWith("_")) return;
     // hotelBookingFeeEnabled on checkbox erikseen
     if (k === "hotelBookingFeeEnabled") {
       const cb = document.getElementById("hotelBookingFeeEnabled");
@@ -2175,7 +2283,25 @@ function applyState(state) {
     const el = document.getElementById(k);
     if (el) el.value = v;
   });
-  if (Array.isArray(state.flightSegs)) { flightSegs = state.flightSegs; renderFlightSegments(); }
+  if (Array.isArray(state.flightItins)) {
+    // Uusi malli
+    flightItins = state.flightItins;
+    renderFlightSegments();
+  } else if (Array.isArray(state.flightSegs) && state.flightSegs.length > 0) {
+    // Migrointi vanhoista flightSegs → flightItins (yksi itinerary kaikille)
+    flightItins = [{
+      pax: state.flightSegs[0].pax || 0,
+      pricePerPax: state.flightSegs[0].price || 0,
+      segments: state.flightSegs.map(s => ({
+        date: s.date, route: s.route, flightNo: s.flightNo,
+        depTime: s.depTime, arrTime: s.arrTime,
+      })),
+    }];
+    renderFlightSegments();
+  } else {
+    flightItins = [];
+    renderFlightSegments();
+  }
   if (Array.isArray(state.transferSegs)) { transferSegs = state.transferSegs; renderTransferRows(); }
   if (Array.isArray(state.dinnerSegs)) { dinnerSegs = state.dinnerSegs; renderDinnerRows(); }
   if (Array.isArray(state.sourcingSegs)) { sourcingSegs = state.sourcingSegs; renderSourcingRows(); }
