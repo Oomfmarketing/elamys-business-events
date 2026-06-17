@@ -43,6 +43,7 @@
   .top h1 { font-size: 18px; font-weight: 700; }
   .top .sub { font-size: 11px; color: var(--ice); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
   .top .right { font-size: 12px; color: var(--ice); text-align: right; max-width: 100%; }
+  .fi-date-hint { font-size: 11px; color: var(--muted); font-weight: 400; margin-left: 4px; }
   .top .actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
   .top .actions select { max-width: 200px; }
   .top .actions .btn { padding: 6px 10px; font-size: 11.5px; }
@@ -294,7 +295,7 @@
       <input type="file" id="importJSON" accept=".json" style="display:none" onchange="importOffersJSON(this.files[0])">
       <button class="btn outline" onclick="resetEmpty()">Tyhjennä</button>
     </div>
-    <div style="margin-top:6px;">Hinnasto Exhibit 3 · v1.0 · 17.6.2026</div>
+    <div style="margin-top:6px;">Tarjouslaskuri v2.1 · 17.6.2026 · <span style="color:#FCD34D">3 tulovirta -malli</span></div>
   </div>
 </div>
 
@@ -468,12 +469,12 @@
     <div id="statusDates" style="display:none;">
       <div class="row r3">
         <div>
-          <label>Tarjous lähetetty</label>
-          <input id="sentDate" type="date" oninput="calc()">
+          <label>Tarjous lähetetty <span class="fi-date-hint" id="sentDateHint"></span></label>
+          <input id="sentDate" type="date" oninput="updateFiDateHint('sentDate','sentDateHint'); calc()">
         </div>
         <div id="acceptedDateBlock">
-          <label>Hyväksytty / PO saatu</label>
-          <input id="acceptedDate" type="date" oninput="calc()">
+          <label>Hyväksytty / PO saatu <span class="fi-date-hint" id="acceptedDateHint"></span></label>
+          <input id="acceptedDate" type="date" oninput="updateFiDateHint('acceptedDate','acceptedDateHint'); calc()">
         </div>
         <div id="poNumberBlock">
           <label>PO-numero</label>
@@ -492,8 +493,8 @@
     </div>
     <div class="row r3">
       <div><label>Kohde</label><input id="dest" type="text" placeholder="Esim. Barcelona"></div>
-      <div><label>Lähtö</label><input id="depDate" type="date"></div>
-      <div><label>Paluu</label><input id="retDate" type="date"></div>
+      <div><label>Lähtö <span class="fi-date-hint" id="depDateHint"></span></label><input id="depDate" type="date" oninput="updateFiDateHint('depDate','depDateHint')"></div>
+      <div><label>Paluu <span class="fi-date-hint" id="retDateHint"></span></label><input id="retDate" type="date" oninput="updateFiDateHint('retDate','retDateHint')"></div>
     </div>
     <div class="row r4">
       <div><label>HCP (lkm)</label><input id="paxHCP" type="number" min="0" value="0" oninput="calc()"></div>
@@ -551,32 +552,39 @@
 
   <div class="card">
     <h2>Hotelli</h2>
-    <div class="row r4">
+    <div class="row r3">
+      <div><label>Hotellin nimi</label><input id="hotelName" type="text" value="" placeholder="Esim. Hotel Casa Camper Barcelona"></div>
       <div><label>Tähtiluokka</label>
         <select id="hotelClass" onchange="calc()">
           <option>4★</option>
           <option>3★</option>
         </select>
       </div>
-      <div><label>Hinta / yö (€)</label><input id="hotelRate" type="number" min="0" value="0" oninput="calc()"></div>
-      <div><label>Yöt</label><input id="hotelNights" type="number" min="0" value="0" oninput="calc()"></div>
-      <div><label>Huoneita (pax)</label><input id="hotelRooms" type="number" min="0" value="0" oninput="calc()"></div>
-    </div>
-    <div class="row r2">
       <div>
         <label>Aamiainen mukana</label>
         <select id="hotelBreakfast"><option>Kyllä</option><option>Ei</option></select>
       </div>
+    </div>
+    <div class="row r1" style="margin-top: 8px;">
       <div>
         <label>Sijainti</label>
         <input id="hotelLocation" type="text" placeholder="Esim. Ramblas-alue, käveltävissä kongressikeskukseen">
       </div>
     </div>
-    <div class="row r2" style="margin-top: 8px;">
-      <div><label>Hotellin nimi</label><input id="hotelName" type="text" value="" placeholder="Esim. Hotel Casa Camper Barcelona"></div>
-      <div></div>
+
+    <h3 style="margin-top: 16px; font-size: 14px; color: var(--navy);">Majoitusryhmät (eri matkustajille voi olla eri päivät)</h3>
+    <div id="hotelBlockRows"></div>
+    <button class="btn" style="margin-top: 6px;" onclick="addHotelBlock()">+ Lisää majoitusryhmä</button>
+    <div class="hint" style="margin-top: 6px;">
+      Esimerkkejä: <em>"Pääryhmä 14 hlö 16.-21.10."</em>, <em>"Mansikkaniemi 1 hlö 17.-21.10. (myöhäinen saapuminen)"</em>, <em>"Late check-out 14.10. ekstra-yö 2 hlö"</em>.
     </div>
-    <div style="margin-top: 8px;">
+
+    <!-- Piilotettu yhteenlaskettu kenttä joka pidetään Floating Fund -auto-calcin kanssa yhteensopivana -->
+    <input id="hotelRate" type="hidden" value="0">
+    <input id="hotelNights" type="hidden" value="0">
+    <input id="hotelRooms" type="hidden" value="0">
+
+    <div style="margin-top: 12px;">
       <label>Hotellin ehdot ja huomautukset asiakkaalle (peruutus, sisäänkirjautuminen, varauksen vahvistus)</label>
       <textarea id="hotelTerms" rows="2" style="width:100%; padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;" placeholder="Esim. Peruutus 14 vrk ennen saapumista ilman veloitusta. Check-in klo 15, check-out klo 11. No-show veloitetaan ensimmäinen yö."></textarea>
     </div>
@@ -585,7 +593,7 @@
       <div><label>Hotellivarausmaksu per huone (10 €)</label><input id="hotelBookingFeeEnabled" type="checkbox" onchange="calc()" style="width:auto;margin-top:8px;"> <span style="font-size:12px;">Veloita transaktiomaksu</span></div>
     </div>
     <div class="hint">
-      <strong>Pass-through:</strong> hotellin nettohinta. <strong>Tuntiveloitus:</strong> Hotel Sourcing 45 €/t kirjataan erikseen. <strong>Transaktiomaksu:</strong> 10 €/huone jos käsitellään yksittäisinä varauksina (rastita yllä).
+      <strong>Pass-through:</strong> majoitusryhmien nettohinnat lasketaan yhteen. <strong>Tuntiveloitus:</strong> Hotel Sourcing 45 €/t kirjataan erikseen (Niinan baseline-arvio 5–7 t / hotelli). <strong>Transaktiomaksu:</strong> 10 €/huone jos käsitellään yksittäisinä varauksina (rastita yllä).
     </div>
   </div>
 
@@ -692,8 +700,8 @@
   <div class="card" style="border-left: 5px solid var(--blue);">
     <h2>Supplier Payment Fee (5 %)</h2>
     <p style="font-size: 12px; color: var(--muted); margin-bottom: 10px;">
-      <strong>Sopimuksen mukainen palvelumaksu</strong> kun Menestys maksaa toimittajille AbbVien puolesta (Floating Fund -malli).
-      Lasketaan hotelleista + kongressista + transferista + illallisista + loungesta — <strong>EI lennoista</strong>.
+      <strong>Sopimuksen mukainen palvelumaksu</strong>: "Payments to suppliers on behalf of AbbVie = 5 % of total value".
+      Lasketaan KAIKISTA pass-through-maksuista joissa Menestys maksaa toimittajalle AbbVien puolesta — <strong>myös lennoista (BSP-maksu)</strong>.
     </p>
     <div class="row r2">
       <div><label>Prosentti (%)</label><input id="ffPct" type="number" min="0" max="100" step="0.5" value="5" oninput="calc()"></div>
@@ -706,7 +714,7 @@
     </div>
     <div class="hint">
       <strong>Toimintaohje:</strong> "Supplier Payment Fee 5 % on osa projektin laskutusta AINA kun Menestys maksaa toimittajalle AbbVien puolesta."
-      Klikkaa "Laske auto" niin lomake täyttää pass-through-rivien pohjalta (ilman lentoja).
+      Klikkaa "Laske auto" niin lomake täyttää kaikkien pass-through-rivien pohjalta. Muokkaa käsin jos joku komponentti maksetaan AbbVien luottokortilla suoraan.
     </div>
   </div>
 
@@ -996,7 +1004,7 @@ function renderDinnerRows() {
     div.style.cssText = "background: var(--ice2); border-left: 3px solid var(--blue); padding: 8px; border-radius: 5px; margin-bottom: 6px;";
     div.innerHTML = `
       <div style="display:grid; grid-template-columns: 130px 2fr 1fr 70px 2fr 32px; gap: 6px; align-items: end;">
-        <div><label>Pvm</label><input type="date" value="${d.date}" oninput="updDi(${idx},'date',this.value)"></div>
+        <div><label>Pvm <span style="font-size:10px; color:var(--muted); font-weight:400;">${d.date ? "(" + fmtDateFi(d.date) + ")" : ""}</span></label><input type="date" value="${d.date}" oninput="updDi(${idx},'date',this.value); renderDinnerRows()"></div>
         <div><label>Ravintola</label><input type="text" value="${d.restaurant}" oninput="updDi(${idx},'restaurant',this.value)" placeholder="Esim. Can Solé"></div>
         <div><label>€/pax</label><input type="number" min="0" value="${d.pricePerPax}" oninput="updDi(${idx},'pricePerPax',this.value)"></div>
         <div><label>Pax</label><input type="number" min="0" value="${d.pax}" oninput="updDi(${idx},'pax',this.value)"></div>
@@ -1087,6 +1095,80 @@ function addExtraRow(){ extraSegs.push({label:"",supplier:"",amount:0}); renderE
 function rmEx(i){ extraSegs.splice(i,1); renderExtraRows(); calc(); }
 function extraTotalEUR(){ return extraSegs.reduce((a,e)=>a+(e.amount||0),0); }
 
+// ========= Hotel majoitusryhmät (multi-row) =========
+let hotelBlocks = [];
+
+function calcHotelNightsBetween(checkIn, checkOut) {
+  if (!checkIn || !checkOut) return 0;
+  const a = new Date(checkIn);
+  const b = new Date(checkOut);
+  const diff = Math.round((b - a) / (1000 * 60 * 60 * 24));
+  return Math.max(0, diff);
+}
+
+function renderHotelBlocks() {
+  const c = document.getElementById("hotelBlockRows");
+  if (!c) return;
+  c.innerHTML = "";
+  if (hotelBlocks.length === 0) {
+    c.innerHTML = '<div style="font-size: 12px; color: var(--muted); padding: 6px;">Ei majoitusryhmiä vielä. Klikkaa "+" lisätäksesi pääryhmän.</div>';
+    return;
+  }
+  hotelBlocks.forEach((b, idx) => {
+    const nights = calcHotelNightsBetween(b.checkIn, b.checkOut);
+    const subtotal = (b.rooms || 0) * nights * (b.rate || 0);
+    const div = document.createElement("div");
+    div.style.cssText = "background: var(--ice2); border-left: 3px solid var(--blue); padding: 10px; border-radius: 5px; margin-bottom: 8px;";
+    div.innerHTML = `
+      <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 0.8fr 1fr 0.4fr; gap:6px; align-items:end;">
+        <div><label>Kuvaus / kenelle</label><input type="text" value="${b.desc || ""}" oninput="updHb(${idx},'desc',this.value)" placeholder="Esim. Pääryhmä 14 hlö"></div>
+        <div><label>Saapuu <span style="font-size:10px; color:var(--muted); font-weight:400;">${b.checkIn ? "(" + fmtDateFi(b.checkIn) + ")" : ""}</span></label><input type="date" value="${b.checkIn || ""}" onchange="updHb(${idx},'checkIn',this.value); renderHotelBlocks()"></div>
+        <div><label>Lähtee <span style="font-size:10px; color:var(--muted); font-weight:400;">${b.checkOut ? "(" + fmtDateFi(b.checkOut) + ")" : ""}</span></label><input type="date" value="${b.checkOut || ""}" onchange="updHb(${idx},'checkOut',this.value); renderHotelBlocks()"></div>
+        <div><label>Huoneita</label><input type="number" min="0" value="${b.rooms || 0}" oninput="updHbNum(${idx},'rooms',this.value)"></div>
+        <div><label>€ / yö</label><input type="number" min="0" value="${b.rate || 0}" oninput="updHbNum(${idx},'rate',this.value)"></div>
+        <div><button class="btn" style="background:var(--red); padding:6px 10px;" onclick="rmHb(${idx})">×</button></div>
+      </div>
+      <div style="margin-top:6px; font-size:11.5px; color:var(--muted); display:flex; gap:14px;">
+        <span><strong>${nights}</strong> yötä</span>
+        <span><strong>${b.rooms || 0}</strong> huonetta × ${nights} yötä × ${eur(b.rate || 0)} = <strong>${eur(subtotal)}</strong></span>
+      </div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function updHb(i, k, v) { hotelBlocks[i][k] = v; calc(); }
+function updHbNum(i, k, v) { hotelBlocks[i][k] = parseFloat(v) || 0; calc(); }
+function addHotelBlock() {
+  const dep = s("depDate"), ret = s("retDate");
+  const paxTotal = n("paxHCP") + n("paxStaff");
+  hotelBlocks.push({
+    desc: hotelBlocks.length === 0 ? "Pääryhmä" : "",
+    checkIn: dep || "",
+    checkOut: ret || "",
+    rooms: hotelBlocks.length === 0 ? paxTotal : 0,
+    rate: hotelBlocks.length === 0 ? 0 : (hotelBlocks[0]?.rate || 0),
+  });
+  renderHotelBlocks();
+  calc();
+  addChangeLogEntry("auto", "Lisätty majoitusryhmä");
+}
+function rmHb(i) {
+  hotelBlocks.splice(i, 1);
+  renderHotelBlocks();
+  calc();
+}
+
+function hotelBlocksTotalCost() {
+  return hotelBlocks.reduce((a, b) => {
+    const nights = calcHotelNightsBetween(b.checkIn, b.checkOut);
+    return a + (b.rooms || 0) * nights * (b.rate || 0);
+  }, 0);
+}
+function hotelBlocksTotalRooms() {
+  return hotelBlocks.reduce((a, b) => a + (b.rooms || 0), 0);
+}
+
 // ========= Agent name (säilyy across sessions) =========
 const AGENT_KEY = "tarjouslaskuri_agent_name";
 
@@ -1107,10 +1189,58 @@ function getCurrentAgent() {
 }
 
 function nowStamp() {
-  return new Date().toLocaleString("fi-FI", {
-    day: "numeric", month: "numeric", year: "numeric",
-    hour: "2-digit", minute: "2-digit"
-  });
+  // Pakotetaan manuaalisesti suomalainen muoto jotta toimii kaikilla selaimilla
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} klo ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// Normalisoi käyttäjän aikasyöte 24h muotoon HH:MM
+// Hyväksyy "17:00", "17.00", "1700", "5:00 PM", "5 PM"
+function normalizeTime(input) {
+  if (!input) return "";
+  let s = String(input).trim().toUpperCase();
+  // 12h AM/PM -muotoa: yritetään parsia
+  const ampmMatch = s.match(/^(\d{1,2})[:\.]?(\d{0,2})\s*(AM|PM)$/);
+  if (ampmMatch) {
+    let h = parseInt(ampmMatch[1], 10);
+    const m = parseInt(ampmMatch[2] || "0", 10);
+    const ampm = ampmMatch[3];
+    if (ampm === "PM" && h < 12) h += 12;
+    if (ampm === "AM" && h === 12) h = 0;
+    return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+  }
+  // 24h muoto "17:00" tai "17.00" tai "1700"
+  s = s.replace(/[\.]/g, ":");
+  let m2 = s.match(/^(\d{1,2}):(\d{2})$/);
+  if (m2) {
+    const h = Math.min(23, parseInt(m2[1], 10));
+    const mm = Math.min(59, parseInt(m2[2], 10));
+    return String(h).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+  }
+  m2 = s.match(/^(\d{3,4})$/);
+  if (m2) {
+    const v = m2[1].padStart(4, "0");
+    return v.slice(0, 2) + ":" + v.slice(2, 4);
+  }
+  // Ei tunnistettu — palautetaan alkuperäinen
+  return input;
+}
+
+// Suomalainen päivämäärän muoto YYYY-MM-DD -> DD.MM.YYYY
+function fmtDateFi(yyyymmdd) {
+  if (!yyyymmdd) return "";
+  const m = String(yyyymmdd).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return yyyymmdd;
+  return `${parseInt(m[3], 10)}.${parseInt(m[2], 10)}.${m[1]}`;
+}
+
+// Päivittää näkyvän fi-formaatin labelin viereen
+function updateFiDateHint(inputId, hintId) {
+  const inp = document.getElementById(inputId);
+  const hint = document.getElementById(hintId);
+  if (!inp || !hint) return;
+  hint.textContent = inp.value ? "(" + fmtDateFi(inp.value) + ")" : "";
 }
 
 // ========= Tuntikirjaus =========
@@ -1143,7 +1273,7 @@ function renderTimeRows() {
       `<option value="${cat.name}" data-rate="${cat.rate}"${cat.name===t.category?' selected':''}>${cat.name} (${cat.rate} €/t)</option>`
     ).join("");
     div.innerHTML = `
-      <div><label>Pvm</label><input type="date" value="${t.date}" oninput="updTime(${idx},'date',this.value)"></div>
+      <div><label>Pvm <span style="font-size:10px; color:var(--muted); font-weight:400;">${t.date ? "(" + fmtDateFi(t.date) + ")" : ""}</span></label><input type="date" value="${t.date}" oninput="updTime(${idx},'date',this.value); renderTimeRows()"></div>
       <div><label>Virkailija</label><input type="text" value="${t.agent}" oninput="updTime(${idx},'agent',this.value)"></div>
       <div><label>Työkategoria</label><select onchange="updTimeCategory(${idx}, this)">${catOpts}</select></div>
       <div><label>Tunnit</label><input type="number" min="0" step="0.25" value="${t.hours}" oninput="updTimeNum(${idx},'hours',this.value)"></div>
@@ -1261,19 +1391,24 @@ function addManualLogEntry() {
   input.value = "";
 }
 
-// ========= Floating Fund auto-volyymi =========
+// ========= Supplier Payment Fee auto-volyymi =========
 function autoFillFFVolume() {
-  // Pass-through MINUS lennot (Niinan kommentti)
-  const hotelCost = n("hotelRate") * n("hotelNights") * n("hotelRooms");
+  // Sopimusteksti: "Payments to suppliers on behalf of AbbVie = 5 % of total value"
+  // Lasketaan KAIKISTA pass-through-maksuista (myös lennot), koska Menestys maksaa
+  // lentolipun BSP:n kautta AbbVien puolesta = välirahoittaja-rooli.
+  // Virkailija voi muokata käsin jos joku komponentti maksetaan muulla tavalla.
+  const flightCost = flightTotalCost();
+  const hotelCost = hotelBlocksTotalCost();
   const congressCost = n("congressPrice") * n("congressCount");
   const pgCost = n("pgPrice") * n("pgCount");
   const transferCost = transferTotalCost();
   const dinnerCost = dinnerTotalCost();
   const loungeCost = n("loungePrice") * n("loungeCount");
   const ancCost = n("ancPrice") * n("ancCount");
-  const vol = hotelCost + congressCost + pgCost + transferCost + dinnerCost + loungeCost + ancCost;
+  const trainCost = n("trainPrice") * n("trainCount");
+  const vol = flightCost + hotelCost + congressCost + pgCost + transferCost + dinnerCost + loungeCost + ancCost + trainCost;
   document.getElementById("ffVolume").value = Math.round(vol);
-  addChangeLogEntry("auto", `FF-volyymi laskettu autom.: ${eur(vol)}`);
+  addChangeLogEntry("auto", `Supplier Payment Fee -volyymi laskettu autom.: ${eur(vol)} (sis. lennot)`);
   calc();
 }
 
@@ -1462,11 +1597,11 @@ function renderFlightSegments() {
     div.style.cssText = "background: var(--ice2); border-left: 3px solid var(--blue); padding: 10px; border-radius: 5px; margin-bottom: 8px;";
     div.innerHTML = `
       <div style="display: grid; grid-template-columns: minmax(110px,1fr) minmax(110px,1fr) minmax(100px,1fr) minmax(80px,1fr) minmax(80px,1fr) minmax(60px,80px) minmax(80px,1fr) 32px; gap: 6px; align-items: end;">
-        <div><label>Päivä</label><input type="date" value="${seg.date}" onchange="updateSeg(${idx},'date',this.value)"></div>
+        <div><label>Päivä <span style="font-size:10px; color:var(--muted); font-weight:400;">${seg.date ? "(" + fmtDateFi(seg.date) + ")" : ""}</span></label><input type="date" value="${seg.date}" onchange="updateSeg(${idx},'date',this.value); renderFlightSegments()"></div>
         <div><label>Reitti</label><input type="text" value="${seg.route}" onchange="updateSeg(${idx},'route',this.value)"></div>
         <div><label>Lentonumero</label><input type="text" value="${seg.flightNo}" onchange="updateSeg(${idx},'flightNo',this.value)"></div>
-        <div><label>Lähtö</label><input type="time" value="${seg.depTime}" onchange="updateSeg(${idx},'depTime',this.value)"></div>
-        <div><label>Saapuu</label><input type="time" value="${seg.arrTime}" onchange="updateSeg(${idx},'arrTime',this.value)"></div>
+        <div><label>Lähtö (24h)</label><input type="text" inputmode="numeric" pattern="[0-9]{1,2}[:\.][0-9]{2}" placeholder="HH:MM" value="${seg.depTime}" onchange="updateSeg(${idx},'depTime',normalizeTime(this.value))" oninput="this.value = this.value.replace(/[^0-9:.]/g,'')"></div>
+        <div><label>Saapuu (24h)</label><input type="text" inputmode="numeric" pattern="[0-9]{1,2}[:\.][0-9]{2}" placeholder="HH:MM" value="${seg.arrTime}" onchange="updateSeg(${idx},'arrTime',normalizeTime(this.value))" oninput="this.value = this.value.replace(/[^0-9:.]/g,'')"></div>
         <div><label>Pax</label><input type="number" min="0" value="${seg.pax}" onchange="updateSeg(${idx},'pax',this.value)"></div>
         <div><label>€/pax</label><input type="number" min="0" value="${seg.price}" onchange="updateSeg(${idx},'price',this.value)"></div>
         <div><button class="btn" style="background: var(--red); padding: 6px 10px;" onclick="removeFlightSegment(${idx})">×</button></div>
@@ -1551,7 +1686,23 @@ function calc() {
   // Oletus = HCP + staff briiffistä, mutta voi ylikirjoittaa manuaalisesti
   const manualTicketCount = n("flightTicketCount");
   const flightCount = manualTicketCount > 0 ? manualTicketCount : totalPax;
-  const hotelCost = n("hotelRate") * n("hotelNights") * n("hotelRooms");
+
+  // Synkronoi piilotetut hotelRate/hotelNights/hotelRooms majoitusryhmien yhteenlasketuilla arvoilla
+  // (käytössä Floating Fund -auto-calcissa ja vanhassa hotelliviittauksessa)
+  const hotelTotalRoomsCalc = hotelBlocksTotalRooms();
+  const hotelTotalCostCalc = hotelBlocksTotalCost();
+  document.getElementById("hotelRate").value = hotelTotalRoomsCalc > 0 ? Math.round(hotelTotalCostCalc / hotelTotalRoomsCalc * 100) / 100 : 0;
+  // Yöt = pisin majoitusryhmä (jotta vanha kaava toimii)
+  let maxNights = 0;
+  hotelBlocks.forEach(b => {
+    const nn = calcHotelNightsBetween(b.checkIn, b.checkOut);
+    if (nn > maxNights) maxNights = nn;
+  });
+  document.getElementById("hotelNights").value = maxNights;
+  document.getElementById("hotelRooms").value = hotelTotalRoomsCalc;
+  // Hotellikulu = majoitusryhmien yhteenlaskettu summa
+  const hotelCost = hotelTotalCostCalc;
+  const hotelTotalRooms = hotelTotalRoomsCalc;
   const congressCost = n("congressPrice") * n("congressCount");
   const pgCost = n("pgPrice") * n("pgCount");
   const transferCost = transferTotalCost();
@@ -1568,7 +1719,7 @@ function calc() {
     const label = `Lento ${seg.flightNo} ${spelled} (${fmtDateShort(seg.date)} ${seg.depTime}–${seg.arrTime || ""})`;
     return [label, `${seg.pax} × ${eur(seg.price)}`, cost];
   });
-  const hotelLabel = "Hotelli " + (s("hotelName") ? s("hotelName") + " " : "") + s("hotelClass") + " (" + n("hotelNights") + " yötä)";
+  const hotelLabel = "Hotelli " + (s("hotelName") ? s("hotelName") + " " : "") + s("hotelClass") + (hotelBlocks.length > 1 ? " (" + hotelBlocks.length + " majoitusryhmää)" : (" (" + n("hotelNights") + " yötä)"));
   const transferRowsForCost = transferSegs.map(t => {
     const cost = (t.pax || 0) * ((t.pricePerPax || 0) + (t.vip ? 50 : 0));
     return ["Transfer " + (t.desc || "—") + (t.vip ? " (VIP)" : ""), t.pax + " × " + eur((t.pricePerPax || 0) + (t.vip ? 50 : 0)), cost];
@@ -1580,7 +1731,7 @@ function calc() {
   });
   const costRows = [
     ...flightRows,
-    [hotelLabel, n("hotelRooms") + " × " + n("hotelNights") + " × " + eur(n("hotelRate")), hotelCost],
+    [hotelLabel, hotelBlocks.length > 1 ? hotelTotalRooms + " huonetta yht." : (n("hotelRooms") + " × " + n("hotelNights") + " × " + eur(n("hotelRate"))), hotelCost],
     ["Kongressi-rekisteröityminen", n("congressCount") + " × " + eur(n("congressPrice")), congressCost],
     [s("addonName") || "Kongressin lisäosa", n("pgCount") + " × " + eur(n("pgPrice")), pgCost],
     ...transferRowsForCost,
@@ -1605,7 +1756,7 @@ function calc() {
   const feeFlightTicket = 30 * flightCount;
   const feeFlightChange = 30 * n("flightChangeCount");
   const hotelBookingFeeOn = (document.getElementById("hotelBookingFeeEnabled") || {}).checked;
-  const feeHotelBooking = hotelBookingFeeOn ? 10 * n("hotelRooms") : 0;
+  const feeHotelBooking = hotelBookingFeeOn ? 10 * hotelTotalRooms : 0;
   const feeTransferBooking = 20 * transferCount;
   const feeLoungeBooking = 10 * n("loungeCount");
   const feeAncBooking = 10 * n("ancCount");
@@ -1647,7 +1798,7 @@ function calc() {
     // B. Transaktiomaksut
     ["B. Lentolippu (30 €/lippu × " + flightCount + ")", "B", feeFlightTicket],
     ["B. Lentomuutos (30 €/muutos × " + n("flightChangeCount") + ")", "B", feeFlightChange],
-    ["B. Hotellivaraus (10 €/huone × " + n("hotelRooms") + ")", "B", feeHotelBooking],
+    ["B. Hotellivaraus (10 €/huone × " + hotelTotalRooms + ")", "B", feeHotelBooking],
     ["B. Transferi (20 €/varaus × " + transferCount + ")", "B", feeTransferBooking],
     ["B. Lounge (10 €/varaus × " + n("loungeCount") + ")", "B", feeLoungeBooking],
     ["B. Ancillary (10 €/varaus × " + n("ancCount") + ")", "B", feeAncBooking],
@@ -1964,6 +2115,7 @@ function resetEmpty() {
   transferSegs = []; renderTransferRows();
   dinnerSegs = []; renderDinnerRows();
   sourcingSegs = []; renderSourcingRows();
+  hotelBlocks = []; renderHotelBlocks();
   timeEntries = []; renderTimeRows();
   changeLog = []; renderChangeLog();
   document.getElementById("offerCreatedAt").value = nowStamp();
@@ -2003,6 +2155,7 @@ function collectState() {
   state.transferSegs = JSON.parse(JSON.stringify(transferSegs));
   state.dinnerSegs = JSON.parse(JSON.stringify(dinnerSegs));
   state.sourcingSegs = JSON.parse(JSON.stringify(sourcingSegs));
+  state.hotelBlocks = JSON.parse(JSON.stringify(hotelBlocks));
   state.timeEntries = JSON.parse(JSON.stringify(timeEntries));
   state.changeLog = JSON.parse(JSON.stringify(changeLog));
   state.status = currentStatus;
@@ -2012,7 +2165,7 @@ function collectState() {
 
 function applyState(state) {
   Object.entries(state).forEach(([k, v]) => {
-    if (["flightSegs","transferSegs","dinnerSegs","sourcingSegs","extraSegs","timeEntries","changeLog","status"].includes(k) || k.startsWith("_")) return;
+    if (["flightSegs","transferSegs","dinnerSegs","sourcingSegs","extraSegs","hotelBlocks","timeEntries","changeLog","status"].includes(k) || k.startsWith("_")) return;
     // hotelBookingFeeEnabled on checkbox erikseen
     if (k === "hotelBookingFeeEnabled") {
       const cb = document.getElementById("hotelBookingFeeEnabled");
@@ -2026,10 +2179,13 @@ function applyState(state) {
   if (Array.isArray(state.transferSegs)) { transferSegs = state.transferSegs; renderTransferRows(); }
   if (Array.isArray(state.dinnerSegs)) { dinnerSegs = state.dinnerSegs; renderDinnerRows(); }
   if (Array.isArray(state.sourcingSegs)) { sourcingSegs = state.sourcingSegs; renderSourcingRows(); }
+  if (Array.isArray(state.hotelBlocks)) { hotelBlocks = state.hotelBlocks; renderHotelBlocks(); }
   if (Array.isArray(state.timeEntries)) { timeEntries = state.timeEntries; renderTimeRows(); }
   if (Array.isArray(state.changeLog)) { changeLog = state.changeLog; renderChangeLog(); }
   // Status — defaultaa draftiin jos ei ole tallennettu
   setStatus(state.status || "draft");
+  // Päivämääriä koskevat fi-hintit
+  ["depDate","retDate","sentDate","acceptedDate"].forEach(id => updateFiDateHint(id, id + "Hint"));
   updateDinnerLimit();
   calc();
 }
@@ -2132,10 +2288,13 @@ renderFlightSegments();
 renderTransferRows();
 renderDinnerRows();
 renderSourcingRows();
+renderHotelBlocks();
 renderTimeRows();
 renderChangeLog();
 refreshSavedDropdown();
 loadAgentName();
+// Päivitä päivämäärä-vihjeet
+["depDate","retDate","sentDate","acceptedDate"].forEach(id => updateFiDateHint(id, id + "Hint"));
 // Aseta luontiaika jos tyhjä
 const createdEl = document.getElementById("offerCreatedAt");
 if (createdEl && !createdEl.value) createdEl.value = nowStamp();
