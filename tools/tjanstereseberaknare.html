@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menestys Liikematkalaskuri — Mitä säästät kun siirryt liikematkatoimistolle?</title>
-<meta name="description" content="Laske kuinka paljon yrityksesi säästää siirtymällä Menestys Liikematkapalveluiden asiakkaaksi. Aika, raha, CSRD-raportointi ja Duty of Care. NPS +44.">
+<title>Menestys Tjänsteresekalkylator — Hur mycket sparar du med en affärsresebyrå?</title>
+<meta name="description" content="Räkna ut hur mycket ditt företag sparar genom att bli Menestys-kund. Tid, pengar, CSRD-rapportering och Duty of Care. NPS +44.">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -391,178 +391,182 @@
 
 <header class="hero">
 <div class="lang-switch" style="position:absolute;top:20px;right:20px;z-index:10;display:flex;gap:4px;background:rgba(255,255,255,0.1);padding:4px;border-radius:20px;backdrop-filter:blur(8px);">
-  <a href="/liikematkalaskuri" style="padding:6px 14px;border-radius:16px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:0.5px;background:#FF6D32;">FI</a>
+  <a href="/liikematkalaskuri" style="padding:6px 14px;border-radius:16px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:0.5px;opacity:0.65;">FI</a>
   <a href="/businesstravel-calculator" style="padding:6px 14px;border-radius:16px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:0.5px;opacity:0.65;">EN</a>
-  <a href="/tjanstereseberaknare" style="padding:6px 14px;border-radius:16px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:0.5px;opacity:0.65;">SV</a>
+  <a href="/tjanstereseberaknare" style="padding:6px 14px;border-radius:16px;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:0.5px;background:#FF6D32;">SV</a>
 </div>
+
+
+
+
 
   <div class="container">
     <div class="menestys-logo">
       <div class="mark">menestys</div>
       <div class="tagline">MENESTYS = LIIKEMATKA + ELÄMYS</div>
     </div>
-    <h1>Mitä yrityksesi säästää, kun siirryt liikematkatoimistolle?</h1>
-    <p class="lead">Kun työntekijät varaavat matkoja itse eri kanavista, hukkaat aikaa, rahaa ja vastuullisuusraportoinnin valmiutta. Laske mitä Menestys tuo tilalle — alle kahdessa minuutissa.</p>
+    <h1>Hur mycket sparar ditt företag genom att byta till en affärsresebyrå?</h1>
+    <p class="lead">När anställda bokar resor själva via olika kanaler förlorar ni tid, pengar och beredskap för hållbarhetsrapportering. Räkna ut vad Menestys ger istället — på under två minuter.</p>
     <div class="quick-presets" role="tablist">
-      <button class="preset" data-preset="100">100 henkilön yritys</button>
-      <button class="preset active" data-preset="500">500 henkilön yritys</button>
-      <button class="preset" data-preset="1000">1000 henkilön yritys</button>
-      <button class="preset" data-preset="custom" onclick="document.getElementById('inputs').scrollIntoView()">Omat luvut →</button>
+      <button class="preset" data-preset="100">Företag med 100 anställda</button>
+      <button class="preset active" data-preset="500">Företag med 500 anställda</button>
+      <button class="preset" data-preset="1000">Företag med 1000 anställda</button>
+      <button class="preset" data-preset="custom" onclick="document.getElementById('inputs').scrollIntoView()">Egna värden →</button>
     </div>
     <div class="tunnusluvut">
-      <div class="tunnus"><span class="n">55 M€</span><span class="l">Liikevaihto</span></div>
-      <div class="tunnus"><span class="n">200 000+</span><span class="l">Matkaa / vuosi</span></div>
-      <div class="tunnus"><span class="n">250</span><span class="l">Yritysasiakasta</span></div>
-      <div class="tunnus"><span class="n">100</span><span class="l">Asiantuntijaa</span></div>
-      <div class="tunnus"><span class="n">1990</span><span class="l">Perustettu</span></div>
+      <div class="tunnus"><span class="n">55 M€</span><span class="l">Omsättning</span></div>
+      <div class="tunnus"><span class="n">200 000+</span><span class="l">Resor / år</span></div>
+      <div class="tunnus"><span class="n">250</span><span class="l">Företagskunder</span></div>
+      <div class="tunnus"><span class="n">100</span><span class="l">Experter</span></div>
+      <div class="tunnus"><span class="n">1990</span><span class="l">Grundat</span></div>
     </div>
   </div>
 </header>
 
 <div class="container">
   <div class="headline">
-    <div class="label">Nettohyöty vuodessa</div>
+    <div class="label">Nettonytta per år</div>
     <div class="big" id="big-total">—</div>
-    <div class="sub" id="big-sub">Säästöt − palvelumaksu Menestykselle</div>
+    <div class="sub" id="big-sub">Besparingar minus serviceavgift till Menestys</div>
     <div class="roi-grid">
       <div class="roi-item save">
-        <div class="roi-l">Bruttosäästö</div>
+        <div class="roi-l">Bruttobesparingar</div>
         <div class="roi-v" id="roi-save">—</div>
       </div>
       <div class="roi-item cost">
-        <div class="roi-l">Palvelumaksu Menestykselle</div>
+        <div class="roi-l">Serviceavgift till Menestys</div>
         <div class="roi-v" id="roi-fee">—</div>
         <div class="roi-l" style="margin-top:4px;font-size:11px;" id="roi-fee-pct">—</div>
       </div>
       <div class="roi-item roi">
         <div class="roi-l">ROI</div>
         <div class="roi-v" id="roi-pct">—</div>
-        <div class="roi-l" style="margin-top:4px;font-size:11px;">€ takaisin / € maksu</div>
+        <div class="roi-l" style="margin-top:4px;font-size:11px;">€ tillbaka / € betalat</div>
       </div>
     </div>
   </div>
 
   <div class="inputs-card" id="inputs">
-    <h2>Säädä omilla luvuilla</h2>
-    <p class="hint">Liu'uta arvioita yrityksesi tilanteeseen — kaikki luvut päivittyvät reaaliajassa.</p>
+    <h2>Justera med era egna siffror</h2>
+    <p class="hint">Skjut reglarna för att passa ert företag — alla siffror uppdateras direkt.</p>
     <div class="inputs-grid">
       <div class="input-block">
-        <label>Henkilöstömäärä</label>
-        <div class="input-row"><input type="number" id="i-headcount" min="10" max="100000" step="10"><span class="unit">hlö</span></div>
+        <label>Antal anställda</label>
+        <div class="input-row"><input type="number" id="i-headcount" min="10" max="100000" step="10"><span class="unit">anställda</span></div>
         <input type="range" id="r-headcount" min="50" max="5000" step="10">
       </div>
       <div class="input-block">
-        <label>Matkustavien osuus <span class="range-value" id="rv-traveler">30 %</span></label>
+        <label>Andel resenärer <span class="range-value" id="rv-traveler">30 %</span></label>
         <input type="range" id="r-traveler" min="5" max="100" step="1">
-        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">% työntekijöistä joilla on liikematkoja</div>
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">% of anställda who travel for business</div>
       </div>
       <div class="input-block">
-        <label>Matkoja per matkustaja / vuosi <span class="range-value" id="rv-trips">4</span></label>
-        <input type="range" id="r-trips" min="1" max="30" step="1">
+        <label>Resor per resenär / år <span class="range-value" id="rv-resor">4</span></label>
+        <input type="range" id="r-resor" min="1" max="30" step="1">
       </div>
       <div class="input-block">
-        <label>Keskimääräinen matkan hinta</label>
+        <label>Genomsnittlig resekostnad</label>
         <div class="input-row"><input type="number" id="i-tripcost" min="100" max="10000" step="50"><span class="unit">€</span></div>
         <input type="range" id="r-tripcost" min="200" max="3000" step="50">
       </div>
       <div class="input-block">
-        <label>Työntekijän tuntikustannus</label>
+        <label>Anställds timkostnad</label>
         <div class="input-row"><input type="number" id="i-wage" min="20" max="200" step="5"><span class="unit">€/h</span></div>
         <input type="range" id="r-wage" min="30" max="120" step="5">
-        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Sis. sivukulut</div>
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Inkl. arbetsgivaravgifter</div>
       </div>
       <div class="input-block">
-        <label>Muutosten osuus matkoista <span class="range-value" id="rv-changes">8 %</span></label>
+        <label>Andel resor med ändringar <span class="range-value" id="rv-changes">8 %</span></label>
         <input type="range" id="r-changes" min="0" max="30" step="1">
       </div>
       <div class="input-block">
-        <label>Itsevarauksen osuus (online) <span class="range-value" id="rv-online">60 %</span></label>
+        <label>Andel självbokningar (online) <span class="range-value" id="rv-online">60 %</span></label>
         <input type="range" id="r-online" min="0" max="100" step="5">
-        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Mitä enemmän itsevarausta, sitä halvempi palvelumaksu</div>
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Mer självbokning = lägre serviceavgift</div>
       </div>
       <div class="input-block" style="grid-column: 1 / -1; padding-top: 16px; border-top: 1px dashed var(--border);">
-        <label>Vuosittainen matkabudjetti (vapaaehtoinen — vertaillaan Menestys-asiakkaisiin)</label>
+        <label>Årlig resebudget (frivilligt — jämförs mot Menestys-kunder)</label>
         <div class="input-row" style="max-width: 320px;">
-          <input type="number" id="i-budget" min="0" max="50000000" step="10000" placeholder="esim. 250 000"><span class="unit">€ / vuosi</span>
+          <input type="number" id="i-budget" min="0" max="50000000" step="10000" placeholder="t.ex. 250 000"><span class="unit">€ / år</span>
         </div>
-        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Jos tiedät yrityksesi liikematkabudjetin, näytämme miten samanlaiset Menestys-asiakkaat ovat matkustaneet</div>
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Om ni vet er resebudget visar vi hur liknande Menestys-kunder har rest</div>
       </div>
     </div>
   </div>
 
   <section class="block" id="benchmark-section" style="display:none;">
-    <h2>Näin samankokoiset Menestys-asiakkaat matkustavat</h2>
-    <p class="lead">Anonymisoidut tunnusluvut neljästä todellisesta Menestys-asiakkaastamme (Q1–vuositason data 2025–2026). Vertailutaso budjettisi mukaan: <strong id="bm-match">—</strong>.</p>
+    <h2>Så reser jämförbara Menestys-kunder</h2>
+    <p class="lead">Anonymisoidut tunnusluvut neljästä todellisesta Menestys-asiakkaastamme (Q1–vuositason data 2025–2026). Jämförelse budjettisi mukaan: <strong id="bm-match">—</strong>.</p>
     <div class="bm-grid" id="bm-grid"></div>
     <div class="charts-row" style="margin-top: 28px;">
       <div class="chart-card">
-        <h3>Keskimääräinen lippuhinta (€)</h3>
+        <h3>Snittpris biljett (€)</h3>
         <div class="chart-wrap"><canvas id="bm-bars"></canvas></div>
       </div>
       <div class="chart-card">
-        <h3>CO₂-päästöjen jakauma (asiakas B vs C)</h3>
+        <h3>CO₂-utsläpp split (customer B vs C)</h3>
         <div class="chart-wrap"><canvas id="bm-co2"></canvas></div>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <h2>Mistä säästö syntyy</h2>
-    <p class="lead">Jokainen euron säästö lasketaan konservatiivisesti toimialan benchmark-luvuilla (SAP Concur, GBTA, Amex GBT) — Liikematkabarometri 2026 vahvistaa myös: <strong>66 %</strong> organisaatioista priorisoi kustannussäästöt ja <strong>30 %</strong> CSRD-raportoinnin.</p>
+    <h2>Varifrån besparingarna kommer</h2>
+    <p class="lead">Varje euro räknas konservativt med branschens benchmarks (SAP Concur, GBTA, Amex GBT) — Affärsresebarometern 2026 bekräftar: <strong>66 %</strong> av organisationer prioriterar kostnadsbesparingar och <strong>30 %</strong> CSRD-rapportering.</p>
     <div class="savings-grid">
       <div class="save-card aika">
         <div class="icon">⏱</div>
-        <div class="title">Aikasäästö varauksissa</div>
+        <div class="title">Tid sparad vid bokningar</div>
         <div class="euro" id="s-aika">—</div>
-        <div class="desc">Itse varaaminen vie keskimäärin tunnin, monimutkaiset matkat (yhdistetyt reitit, useat majoitukset, conenctit) jopa 2–4 h. Menestyksellä 10–15 min: lähetä pyyntö, hyväksy ehdotus. Itsevarauksena online-varausjärjestelmä.</div>
+        <div class="desc">Self-booking takes roughly an hour on average; komplexa resor (combined routes, several accommodations, connections) up to 2-4 h. Med Menestys, 10-15 min: send a request, approve the suggestion. Self-booking via online tool.</div>
       </div>
       <div class="save-card hinta">
         <div class="icon">€</div>
-        <div class="title">Sopimushinnat &amp; alennukset</div>
+        <div class="title">Avtalspriser & rabatter</div>
         <div class="euro" id="s-hinta">—</div>
-        <div class="desc">Volyymisopimuksilla lennot 6–10 % halvempia kuin julkiset hinnat ja hotellit 8–12 %. Laajat kansainväliset kumppaniverkostot — Amadeus-pohjainen.</div>
+        <div class="desc">Volymavtal ger flyg 6-10 % billigare än publika priser och hotell 8-12 %. Brett internationellt partnernätverk — Amadeus-baserat.</div>
       </div>
       <div class="save-card muutos">
         <div class="icon">↻</div>
-        <div class="title">Muutoskulu-säästöt</div>
+        <div class="title">Ändringsavgift-besparingar</div>
         <div class="euro" id="s-muutos">—</div>
-        <div class="desc">Itse ostettuna halvimmalla hinnalla osa lipuista on joustamattomia — pahimmassa tapauksessa <strong>koko lipun arvo menetetään</strong> jos matka peruuntuu tai muuttuu. Menestys neuvottelee joustavat sopimushinnat ja hoitaa muutokset puolestasi.</div>
+        <div class="desc">Vid egenköp till lägsta pris är vissa biljetter oflexibla — i värsta fall <strong>förloras hela biljettens värde</strong> om resan avbokas eller ändras. Menestys förhandlar flexibla avtalspriser och hanterar ändringar åt er.</div>
       </div>
       <div class="save-card policy">
         <div class="icon">📜</div>
-        <div class="title">Travel policy -säästöt</div>
+        <div class="title">Resepolicy-besparingar</div>
         <div class="euro" id="s-policy">—</div>
-        <div class="desc">Ilman ohjausta 15–20 % matkoista menee yli budjetin. Policy + Menestyksen järjestelmä pitää alle 4 %:ssa. Policy-konsultointi sisältyy.</div>
+        <div class="desc">Utan styrning överskrider 15-20 % av resorna budget. Policy + Menestys system håller det under 4 %. Policy-konsultation ingår.</div>
       </div>
       <div class="save-card csrd">
         <div class="icon">♻</div>
-        <div class="title">CSRD-raportoinnin aikasäästö</div>
+        <div class="title">CSRD-rapportering tid sparad</div>
         <div class="euro" id="s-csrd">—</div>
-        <div class="desc">Päästödata Scope 3.6 -raportointiin valmiina API:lla. Vastuullisuustiimi säästää 60–80 h/vuosi datan keruusta. CSRD-yhteensopiva päästöraportointi (GHG).</div>
+        <div class="desc">Scope 3.6 utsläppsdata redo via API. Hållbarhetsteamet sparar 60-80 h/år på datainsamling. CSRD-kompatibel utsläppsrapport (GHG).</div>
       </div>
       <div class="save-card duty">
         <div class="icon">🛡</div>
-        <div class="title">Duty of Care -riskinhallinta</div>
-        <div class="euro muted">Riskien minimointi</div>
-        <div class="desc">Tiedät reaaliajassa missä työntekijät matkustavat. Hätätilanteessa tavoitettavissa minuuteissa. Liikematkabarometri: 57 % CEO:ista pitää Duty of Carea ykkösprioriteettina.</div>
+        <div class="title">Duty of Care riskhantering</div>
+        <div class="euro muted">Riskminimering</div>
+        <div class="desc">Tiedät reaaliajassa missä työntekijät matkustavat. Hätätilanteessa tavoitettavissa minuuteissa. Liikematkabarometri: 57 % av CEO:er rankar Duty of Care som högsta prioritet.</div>
       </div>
     </div>
 
     <div class="charts-row">
       <div class="chart-card">
-        <h3>Säästöjen jakauma</h3>
+        <h3>Fördelning av besparingar</h3>
         <div class="chart-wrap"><canvas id="donut"></canvas></div>
       </div>
       <div class="chart-card">
-        <h3>Oma varaus vs. Menestys (€ / vuosi)</h3>
+        <h3>Oma varaus vs. Menestys (€ / år)</h3>
         <div class="chart-wrap"><canvas id="bars"></canvas></div>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <h2>Ilman liikematkatoimistoa — mihin rahat oikeasti menevät?</h2>
-    <p class="lead">Et maksa kenellekään palvelumaksua, mutta kustannuksia syntyy hajaantuneesti — ja moni niistä piiloutuu palkkakuluihin, listahintoihin ja vastuullisuustiimin Excelin tunteihin. Yhteenlaskettuna ne ovat tyypillisesti suurempia kuin Menestyksen palvelumaksu.</p>
+    <h2>Utan en affärsresebyrå — vart tar pengarna egentligen vägen?</h2>
+    <p class="lead">Ni betalar ingen serviceavgift, men kostnader uppstår utspridda — många gömmer sig i lönekostnader, listpriser och hållbarhetsteamets Excel-timmar. Sammanräknat överstiger de oftast Menestys serviceavgift.</p>
     <div class="hidden-card">
       <div class="hidden-grid">
         <div class="hidden-list" id="hidden-list">
@@ -573,182 +577,182 @@
         </div>
       </div>
       <div class="hidden-total">
-        <div class="label">Piilevä kokonaiskustannus / vuosi</div>
+        <div class="label">Dold totalkostnad / år</div>
         <div class="v" id="hidden-total-v">—</div>
-        <div class="desc">Tämä on hajaantuneena yrityksen sisällä — palkoissa, listahinnoissa ja menetetyssä työajassa. Se ei näy yhdessä laskussa, mutta on todellinen.</div>
+        <div class="desc">Detta är utspritt inom företaget — i löner, listpriser och förlorade arbetstimmar. Det syns inte på en faktura, men det är verkligt.</div>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <h2>Mitä Menestys maksaa — palvelumaksun avaus</h2>
-    <p class="lead">Mitä enemmän itsevarauksia käytetään, sitä halvempi vuosikustannus — säädä yläpuolelta <strong>Itsevarauksen osuus</strong> -slideria nähdäksesi vaikutus.</p>
+    <h2>Vad Menestys kostar — uppdelning av serviceavgift</h2>
+    <p class="lead">Ju fler självbokningar, desto lägre årskostnad — justera <strong>Itsevarauksen osuus</strong> reglaget ovan för att se effekten.</p>
     <div class="fee-card">
       <div class="fee-rows">
         
         
         
         
-        <div class="fee-row total"><span class="k">Palvelumaksu yhteensä / vuosi</span><span class="v" id="fee-total">—</span></div>
+        <div class="fee-row total"><span class="k">Total serviceavgift / år</span><span class="v" id="fee-total">—</span></div>
       </div>
       <div class="fee-compare">
         <div class="fee-vs bad">
-          <div class="label">Jos vain palvelutiimi</div>
+          <div class="label">Endast agentbokning</div>
           <div class="v" id="fee-fullservice">—</div>
-          <div class="desc">100 % varauksista palvelutiimin kautta</div>
+          <div class="desc">100 % av bokningar via servicegrupp</div>
         </div>
         <div class="fee-vs good">
-          <div class="label">Säästö itsevarauksella</div>
+          <div class="label">Besparing med självbokning</div>
           <div class="v" id="fee-onlinesave">—</div>
-          <div class="desc">Online-itsevaraus on edullisempaa per varaus</div>
+          <div class="desc">Online-självbokning är billigare per transaktion</div>
         </div>
       </div>
-      <p style="margin-top:18px;font-size:13px;color:var(--text-muted);">Hinnoittelu räätälöidään yritys- ja volyymikohtaisesti. Tämä on suuntaa-antava arvio Menestyksen hinnastomallin pohjalta — lopullinen tarjous lähetetään asiakaskohtaisesti.</p>
+      <p style="margin-top:18px;font-size:13px;color:var(--text-muted);">Priserna anpassas per företag och volym. Detta är en vägledande uppskattning baserad på Menestys prismodell — slutligt erbjudande tas fram per kund.</p>
     </div>
   </section>
 
   <section class="block">
-    <h2>Mitä muuta saat — lisäarvo joka ei näy euroissa</h2>
-    <p class="lead">Rahasäästöjen lisäksi Menestys tuo asioita, joita ei voi suoraan laskea taulukkoon mutta jotka muuttavat arjen täysin.</p>
+    <h2>Vad mer ni får — värde som inte syns i euro</h2>
+    <p class="lead">Utöver ekonomiska besparingar levererar Menestys förmåner som inte går att tabellera men som förändrar vardagen.</p>
     <div class="extras-grid">
-      <div class="extra"><h4>🇫🇮 Kotimainen henkilökohtainen tiimi</h4><p>Oma asiantuntijatiimi joka tuntee yrityksesi tarpeet. Tukea 4,91/5 — markkinassa 4,46/5.</p></div>
-      <div class="extra"><h4>📞 24/7 hätäpäivystys</h4><p>Soita milloin tahansa: jaa, vaihda, peruuta. Vastaava ammattilainen alle 15 minuutissa.</p></div>
-      <div class="extra"><h4>🛡 Duty of Care täyttyy</h4><p>Työturvallisuuslaki vaatii vastuun. Travel tracking + ISO 31030 -mukainen riskinhallinta.</p></div>
-      <div class="extra"><h4>♻ CSRD-päästödata valmiina</h4><p>Scope 3.6 -raportti suoraan vastuullisuustiimille — ei Excel-keruuta, ei laskuvirheitä.</p></div>
-      <div class="extra"><h4>📊 Travel Manager Dashboard</h4><p>Reaaliaikainen kulu-, varauskäyttäytymis- ja turvallisuusnäkymä. Sisältyy hintaan.</p></div>
-      <div class="extra"><h4>🤝 Sopimusneuvottelut puolestasi</h4><p>Lentoyhtiöiden ja hotellien volyymisopimukset → sinun ei tarvitse kilpailuttaa erikseen.</p></div>
-      <div class="extra"><h4>💼 Yksi lasku — ei kululaskuja</h4><p>Kaikki yhdessä laskussa. Työntekijöiden kuittiviidakko poistuu.</p></div>
-      <div class="extra"><h4>📜 Travel policy -konsultointi</h4><p>Ei vain järjestelmä vaan myös ohjaus: miten policy rakennetaan ja miten sitä noudatetaan.</p></div>
+      <div class="extra"><h4>🇫🇮 Inhemskt dedikerat team</h4><p>Ett eget expertteam som känner era behov. Supportbetyg 4,91/5 — marknadssnitt 4,46/5.</p></div>
+      <div class="extra"><h4>📞 24/7 jourdesk</h4><p>Ring när som helst: dela, ändra, avboka. En ansvarig handläggare inom 15 minuter.</p></div>
+      <div class="extra"><h4>🛡 Duty of Care uppfylls</h4><p>Arbetsmiljölagen kräver ansvar. Travel tracking + ISO 31030 riskhantering.</p></div>
+      <div class="extra"><h4>♻ CSRD-utsläppsdata redo</h4><p>Scope 3.6-rapport direkt till hållbarhetsteamet — ingen Excel-insamling, inga räknefel.</p></div>
+      <div class="extra"><h4>📊 Travel Manager Dashboard</h4><p>Realtidsöversikt över utgifter, bokningsbeteende och säkerhet. Ingår i priset.</p></div>
+      <div class="extra"><h4>🤝 Avtalsförhandlingar för er räkning</h4><p>Volymavtal med flygbolag och hotellkedjor → ingen separat upphandling behövs.</p></div>
+      <div class="extra"><h4>💼 En faktura — inga reseräkningar</h4><p>Everything in one invoice. The receipt jungle disappears for anställda.</p></div>
+      <div class="extra"><h4>📜 Resepolicy-konsultation</h4><p>Inte bara ett system utan också vägledning: hur policyn byggs och efterlevs.</p></div>
     </div>
   </section>
 
   <section class="block">
-    <h2>Liikematkabarometri 2026 — mitä markkinat sanovat</h2>
-    <p class="lead">Menestys Travelin anonyymi tutkimus tammikuussa 2026, n=113 liikematkustuksen ammattilaista (travel managerit, johdon assistentit, CEO:t, hankinta). Valtaosa vastaajista <em>ei</em> ole Menestyksen asiakkaita.</p>
+    <h2>Affärsresebarometern 2026 — vad marknaden säger</h2>
+    <p class="lead">Menestys Travels anonyma studie januari 2026, n=113 affärsresepro­fessionella (travel managers, ledningsassistenter, CEO:er, inköp). Majoriteten av respondenterna är <em>inte</em> Menestys-kunder.</p>
     <div class="barometer-grid">
       <div class="barometer-card">
         <div class="big-pct">66 %</div>
-        <div class="title">Priorisoi kustannussäästöt</div>
-        <div class="desc">Ylivoimaisesti tärkein agenda 2026</div>
+        <div class="title">Prioriterar kostnadsbesparingar</div>
+        <div class="desc">Med stor marginal viktigast 2026</div>
       </div>
       <div class="barometer-card">
         <div class="big-pct">36 %</div>
-        <div class="title">Liikaa manuaalista työtä</div>
-        <div class="desc">Poikkeukset ja käsityö kuormittavat</div>
+        <div class="title">För mycket manuellt arbete</div>
+        <div class="desc">Undantag och manuellt arbete belastar team</div>
       </div>
       <div class="barometer-card">
         <div class="big-pct">31 %</div>
-        <div class="title">Matkustajat kiertävät prosessia</div>
-        <div class="desc">Policy ei ohjaa, ostot hajaantuvat</div>
+        <div class="title">Resenärer kringgår processen</div>
+        <div class="desc">Policy styr inte, inköp sprids</div>
       </div>
       <div class="barometer-card">
         <div class="big-pct">25 %</div>
-        <div class="title">Pitää nykyistä tukea puutteellisena</div>
-        <div class="desc">Häiriötilanteissa ei toimivaa apua</div>
+        <div class="title">Tycker nuvarande support är otillräcklig</div>
+        <div class="desc">Ingen fungerande hjälp vid störningar</div>
       </div>
       <div class="barometer-card">
         <div class="big-pct">57 %</div>
-        <div class="title">CEO:t: Duty of Care #1</div>
-        <div class="desc">Ylimmälle johdolle turvallisuus tärkein</div>
+        <div class="title">CEO:er: Duty of Care #1</div>
+        <div class="desc">Toppledningen rankar säkerhet #1</div>
       </div>
       <div class="barometer-card">
         <div class="big-pct">30 %</div>
-        <div class="title">CSRD &amp; vastuullisuus nousee</div>
-        <div class="desc">Päästödata raportointiin agendalle</div>
+        <div class="title">CSRD & hållbarhet stiger</div>
+        <div class="desc">Utsläppsdata på rapporteringsagendan</div>
       </div>
     </div>
 
     <div class="nps-card">
-      <h3>Menestys vs. markkinakeskiarvo (NPS 2026)</h3>
-      <div class="src">Lähde: Liikematkabarometri 2026 · n=113 (23 Menestys-asiakasta, 84 muun TMC:n asiakasta, 6 muu)</div>
+      <h3>Menestys vs. marknadssnitt (NPS 2026)</h3>
+      <div class="src">Källa: Affärsresebarometern 2026 · n=113 (23 Menestys-asiakasta, 84 muun TMC:n asiakasta, 6 muu)</div>
       <div class="nps-grid">
         <div class="nps-col menestys">
-          <div class="label">Suomalainen kotimainen</div>
+          <div class="label">Inhemsk finländsk</div>
           <div class="name">Menestys Travel</div>
-          <div class="stat"><div class="v">+44</div><div class="vl">NPS 2026<br>Erinomainen (yli 30)</div></div>
-          <div class="stat"><div class="v">4,91</div><div class="vl">/ 5 · Tuki häiriötilanteessa</div></div>
-          <div class="stat"><div class="v">9 %</div><div class="vl">Pitää tukea puutteellisena</div></div>
+          <div class="stat"><div class="v">+44</div><div class="vl">NPS 2026<br>Utmärkt (över 30)</div></div>
+          <div class="stat"><div class="v">4,91</div><div class="vl">/ 5 · Stöd vid störningar</div></div>
+          <div class="stat"><div class="v">9 %</div><div class="vl">Tycker stödet är otillräckligt</div></div>
         </div>
         <div class="nps-col market">
-          <div class="label">Vertailutaso</div>
-          <div class="name">Markkinakeskiarvo</div>
-          <div class="stat"><div class="v">+6</div><div class="vl">NPS · Toimialan taso</div></div>
-          <div class="stat"><div class="v">4,46</div><div class="vl">/ 5 · Tuki häiriötilanteessa</div></div>
-          <div class="stat"><div class="v">31 %</div><div class="vl">Pitää tukea puutteellisena</div></div>
+          <div class="label">Jämförelse</div>
+          <div class="name">Marknadssnitt</div>
+          <div class="stat"><div class="v">+6</div><div class="vl">NPS · Branschnivå</div></div>
+          <div class="stat"><div class="v">4,46</div><div class="vl">/ 5 · Stöd vid störningar</div></div>
+          <div class="stat"><div class="v">31 %</div><div class="vl">Tycker stödet är otillräckligt</div></div>
         </div>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <h2>Menestyksen palvelumalli — ennen, aikana, jälkeen</h2>
-    <p class="lead">360°-matkapalvelu yhdellä kumppanilla. Asiakaslähtöinen palvelumme ratkaisee kaikki matkustamisen tarpeet.</p>
+    <h2>Menestys servicemodell — före, under, efter</h2>
+    <p class="lead">360°-resetjänst från en partner. Vår kundorienterade service löser alla resebehov.</p>
     <div class="journey">
       <div class="journey-col">
-        <div class="stage">Ennen matkaa</div>
-        <h3>Suunnittelu &amp; varaus</h3>
+        <div class="stage">Före resan</div>
+        <h3>Planering & bokning</h3>
         <ul>
-          <li>Travel Policy -konsultointi</li>
-          <li>Online-varausjärjestelmä</li>
-          <li>Henkilökohtainen oma tiimi</li>
-          <li>Sopimushinnat &amp; volyymietuudet</li>
+          <li>Resepolicy-konsultation</li>
+          <li>Online självbokningsverktyg</li>
+          <li>Personligt dedikerat team</li>
+          <li>Avtalspriser & volymförmåner</li>
           <li>Travel Manager Dashboard</li>
         </ul>
       </div>
       <div class="journey-col">
-        <div class="stage">Matkan aikana</div>
-        <h3>Huolenpito &amp; tuki</h3>
+        <div class="stage">Under resan</div>
+        <h3>Omsorg & stöd</h3>
         <ul>
-          <li>24/7 kotimainen asiakaspalvelu</li>
-          <li>Duty of Care &amp; matkustajien turvallisuus</li>
-          <li>Tukea 4,91/5 (vs markkina 4,46)</li>
-          <li>Reaaliaikainen travel tracking</li>
-          <li>Vaihdot ja peruutukset hoidettuna puolestasi</li>
+          <li>24/7 inhemsk kundservice</li>
+          <li>Duty of Care & resenärssäkerhet</li>
+          <li>Stöd 4,91/5 (vs marknad 4,46)</li>
+          <li>Realtids-travel-tracking</li>
+          <li>Ändringar och avbokningar sköts åt er</li>
         </ul>
       </div>
       <div class="journey-col">
-        <div class="stage">Matkan jälkeen</div>
-        <h3>Raportointi &amp; optimointi</h3>
+        <div class="stage">Efter resan</div>
+        <h3>Rapportering & optimering</h3>
         <ul>
-          <li>Kulu- ja ostoraportointi (TCO)</li>
-          <li>Päästöraportointi GHG / CSRD-yhteensopiva</li>
-          <li>Maksu- ja kuluhallinta keskitetysti</li>
-          <li>Policy-suositukset &amp; optimointi</li>
-          <li>Tekoälyavusteinen analytiikka</li>
+          <li>Utgifts- och inköpsrapport (TCO)</li>
+          <li>GHG / CSRD-kompatibel utsläppsrapport</li>
+          <li>Centraliserad betal- och utläggshantering</li>
+          <li>Policy-rekommendationer & optimering</li>
+          <li>AI-stödd analys</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <h2>Itse varaaminen vs. Menestys liikematkatoimisto</h2>
-    <p class="lead">Mitä eroa käytännössä on?</p>
+    <h2>Egenbokning vs. Menestys affärsresebyrå</h2>
+    <p class="lead">Vad är den praktiska skillnaden?</p>
     <div class="compare-card">
       <div class="compare-grid">
         <div class="compare-col bad">
-          <h4>Ilman liikematkatoimistoa</h4>
+          <h4>Utan en affärsresebyrå</h4>
           <ul>
-            <li>Jokainen varaa eri kanavista — vertailtavuus puuttuu</li>
-            <li>Kuitit &amp; kululaskut työntekijöiden vastuulla</li>
-            <li>Ei sopimushintoja → täysi listahinta</li>
-            <li>Muutokset &amp; peruutukset täysihintaisina</li>
-            <li>Ei tietoa missä työntekijät ovat (Duty of Care -riski)</li>
-            <li>CSRD-data kerätään käsin Excelistä</li>
-            <li>Ei näkyvyyttä kokonaiskuluihin reaaliajassa</li>
-            <li>Policyn rikkomukset huomataan vasta jälkikäteen</li>
+            <li>Alla bokar från olika kanaler — ingen jämförbarhet</li>
+            <li>Receipts & expense reports on anställda</li>
+            <li>Inga avtalspriser → fullt listpris</li>
+            <li>Ändringar & avbokningar till fullpris</li>
+            <li>No visibility on where anställda are (Duty of Care risk)</li>
+            <li>CSRD-data samlas manuellt i Excel</li>
+            <li>Ingen realtidssyn över totalutgifterna</li>
+            <li>Policy-brott upptäcks först i efterhand</li>
           </ul>
         </div>
         <div class="compare-col good">
-          <h4>Menestyksen kanssa</h4>
+          <h4>Med Menestys</h4>
           <ul>
-            <li>Yksi kanava: pyyntö → Menestys → vahvistus</li>
-            <li>Lasku yhdessä — kululaskutus poistuu työntekijöiltä</li>
-            <li>Sopimushinnat lentoyhtiöiden ja hotelliketjujen kanssa</li>
-            <li>Joustavat ehdot, useimmiten ilmaiset muutokset</li>
-            <li>24/7 hätäpäivystys + travel tracking</li>
-            <li>CSRD-päästödata valmiina raportointiin (Scope 3.6)</li>
-            <li>Reaaliaikainen kustannusseuranta &amp; raportit</li>
-            <li>Policy ohjaa varauksen heti, ei jälkikäteen</li>
+            <li>En kanal: förfrågan → Menestys → bekräftelse</li>
+            <li>Single invoice — expense reporting removed from anställda</li>
+            <li>Avtalspriser med flygbolag och hotellkedjor</li>
+            <li>Flexibla villkor, oftast fria ändringar</li>
+            <li>24/7 jourdesk + travel tracking</li>
+            <li>CSRD-utsläppsdata redo raportointiin (Scope 3.6)</li>
+            <li>Realtids kostnadsspårning & rapporter</li>
+            <li>Policy styr bokningen direkt, inte i efterhand</li>
           </ul>
         </div>
       </div>
@@ -756,47 +760,47 @@
   </section>
 
   <section class="block">
-    <h2>Duty of Care — laki vaatii vastuun työntekijöiden turvallisuudesta</h2>
-    <p class="lead">Työturvallisuuslaki, GDPR ja kansainväliset standardit (ISO 31030) edellyttävät että työnantaja tietää missä työntekijät matkustavat ja pystyy auttamaan kriisissä. Liikematkabarometri 2026: <strong>57 %</strong> CEO:ista pitää Duty of Carea ykkösprioriteettina.</p>
+    <h2>Duty of Care — lagen kräver ansvar för anställdas säkerhet</h2>
+    <p class="lead">Occupational safety law, GDPR and international standards (ISO 31030) require that the employer knows where anställda travel and can help in a crisis. Business Travel Barometer 2026: <strong>57 %</strong> av CEO:er rankar Duty of Care som högsta prioritet.</p>
     <div class="info-card">
-      <h3>Mitä Duty of Care tarkoittaa käytännössä?</h3>
-      <p>Kun työntekijä matkustaa työasioissa, työnantajan on lain mukaan varmistettava että:</p>
+      <h3>Vad innebär Duty of Care i praktiken?</h3>
+      <p>När en anställd reser i tjänsten måste arbetsgivaren enligt lag säkerställa att:</p>
       <ul style="margin-left:20px; color:var(--text-soft); margin-bottom:14px;">
-        <li>Matkareitti, majoituspaikka ja yhteystiedot ovat työnantajan tiedossa</li>
-        <li>Kriisitilanteessa (terrorismi, luonnonkatastrofi, sairastapaus) työntekijä on tavoitettavissa</li>
-        <li>Riskialueille matkustaessa työntekijä saa tarvittavan briefingin ja suojan</li>
-        <li>Korvaava matka tai paluu järjestyy nopeasti, jos olosuhteet muuttuvat</li>
+        <li>Resvägen, boendet och kontaktuppgifterna är kända för arbetsgivaren</li>
+        <li>Vid kris (terror, naturkatastrof, medicinskt) är den anställde nåbar</li>
+        <li>Vid resa till riskområden får den anställde nödvändig briefing och skydd</li>
+        <li>En ersättningsresa eller hemresa ordnas snabbt om förhållandena ändras</li>
       </ul>
-      <p style="color:var(--text-soft);">Ilman keskitettyä liikematkatoimistoa nämä tiedot ovat hajaantuneina sähköposteissa, henkilökohtaisilla luottokorteilla ja työntekijöiden muistissa. Menestys tarjoaa <strong>yhden reaaliaikaisen näkymän</strong> jokaisesta matkasta.</p>
+      <p style="color:var(--text-soft);">Without a centralised travel management company this data is scattered across emails, personal credit cards and anställda' memory. Menestys provides <strong>one real-time view</strong> of every trip.</p>
       <div class="stat-row">
-        <div class="stat-item"><span class="n">24/7</span><span class="l">Hätäpäivystys ja matka-apu</span></div>
-        <div class="stat-item"><span class="n">&lt; 15 min</span><span class="l">Vasteaika kriisitilanteissa</span></div>
-        <div class="stat-item"><span class="n">100 %</span><span class="l">Matkat näkyvät yhdessä järjestelmässä</span></div>
-        <div class="stat-item"><span class="n">ISO 31030</span><span class="l">Travel risk management -standardin mukainen</span></div>
+        <div class="stat-item"><span class="n">24/7</span><span class="l">Jourdesk och reseassistans</span></div>
+        <div class="stat-item"><span class="n">&lt; 15 min</span><span class="l">Responstid vid kriser</span></div>
+        <div class="stat-item"><span class="n">100 %</span><span class="l">Resor syns i ett system</span></div>
+        <div class="stat-item"><span class="n">ISO 31030</span><span class="l">Travel risk management-standard</span></div>
       </div>
     </div>
   </section>
 
   <section class="block">
-    <h2>CSRD-raportointi — vastuullisuustiimi säästää viikkoja</h2>
-    <p class="lead">EU:n CSRD-direktiivi (2024 → kaikki yli 250 hengen yritykset) vaatii Scope 3.6 -liikematkojen päästöraportoinnin. Datan kerääminen käsin Excelistä on viikkojen työ — Menestys toimittaa sen API:n yli valmiina.</p>
+    <h2>CSRD-rapportering — hållbarhetsteamet sparar veckor</h2>
+    <p class="lead">The EU CSRD directive (2024 → all companies over 250 anställda) requires Scope 3.6 business travel emissions reporting. Manual collection in Excel is weeks of work — Menestys delivers it via API ready-made.</p>
     <div class="info-card">
-      <h3>Mitä Scope 3.6 sisältää?</h3>
-      <p>Liikematkojen kasvihuonepäästöt: lennot, junat, hotellit, vuokra-autot. Jokaisesta varauksesta tarvitaan päivämäärä, reitti, etäisyys ja CO₂e-päästö.</p>
+      <h3>Vad ingår i Scope 3.6?</h3>
+      <p>Affärsresors växthusgaser: flyg, tåg, hotell, hyrbil. Varje bokning kräver datum, rutt, sträcka och CO₂e-utsläpp.</p>
       <div class="stat-row">
-        <div class="stat-item"><span class="n">60–80 h</span><span class="l">Vastuullisuustiimin säästö / vuosi</span></div>
-        <div class="stat-item"><span class="n">99 %</span><span class="l">Vähemmän käsityötä datan keruussa</span></div>
-        <div class="stat-item"><span class="n">Scope 3.6</span><span class="l">Valmis raportti tilintarkastukseen</span></div>
-        <div class="stat-item"><span class="n">CO₂e</span><span class="l">Per matka, per yksikkö, per kuukausi</span></div>
+        <div class="stat-item"><span class="n">60–80 h</span><span class="l">Hållbarhetsteamets besparing / år</span></div>
+        <div class="stat-item"><span class="n">99 %</span><span class="l">Mindre manuellt arbete i datainsamling</span></div>
+        <div class="stat-item"><span class="n">Scope 3.6</span><span class="l">Färdig rapport för revision</span></div>
+        <div class="stat-item"><span class="n">CO₂e</span><span class="l">Per resa, per enhet, per månad</span></div>
       </div>
-      <p style="margin-top:14px;color:var(--text-soft);">Menestyksen Travel Manager Dashboard toimittaa päästödatan suoraan vastuullisuustiimin työkaluihin (esim. Position Green, Worldfavor, ESG-rajapinta) — ei manuaalista Excel-keruuta, ei laskuvirheitä.</p>
+      <p style="margin-top:14px;color:var(--text-soft);">Menestys Travel Manager Dashboard levererar utsläppsdata direkt till hållbarhetsteamets verktyg (t.ex. Position Green, Worldfavor, ESG-gränssnitt) — ingen manuell Excel-insamling, inga räknefel.</p>
     </div>
   </section>
 
   <div class="cta-band">
-    <h2>Haluatko tarkemman laskelman omasta yrityksestäsi?</h2>
-    <p>Sovi 30 min etätapaaminen — käymme luvut läpi yhdessä ja teemme yrityksellesi räätälöidyn säästöanalyysin Menestyksen palvelumallin pohjalta.</p>
-    <a href="https://www.menestysliikematka.fi/yhteystiedot" class="btn">Pyydä tapaaminen →</a>
+    <h2>Vill ni ha en skräddarsydd kalkyl för ert företag?</h2>
+    <p>Boka 30-minuters distansmöte — vi går igenom siffrorna tillsammans och bygger en skräddarsydd besparingsanalys baserad på Menestys servicemodell.</p>
+    <a href="https://www.menestysliikematka.fi/yhteystiedot" class="btn">Boka möte →</a>
   </div>
 </div>
 
@@ -805,8 +809,8 @@
     <div class="mark">menestys</div>
     <div class="tagline">MENESTYS = LIIKEMATKA + ELÄMYS</div>
   </div>
-  <p>osa Elämys Groupia · Helsinki · Tampere · Malmö · Oslo</p>
-  <p style="margin-top:6px;">Säästöt perustuvat toimialan benchmark-lukuihin (SAP Concur, GBTA, Amex GBT). Liikematkabarometri 2026 -tilastot © Elämys Group, n=113. Tarkka analyysi tehdään yrityskohtaisesti.</p>
+  <p>del av Elämys Group · Helsingfors · Tammerfors · Malmö · Oslo</p>
+  <p style="margin-top:6px;">Besparingar baserade på branschens benchmarks (SAP Concur, GBTA, Amex GBT). Affärsresebarometern 2026 statistik © Elämys Group, n=113. Exakt analys tas fram per kund.</p>
   <p style="margin-top:14px;font-size:11px;opacity:0.6;">© 2026 Elämys Group · <a href="https://www.menestysliikematka.fi">menestysliikematka.fi</a></p>
 </footer>
 
@@ -815,43 +819,43 @@
 // Lähtödata: 4 todellisen asiakkaan käyttäjäraportit (anonymisoitu A/B/C/D)
 const BENCHMARK = [
   {
-    anon: "Asiakas A",
-    profile: "Teollisuus · noin 50 hlö · ulkomaanmatkat",
+    anon: "Kund A",
+    profile: "Teollisuus · noin 50 anställda · ulkomaanmatkat",
     annual: 186000,
     passengers: 48,
-    trips: 55,
+    resor: 55,
     avgFlight: 890,
     hotelNights: 36,           // hotellivarauksia / vuosi
     avgPerPassenger: 3875,     // €/matkustaja/vuosi
   },
   {
-    anon: "Asiakas B",
-    profile: "Vähittäiskauppa · ~200 hlö · kotimaapainotteinen",
+    anon: "Kund B",
+    profile: "Vähittäiskauppa · ~200 anställda · kotimaapainotteinen",
     annual: 261000,
     passengers: 132,
-    trips: 248,
+    resor: 248,
     avgFlight: 275,
     hotelNights: 216,
     avgPerPassenger: 1977,
     co2: { flight_kg: 28074, hotel_kg: 2402, train_kg: 325, total_t: 30.8 },
   },
   {
-    anon: "Asiakas C",
-    profile: "Teollisuus · ~150 hlö · kansainvälinen",
+    anon: "Kund C",
+    profile: "Teollisuus · ~150 anställda · kansainvälinen",
     annual: 452000,
     passengers: 96,
-    trips: 160,
+    resor: 160,
     avgFlight: 976,
     hotelNights: 24,
     avgPerPassenger: 4708,
     co2: { flight_kg: 79924, hotel_kg: 5181, total_t: 85.1 },
   },
   {
-    anon: "Asiakas D",
-    profile: "B2B-palvelut · ~30 hlö · sekä koti- että ulkomaa",
+    anon: "Kund D",
+    profile: "B2B-palvelut · ~30 anställda · sekä koti- että ulkomaa",
     annual: 82000,
     passengers: 11,
-    trips: 59,
+    resor: 59,
     avgFlight: 682,
     hotelNights: 17,
     avgPerPassenger: 7455,
@@ -862,7 +866,7 @@ const BENCHMARK = [
 // Säädetty Menestys-asiakasdataa (A/B/C/D) ja yleisiä TMC-toimialan tutkimuksia (GBTA, SAP Concur) vastaavaksi
 const CFG = {
   // Aika: itse-varaaminen 45 min keskimäärin, mutta monimutkainen matka (yhdistetyt reitit,
-  // useat majoitukset, conenctit) vie 2-4 h. Painotettu keskiarvo 60 min/matka.
+  // useat majoitukset, conenctit) vie 2-4 h. Painotettu keskiarvo 60 min/resa.
   // TMC: 12 min keskiarvo myös monimutkaisille matkoille (osa hoituu palvelutiimissä).
   selfBookMin: 60,
   tmcBookMin: 12,
@@ -902,16 +906,16 @@ const CFG = {
 
 const $ = (id) => document.getElementById(id);
 const presets = {
-  100:  { headcount: 100,  traveler: 20, trips: 4, tripcost: 700,  wage: 55, changes: 8,  online: 60 },
-  500:  { headcount: 500,  traveler: 18, trips: 5, tripcost: 800,  wage: 60, changes: 8,  online: 60 },
-  1000: { headcount: 1000, traveler: 15, trips: 6, tripcost: 900,  wage: 65, changes: 10, online: 60 },
+  100:  { headcount: 100,  traveler: 20, resor: 4, tripcost: 700,  wage: 55, changes: 8,  online: 60 },
+  500:  { headcount: 500,  traveler: 18, resor: 5, tripcost: 800,  wage: 60, changes: 8,  online: 60 },
+  1000: { headcount: 1000, traveler: 15, resor: 6, tripcost: 900,  wage: 65, changes: 10, online: 60 },
 };
 let state = { ...presets[500] };
 
 function applyState(s) {
   $('i-headcount').value = s.headcount; $('r-headcount').value = s.headcount;
   $('r-traveler').value = s.traveler; $('rv-traveler').textContent = s.traveler + ' %';
-  $('r-trips').value = s.trips; $('rv-trips').textContent = s.trips;
+  $('r-resor').value = s.resor; $('rv-resor').textContent = s.resor;
   $('i-tripcost').value = s.tripcost; $('r-tripcost').value = s.tripcost;
   $('i-wage').value = s.wage; $('r-wage').value = s.wage;
   $('r-changes').value = s.changes; $('rv-changes').textContent = s.changes + ' %';
@@ -924,7 +928,7 @@ function fmt(n, decimals = 0) {
 }
 function compute(s) {
   const travelers = s.headcount * (s.traveler / 100);
-  const totalTrips = travelers * s.trips;
+  const totalTrips = travelers * s.resor;
   const totalSpend = totalTrips * s.tripcost;
   const wagePerMin = s.wage / 60;
   const minSavedPerTrip = (CFG.selfBookMin - CFG.tmcBookMin) + (CFG.selfExpenseMin - CFG.tmcExpenseMin);
@@ -940,7 +944,7 @@ function compute(s) {
   const csrdEuros = CFG.csrdHoursSaved * CFG.csrdRate;
   const savings = aikaEuros + hintaEuros + muutosEuros + policyEuros + csrdEuros;
 
-  // Palvelumaksu Menestykselle: per varaus + lisenssit
+  // Serviceavgift till Menestys: per varaus + lisenssit
   // Lentolippuja = totalTrips, hotelliyöt = totalTrips * hotelRatio
   const onlineMix = (s.online || 0) / 100;
   const flightFeePerBooking = CFG.selfBookFeeFlight * onlineMix + CFG.fullServiceFeeFlight * (1 - onlineMix);
@@ -1038,23 +1042,23 @@ function renderHiddenCost(r) {
   const policyLeak  = r.totalTrips * state.tripcost * CFG.policyOverrunSelf;
   const csrdManual  = CFG.csrdHoursSaved * CFG.csrdRate;
   const items = [
-    { k: "Työntekijöiden työaika — varauksissa",
-      sub: `${(r.totalTrips * CFG.selfBookMin / 60).toFixed(0)} h/vuosi · ${CFG.selfBookMin} min/matka (monimutkaiset 2–4 h)`,
+    { k: "Anställdas tid — på bokningar",
+      sub: `${(r.totalTrips * CFG.selfBookMin / 60).toFixed(0)} t/år · ${CFG.selfBookMin} min/resa (komplexa 2–4 h)`,
       v: bookTime, color: "#7BD3F7" },
     { k: "Työntekijöiden työaika — kululaskuissa & kuiteissa",
-      sub: `${(r.totalTrips * CFG.selfExpenseMin / 60).toFixed(0)} h/vuosi · ${CFG.selfExpenseMin} min/matka`,
+      sub: `${(r.totalTrips * CFG.selfExpenseMin / 60).toFixed(0)} t/år · ${CFG.selfExpenseMin} min/resa`,
       v: expenseTime, color: "#4FB7E8" },
-    { k: "Listahinnat ilman sopimusalennuksia",
-      sub: `~${(CFG.contractDiscount*100).toFixed(0)} % enemmän per lento ja hotelli`,
+    { k: "Listpriser utan avtalsrabatter",
+      sub: `~${(CFG.contractDiscount*100).toFixed(0)} % mer per flyg och hotell`,
       v: listPremium, color: "#FF6D32" },
     { k: "Muutokset & menetetyt liput",
-      sub: `~${state.changes} % matkoista muuttuu · ${(CFG.changeLostRatio*100).toFixed(0)} % halvoista lipuista menetetään kokonaan`,
+      sub: `~${state.changes} % av resorna ändras · ${(CFG.changeLostRatio*100).toFixed(0)} % av billiga biljetter förloras helt`,
       v: changeCost, color: "#8B5CF6" },
-    { k: "Policy-ylitykset (työntekijät varaavat yli budjetin)",
-      sub: `~${(CFG.policyOverrunSelf*100).toFixed(0)} % matkoista yli policyn ilman ohjausta`,
+    { k: "Policy overruns (anställda book over budget)",
+      sub: `~${(CFG.policyOverrunSelf*100).toFixed(0)} % av resorna överskrider policy utan styrning`,
       v: policyLeak, color: "#EF4444" },
-    { k: "CSRD-data käsin kerätty (vastuullisuustiimi)",
-      sub: `~${CFG.csrdHoursSaved} h/vuosi · ${CFG.csrdRate} €/h`,
+    { k: "CSRD-data manuellt insamlad (hållbarhetsteam)",
+      sub: `~${CFG.csrdHoursSaved} t/år · ${CFG.csrdRate} €/h`,
       v: csrdManual, color: "#EAB308" },
   ];
   const total = items.reduce((s, i) => s + i.v, 0);
@@ -1108,17 +1112,17 @@ function renderBenchmark(budget) {
   const grid = $('bm-grid');
   grid.innerHTML = BENCHMARK.map(b => {
     const isMatch = b === closest;
-    const co2 = b.co2 ? `<div class="co2">CO₂-päästöt: <strong>${b.co2.total_t.toFixed(1)} t / vuosi</strong> (CSRD Scope 3.6)</div>` : '';
+    const co2 = b.co2 ? `<div class="co2">CO₂-utsläpp: <strong>${b.co2.total_t.toFixed(1)} t / vuosi</strong> (CSRD Scope 3.6)</div>` : '';
     return `<div class="bm-card${isMatch ? ' match' : ''}">
-      <div class="anon">${b.anon}${isMatch ? '<span class="badge">SINUN TASOSI</span>' : ''}</div>
-      <div class="annual">${fmt(b.annual)}<span class="l">Vuosibudjetti</span></div>
+      <div class="anon">${b.anon}${isMatch ? '<span class="badge">ER NIVÅ</span>' : ''}</div>
+      <div class="annual">${fmt(b.annual)}<span class="l">Årsbudget</span></div>
       <div class="metrics">
-        <div class="metric"><span class="k">Profiili</span><span class="v" style="text-align:right;font-size:11px;max-width:60%;">${b.profile}</span></div>
-        <div class="metric"><span class="k">Matkustajia</span><span class="v">${b.passengers} hlö</span></div>
-        <div class="metric"><span class="k">Matkoja / vuosi</span><span class="v">${b.trips} kpl</span></div>
-        <div class="metric"><span class="k">Ka. lippuhinta</span><span class="v">${fmt(b.avgFlight)}</span></div>
-        <div class="metric"><span class="k">Hotellivarauksia / vuosi</span><span class="v">${b.hotelNights} kpl</span></div>
-        <div class="metric"><span class="k">Ka. / matkustaja</span><span class="v">${fmt(b.avgPerPassenger)}</span></div>
+        <div class="metric"><span class="k">Profil</span><span class="v" style="text-align:right;font-size:11px;max-width:60%;">${b.profile}</span></div>
+        <div class="metric"><span class="k">Resenärer</span><span class="v">${b.passengers} anställda</span></div>
+        <div class="metric"><span class="k">Resor / år</span><span class="v">${b.resor} kpl</span></div>
+        <div class="metric"><span class="k">Snittpris biljett</span><span class="v">${fmt(b.avgFlight)}</span></div>
+        <div class="metric"><span class="k">Hotellbokningar / år</span><span class="v">${b.hotelNights} kpl</span></div>
+        <div class="metric"><span class="k">Snitt / resenär</span><span class="v">${fmt(b.avgPerPassenger)}</span></div>
       </div>
       ${co2}
     </div>`;
@@ -1140,16 +1144,16 @@ function renderBenchmark(budget) {
   });
 
   // CO2 jakauma
-  const bC = BENCHMARK.find(b => b.anon === 'Asiakas B');
-  const bCC = BENCHMARK.find(b => b.anon === 'Asiakas C');
+  const bC = BENCHMARK.find(b => b.anon === 'Kund B');
+  const bCC = BENCHMARK.find(b => b.anon === 'Kund C');
   if (bmCo2) bmCo2.destroy();
   bmCo2 = new Chart($('bm-co2'), {
     type: 'bar',
     data: {
       labels: ['Lennot', 'Hotellit', 'Juna', 'Muut'],
       datasets: [
-        { label: 'Asiakas B (kotimaa)', data: [bC.co2.flight_kg, bC.co2.hotel_kg, bC.co2.train_kg||0, 0], backgroundColor: '#7BD3F7' },
-        { label: 'Asiakas C (ulkomaa)', data: [bCC.co2.flight_kg, bCC.co2.hotel_kg, 0, 0], backgroundColor: '#FF6D32' },
+        { label: 'Kund B (kotimaa)', data: [bC.co2.flight_kg, bC.co2.hotel_kg, bC.co2.train_kg||0, 0], backgroundColor: '#7BD3F7' },
+        { label: 'Kund C (ulkomaa)', data: [bCC.co2.flight_kg, bCC.co2.hotel_kg, 0, 0], backgroundColor: '#FF6D32' },
       ]
     },
     options: {
@@ -1166,22 +1170,22 @@ function renderBenchmark(budget) {
 function update() {
   state.headcount = Math.max(10, +$('i-headcount').value || 0);
   state.traveler  = +$('r-traveler').value;
-  state.trips     = +$('r-trips').value;
+  state.resor     = +$('r-resor').value;
   state.tripcost  = Math.max(100, +$('i-tripcost').value || 0);
   state.wage      = Math.max(20, +$('i-wage').value || 0);
   state.changes   = +$('r-changes').value;
   state.online    = +$('r-online').value;
   $('rv-traveler').textContent = state.traveler + ' %';
-  $('rv-trips').textContent = state.trips;
+  $('rv-resor').textContent = state.resor;
   $('rv-changes').textContent = state.changes + ' %';
   $('rv-online').textContent = state.online + ' %';
   const r = compute(state);
   $('big-total').textContent = fmt(r.net);
-  $('big-sub').innerHTML = `<strong>${Math.round(r.travelers).toLocaleString('fi-FI')} matkustajaa</strong> · <strong>${Math.round(r.totalTrips).toLocaleString('fi-FI')} matkaa</strong> · matkabudjetti <strong>${fmt(r.totalSpend)}</strong>`;
+  $('big-sub').innerHTML = `<strong>${Math.round(r.travelers).toLocaleString('fi-FI')} resenärer</strong> · <strong>${Math.round(r.totalTrips).toLocaleString('fi-FI')} resor</strong> · resebudget <strong>${fmt(r.totalSpend)}</strong>`;
   // ROI-paneeli
   if ($('roi-save')) $('roi-save').textContent = fmt(r.savings);
   if ($('roi-fee')) $('roi-fee').textContent = fmt(r.serviceFee);
-  if ($('roi-fee-pct')) $('roi-fee-pct').textContent = r.feePct.toFixed(1) + ' % matkabudjetista';
+  if ($('roi-fee-pct')) $('roi-fee-pct').textContent = r.feePct.toFixed(1) + ' % av resebudget';
   if ($('roi-pct')) $('roi-pct').textContent = (r.roi/100 + 1).toFixed(1) + 'x';
   // Säästökortit
   $('s-aika').textContent = fmt(r.aika);
@@ -1204,7 +1208,7 @@ function update() {
 
 $('i-budget').addEventListener('input', () => renderBenchmark(+$('i-budget').value || 0));
 
-['i-headcount','r-headcount','r-traveler','r-trips','i-tripcost','r-tripcost','i-wage','r-wage','r-changes','r-online'].forEach(id => {
+['i-headcount','r-headcount','r-traveler','r-resor','i-tripcost','r-tripcost','i-wage','r-wage','r-changes','r-online'].forEach(id => {
   $(id).addEventListener('input', () => {
     if (id === 'i-headcount') $('r-headcount').value = Math.min(5000, +$('i-headcount').value);
     if (id === 'r-headcount') $('i-headcount').value = +$('r-headcount').value;
