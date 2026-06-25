@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menestys Liikematkalaskuri — Mitä säästät kun siirryt liikematkatoimistolle?</title>
+<meta name="description" content="Laske kuinka paljon yrityksesi säästää siirtymällä Menestys Liikematkapalveluiden asiakkaaksi. Aika, raha, CSRD-raportointi ja Duty of Care. NPS +44.">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #0A1A4D;
+    --navy-soft: #1E2F6B;
+    --sky: #7BD3F7;
+    --sky-deep: #4FB7E8;
+    --orange: #FF6D32;
+    --orange-deep: #E5521A;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #0A1A4D;
+    --text-soft: #4B5563;
+    --text-muted: #9CA3AF;
+    --border: #E5E7EB;
+    --border-soft: #F1F5F9;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+    color: #fff;
+    padding: 48px 20px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before, .hero::after {
+    content: '';
+    position: absolute;
+    background: rgba(123, 211, 247, 0.08);
+    transform: rotate(-15deg);
+    pointer-events: none;
+  }
+  .hero::before {
+    width: 600px; height: 400px; top: -100px; right: -200px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+  .hero::after {
+    width: 800px; height: 500px; bottom: -200px; left: -300px;
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+    background: rgba(255, 109, 50, 0.06);
+  }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+  .brand-tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--sky); border: 1px solid var(--sky);
+    padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(28px, 5vw, 52px); line-height: 1.15; font-weight: 700; margin-bottom: 16px; max-width: 900px; }
+  .hero .lead { font-size: clamp(15px, 2vw, 19px); opacity: 0.85; max-width: 720px; margin-bottom: 32px; }
+  .hero .quick-presets { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .preset {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 12px 24px; border-radius: 30px;
+    font-family: inherit; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .preset:hover { background: rgba(123,211,247,0.2); border-color: var(--sky); }
+  .preset.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+  /* TUNNUSLUVUT */
+  .tunnusluvut {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px; margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid rgba(123,211,247,0.18);
+  }
+  .tunnus { color: #fff; }
+  .tunnus .n { color: var(--sky); font-size: 26px; font-weight: 800; line-height: 1; display: block; }
+  .tunnus .l { font-size: 12px; opacity: 0.75; margin-top: 6px; }
+
+  /* HEADLINE NUMBER */
+  .headline {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(10,26,77,0.12);
+    padding: 36px 28px;
+    margin: -50px auto 40px;
+    max-width: 920px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .headline .label { color: var(--text-muted); font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .headline .big { color: var(--orange); font-size: clamp(40px, 7vw, 64px); font-weight: 800; line-height: 1; margin-bottom: 8px; }
+  .headline .sub { color: var(--text-soft); font-size: clamp(13px, 1.6vw, 16px); }
+  .headline .sub strong { color: var(--navy); }
+
+  /* INPUTS */
+  .inputs-card {
+    background: var(--card); border-radius: 16px; padding: 28px;
+    box-shadow: 0 4px 12px rgba(10,26,77,0.05);
+    margin-bottom: 32px;
+  }
+  .inputs-card h2 { font-size: 20px; color: var(--navy); margin-bottom: 6px; }
+  .inputs-card .hint { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+  .inputs-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .input-block label { display: block; font-size: 12px; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .input-row { display: flex; align-items: center; gap: 10px; }
+  .input-row input[type="number"] {
+    flex: 1; padding: 10px 12px; font-size: 16px; font-family: inherit;
+    border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .input-row input[type="number"]:focus { border-color: var(--sky-deep); outline: none; }
+  .input-row .unit { color: var(--text-muted); font-size: 13px; }
+  .input-block input[type="range"] {
+    width: 100%; margin-top: 8px; accent-color: var(--orange);
+  }
+  .range-value { color: var(--orange); font-weight: 700; }
+
+  /* SECTION */
+  section.block { margin: 48px 0; }
+  section.block h2 { font-size: clamp(22px, 3vw, 28px); color: var(--navy); margin-bottom: 8px; }
+  section.block .lead { color: var(--text-soft); font-size: 15px; max-width: 760px; margin-bottom: 24px; }
+
+  /* SAVINGS GRID */
+  .savings-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .save-card {
+    background: var(--card); border-radius: 12px; padding: 22px;
+    border-left: 4px solid var(--sky);
+    box-shadow: 0 2px 6px rgba(10,26,77,0.04);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .save-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(10,26,77,0.1); }
+  .save-card.aika { border-color: var(--sky); }
+  .save-card.hinta { border-color: var(--orange); }
+  .save-card.muutos { border-color: #8B5CF6; }
+  .save-card.policy { border-color: var(--success); }
+  .save-card.csrd { border-color: #EAB308; }
+  .save-card.duty { border-color: var(--danger); }
+  .save-card .icon { width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px; font-size: 20px; }
+  .save-card.aika .icon { background: rgba(123,211,247,0.15); color: var(--sky-deep); }
+  .save-card.hinta .icon { background: rgba(255,109,50,0.12); color: var(--orange); }
+  .save-card.muutos .icon { background: rgba(139,92,246,0.12); color: #8B5CF6; }
+  .save-card.policy .icon { background: rgba(16,185,129,0.12); color: var(--success); }
+  .save-card.csrd .icon { background: rgba(234,179,8,0.12); color: #B58300; }
+  .save-card.duty .icon { background: rgba(239,68,68,0.12); color: var(--danger); }
+  .save-card .title { font-size: 14px; color: var(--text-soft); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .save-card .euro { font-size: 28px; font-weight: 800; color: var(--navy); margin-bottom: 8px; line-height: 1; }
+  .save-card .euro.muted { color: var(--text-muted); font-size: 20px; }
+  .save-card .desc { font-size: 13px; color: var(--text-soft); line-height: 1.5; }
+
+  /* CHARTS */
+  .charts-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px;
+  }
+  .chart-card { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); }
+  .chart-card h3 { font-size: 15px; color: var(--navy); margin-bottom: 14px; }
+  .chart-wrap { position: relative; height: 280px; }
+  @media (max-width: 720px) {
+    .charts-row { grid-template-columns: 1fr; }
+  }
+
+  /* COMPARISON */
+  .compare-card { background: var(--card); border-radius: 12px; padding: 28px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-col { padding: 18px; border-radius: 10px; }
+  .compare-col.bad { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.15); }
+  .compare-col.good { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.18); }
+  .compare-col h4 { font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .compare-col.bad h4 { color: var(--danger); }
+  .compare-col.good h4 { color: var(--success); }
+  .compare-col ul { list-style: none; }
+  .compare-col li { font-size: 14px; padding: 6px 0 6px 22px; position: relative; color: var(--text-soft); }
+  .compare-col.bad li::before { content: '✕'; position: absolute; left: 0; color: var(--danger); font-weight: 700; }
+  .compare-col.good li::before { content: '✓'; position: absolute; left: 0; color: var(--success); font-weight: 700; }
+
+  /* JOURNEY */
+  .journey { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  @media (max-width: 720px) { .journey { grid-template-columns: 1fr; } }
+  .journey-col { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); }
+  .journey-col .stage {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--orange);
+    background: rgba(255,109,50,0.1); padding: 4px 10px; border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .journey-col h3 { color: var(--navy); font-size: 18px; margin-bottom: 12px; }
+  .journey-col ul { list-style: none; padding: 0; }
+  .journey-col li { font-size: 14px; color: var(--text-soft); padding: 6px 0 6px 22px; position: relative; }
+  .journey-col li::before { content: '◆'; position: absolute; left: 0; color: var(--sky-deep); font-size: 10px; top: 9px; }
+
+  /* NPS COMPARE */
+  .nps-card {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+    color: #fff;
+    padding: 32px;
+    border-radius: 16px;
+    margin-top: 24px;
+  }
+  .nps-card h3 { color: #fff; font-size: 20px; margin-bottom: 4px; }
+  .nps-card .src { color: var(--sky); font-size: 12px; margin-bottom: 24px; }
+  .nps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 600px) { .nps-grid { grid-template-columns: 1fr; } }
+  .nps-col { padding: 24px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+  .nps-col .label { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .nps-col .name { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+  .nps-col .stat { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+  .nps-col .stat .v { font-size: 38px; font-weight: 800; line-height: 1; }
+  .nps-col .stat .vl { font-size: 13px; opacity: 0.85; }
+  .nps-col.menestys { background: rgba(123,211,247,0.12); border-color: rgba(123,211,247,0.4); }
+  .nps-col.menestys .v { color: var(--sky); }
+  .nps-col.market .v { color: rgba(255,255,255,0.7); }
+
+  /* CTA */
+  .cta-band {
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+    color: #fff;
+    padding: 48px 20px;
+    border-radius: 16px;
+    text-align: center;
+    margin: 48px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band::before {
+    content: ''; position: absolute; right: -50px; top: -50px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.08);
+    transform: rotate(45deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+  .cta-band h2 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 8px; position: relative; }
+  .cta-band p { font-size: 16px; opacity: 0.95; margin-bottom: 24px; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; }
+  .cta-band .btn { display: inline-block; background: #fff; color: var(--orange-deep);
+    padding: 14px 32px; font-size: 16px; font-weight: 700;
+    border-radius: 30px; text-decoration: none; position: relative;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transition: transform 0.15s; }
+  .cta-band .btn:hover { transform: translateY(-2px); }
+
+  /* INFO BLOCK */
+  .info-card { background: var(--card); border-radius: 12px; padding: 28px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); margin-top: 16px; }
+  .info-card h3 { color: var(--navy); margin-bottom: 12px; font-size: 18px; }
+  .info-card p { color: var(--text-soft); margin-bottom: 10px; }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 18px; }
+  .stat-item { padding: 14px; border-radius: 8px; background: var(--border-soft); }
+  .stat-item .n { font-size: 24px; font-weight: 800; color: var(--orange); display: block; line-height: 1.1; }
+  .stat-item .l { font-size: 13px; color: var(--text-soft); margin-top: 4px; }
+
+  /* BAROMETER STATS */
+  .barometer-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .barometer-card {
+    background: var(--card); border-radius: 12px; padding: 22px;
+    box-shadow: 0 2px 6px rgba(10,26,77,0.04);
+    border-top: 3px solid var(--sky);
+  }
+  .barometer-card .big-pct { font-size: 38px; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 8px; }
+  .barometer-card .title { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 4px; }
+  .barometer-card .desc { font-size: 12px; color: var(--text-muted); }
+
+  /* ROI GRID HEADLINESSÄ */
+  .roi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-soft); }
+  @media (max-width: 600px) { .roi-grid { grid-template-columns: 1fr; } }
+  .roi-item { padding: 12px; border-radius: 8px; background: var(--border-soft); }
+  .roi-item.save { background: rgba(16,185,129,0.08); }
+  .roi-item.cost { background: rgba(123,211,247,0.10); }
+  .roi-item.roi  { background: rgba(255,109,50,0.10); }
+  .roi-item .roi-l { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+  .roi-item .roi-v { font-size: 24px; font-weight: 800; line-height: 1.1; margin-top: 4px; }
+  .roi-item.save .roi-v { color: var(--success); }
+  .roi-item.cost .roi-v { color: var(--sky-deep); }
+  .roi-item.roi  .roi-v { color: var(--orange); }
+
+  /* PALVELUMAKSU-PANEELI */
+  .fee-card { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); }
+  .fee-rows { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; }
+  .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--border-soft); border-radius: 6px; }
+  .fee-row.total { background: rgba(123,211,247,0.12); font-weight: 700; }
+  .fee-row .k { font-size: 14px; color: var(--text-soft); }
+  .fee-row .v { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .fee-row.total .v { color: var(--sky-deep); font-size: 18px; }
+  .fee-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  @media (max-width: 600px) { .fee-compare { grid-template-columns: 1fr; } }
+  .fee-vs { padding: 14px; border-radius: 8px; text-align: center; }
+  .fee-vs.bad { background: rgba(239,68,68,0.06); }
+  .fee-vs.good { background: rgba(16,185,129,0.06); }
+  .fee-vs .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+  .fee-vs .v { font-size: 22px; font-weight: 800; }
+  .fee-vs.bad .v { color: var(--danger); }
+  .fee-vs.good .v { color: var(--success); }
+  .fee-vs .desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* HIDDEN COST BREAKDOWN */
+  .hidden-card { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); border-left: 4px solid var(--danger); }
+  .hidden-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: center; }
+  @media (max-width: 720px) { .hidden-grid { grid-template-columns: 1fr; } }
+  .hidden-list { display: flex; flex-direction: column; gap: 8px; }
+  .hidden-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: rgba(239,68,68,0.05); border-radius: 8px; border-left: 3px solid var(--danger); }
+  .hidden-row .meta { display: flex; flex-direction: column; }
+  .hidden-row .k { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .hidden-row .sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .hidden-row .v { font-size: 16px; font-weight: 800; color: var(--danger); white-space: nowrap; }
+  .hidden-total { background: var(--navy); color: #fff; padding: 16px; border-radius: 10px; margin-top: 12px; text-align: center; }
+  .hidden-total .label { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+  .hidden-total .v { font-size: 28px; font-weight: 800; color: var(--orange); margin-top: 4px; }
+  .hidden-total .desc { font-size: 12px; opacity: 0.85; margin-top: 6px; }
+  .hidden-chart { background: var(--card); border-radius: 12px; padding: 18px; }
+
+  /* MITÄ MUUTA SAAT */
+  .extras-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .extra { background: var(--card); border-radius: 10px; padding: 18px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); border-top: 3px solid var(--orange); }
+  .extra h4 { color: var(--navy); font-size: 15px; margin-bottom: 6px; }
+  .extra p { font-size: 13px; color: var(--text-soft); }
+
+  /* BENCHMARK */
+  .bm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .bm-card { background: var(--card); border-radius: 12px; padding: 22px; box-shadow: 0 2px 6px rgba(10,26,77,0.04); border-top: 4px solid var(--sky); transition: all 0.15s; }
+  .bm-card.match { border-color: var(--orange); box-shadow: 0 8px 24px rgba(255,109,50,0.15); transform: translateY(-2px); }
+  .bm-card .anon { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .bm-card .anon .badge { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+  .bm-card .annual { font-size: 24px; font-weight: 800; color: var(--navy); line-height: 1; margin-bottom: 12px; }
+  .bm-card .annual .l { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 4px; }
+  .bm-card .metrics { display: flex; flex-direction: column; gap: 6px; }
+  .bm-card .metric { display: flex; justify-content: space-between; font-size: 13px; }
+  .bm-card .metric .k { color: var(--text-soft); }
+  .bm-card .metric .v { color: var(--navy); font-weight: 600; }
+  .bm-card .co2 { margin-top: 14px; padding: 10px; background: rgba(234,179,8,0.08); border-radius: 8px; font-size: 12px; color: #B58300; text-align: center; }
+  .bm-card .co2 strong { color: var(--navy); font-size: 14px; }
+
+  /* FOOTER */
+  footer { background: var(--navy); color: rgba(255,255,255,0.7); padding: 32px 20px 24px; text-align: center; font-size: 13px; }
+  footer strong { color: #fff; }
+  footer a { color: var(--sky); text-decoration: none; }
+
+  /* MOBILE */
+  @media (max-width: 720px) {
+    .hero { padding: 32px 16px 64px; }
+    .headline { margin: -40px 16px 24px; padding: 24px 18px; }
+    .container { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <span class="brand-tag">Menestys Liikematkapalvelut</span>
+    <h1>Mitä yrityksesi säästää, kun siirryt liikematkatoimistolle?</h1>
+    <p class="lead">Kun työntekijät varaavat matkoja itse eri kanavista, hukkaat aikaa, rahaa ja vastuullisuusraportoinnin valmiutta. Laske mitä Menestys tuo tilalle — alle kahdessa minuutissa.</p>
+    <div class="quick-presets" role="tablist">
+      <button class="preset" data-preset="100">100 henkilön yritys</button>
+      <button class="preset active" data-preset="500">500 henkilön yritys</button>
+      <button class="preset" data-preset="1000">1000 henkilön yritys</button>
+      <button class="preset" data-preset="custom" onclick="document.getElementById('inputs').scrollIntoView()">Omat luvut →</button>
+    </div>
+    <div class="tunnusluvut">
+      <div class="tunnus"><span class="n">55 M€</span><span class="l">Liikevaihto</span></div>
+      <div class="tunnus"><span class="n">200 000+</span><span class="l">Matkaa / vuosi</span></div>
+      <div class="tunnus"><span class="n">250</span><span class="l">Yritysasiakasta</span></div>
+      <div class="tunnus"><span class="n">100</span><span class="l">Asiantuntijaa</span></div>
+      <div class="tunnus"><span class="n">1990</span><span class="l">Perustettu</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="headline">
+    <div class="label">Nettohyöty vuodessa</div>
+    <div class="big" id="big-total">—</div>
+    <div class="sub" id="big-sub">Säästöt − palvelumaksu Menestykselle</div>
+    <div class="roi-grid">
+      <div class="roi-item save">
+        <div class="roi-l">Bruttosäästö</div>
+        <div class="roi-v" id="roi-save">—</div>
+      </div>
+      <div class="roi-item cost">
+        <div class="roi-l">Palvelumaksu Menestykselle</div>
+        <div class="roi-v" id="roi-fee">—</div>
+        <div class="roi-l" style="margin-top:4px;font-size:11px;" id="roi-fee-pct">—</div>
+      </div>
+      <div class="roi-item roi">
+        <div class="roi-l">ROI</div>
+        <div class="roi-v" id="roi-pct">—</div>
+        <div class="roi-l" style="margin-top:4px;font-size:11px;">€ takaisin / € maksu</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inputs-card" id="inputs">
+    <h2>Säädä omilla luvuilla</h2>
+    <p class="hint">Liu'uta arvioita yrityksesi tilanteeseen — kaikki luvut päivittyvät reaaliajassa.</p>
+    <div class="inputs-grid">
+      <div class="input-block">
+        <label>Henkilöstömäärä</label>
+        <div class="input-row"><input type="number" id="i-headcount" min="10" max="100000" step="10"><span class="unit">hlö</span></div>
+        <input type="range" id="r-headcount" min="50" max="5000" step="10">
+      </div>
+      <div class="input-block">
+        <label>Matkustavien osuus <span class="range-value" id="rv-traveler">30 %</span></label>
+        <input type="range" id="r-traveler" min="5" max="100" step="1">
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">% työntekijöistä joilla on liikematkoja</div>
+      </div>
+      <div class="input-block">
+        <label>Matkoja per matkustaja / vuosi <span class="range-value" id="rv-trips">4</span></label>
+        <input type="range" id="r-trips" min="1" max="30" step="1">
+      </div>
+      <div class="input-block">
+        <label>Keskimääräinen matkan hinta</label>
+        <div class="input-row"><input type="number" id="i-tripcost" min="100" max="10000" step="50"><span class="unit">€</span></div>
+        <input type="range" id="r-tripcost" min="200" max="3000" step="50">
+      </div>
+      <div class="input-block">
+        <label>Työntekijän tuntikustannus</label>
+        <div class="input-row"><input type="number" id="i-wage" min="20" max="200" step="5"><span class="unit">€/h</span></div>
+        <input type="range" id="r-wage" min="30" max="120" step="5">
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Sis. sivukulut</div>
+      </div>
+      <div class="input-block">
+        <label>Muutosten osuus matkoista <span class="range-value" id="rv-changes">8 %</span></label>
+        <input type="range" id="r-changes" min="0" max="30" step="1">
+      </div>
+      <div class="input-block">
+        <label>Itsevarauksen osuus (Cytric) <span class="range-value" id="rv-online">60 %</span></label>
+        <input type="range" id="r-online" min="0" max="100" step="5">
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Mitä enemmän itsevarausta, sitä halvempi palvelumaksu</div>
+      </div>
+      <div class="input-block" style="grid-column: 1 / -1; padding-top: 16px; border-top: 1px dashed var(--border);">
+        <label>Vuosittainen matkabudjetti (vapaaehtoinen — vertaillaan Menestys-asiakkaisiin)</label>
+        <div class="input-row" style="max-width: 320px;">
+          <input type="number" id="i-budget" min="0" max="50000000" step="10000" placeholder="esim. 250 000"><span class="unit">€ / vuosi</span>
+        </div>
+        <div class="hint" style="margin-top:6px;font-size:12px;color:var(--text-muted);">Jos tiedät yrityksesi liikematkabudjetin, näytämme miten samanlaiset Menestys-asiakkaat ovat matkustaneet</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="block" id="benchmark-section" style="display:none;">
+    <h2>Näin samankokoiset Menestys-asiakkaat matkustavat</h2>
+    <p class="lead">Anonymisoidut tunnusluvut neljästä todellisesta Menestys-asiakkaastamme (Q1–vuositason data 2025–2026). Vertailutaso budjettisi mukaan: <strong id="bm-match">—</strong>.</p>
+    <div class="bm-grid" id="bm-grid"></div>
+    <div class="charts-row" style="margin-top: 28px;">
+      <div class="chart-card">
+        <h3>Keskimääräinen lippuhinta (€)</h3>
+        <div class="chart-wrap"><canvas id="bm-bars"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>CO₂-päästöjen jakauma (asiakas B vs C)</h3>
+        <div class="chart-wrap"><canvas id="bm-co2"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Mistä säästö syntyy</h2>
+    <p class="lead">Jokainen euron säästö lasketaan konservatiivisesti toimialan benchmark-luvuilla (SAP Concur, GBTA, Amex GBT) — Liikematkabarometri 2026 vahvistaa myös: <strong>66 %</strong> organisaatioista priorisoi kustannussäästöt ja <strong>30 %</strong> CSRD-raportoinnin.</p>
+    <div class="savings-grid">
+      <div class="save-card aika">
+        <div class="icon">⏱</div>
+        <div class="title">Aikasäästö varauksissa</div>
+        <div class="euro" id="s-aika">—</div>
+        <div class="desc">Itse varaaminen vie keskimäärin 45 min/matka — tutkimus, vertailu, kuitit. Menestyksellä 10 min: lähetä pyyntö, hyväksy ehdotus. Itsevarausjärjestelmänä Cytric &amp; Cytric Easy.</div>
+      </div>
+      <div class="save-card hinta">
+        <div class="icon">€</div>
+        <div class="title">Sopimushinnat &amp; alennukset</div>
+        <div class="euro" id="s-hinta">—</div>
+        <div class="desc">Volyymisopimuksilla lennot 6–10 % halvempia kuin julkiset hinnat ja hotellit 8–12 %. Laajat kansainväliset kumppaniverkostot — Amadeus-pohjainen.</div>
+      </div>
+      <div class="save-card muutos">
+        <div class="icon">↻</div>
+        <div class="title">Muutoskulu-säästöt</div>
+        <div class="euro" id="s-muutos">—</div>
+        <div class="desc">Itse ostetuissa fix-lipuissa muutos maksaa 80–200 €. Menestyksen sopimushinnoissa muutokset usein ilmaisia tai halvempia. 24/7 asiakaspalvelu hoitaa.</div>
+      </div>
+      <div class="save-card policy">
+        <div class="icon">📜</div>
+        <div class="title">Travel policy -säästöt</div>
+        <div class="euro" id="s-policy">—</div>
+        <div class="desc">Ilman ohjausta 15–20 % matkoista menee yli budjetin. Policy + Menestyksen järjestelmä pitää alle 4 %:ssa. Policy-konsultointi sisältyy.</div>
+      </div>
+      <div class="save-card csrd">
+        <div class="icon">♻</div>
+        <div class="title">CSRD-raportoinnin aikasäästö</div>
+        <div class="euro" id="s-csrd">—</div>
+        <div class="desc">Päästödata Scope 3.6 -raportointiin valmiina API:lla. Vastuullisuustiimi säästää 60–80 h/vuosi datan keruusta. CSRD-yhteensopiva päästöraportointi (GHG).</div>
+      </div>
+      <div class="save-card duty">
+        <div class="icon">🛡</div>
+        <div class="title">Duty of Care -riskinhallinta</div>
+        <div class="euro muted">Riskien minimointi</div>
+        <div class="desc">Tiedät reaaliajassa missä työntekijät matkustavat. Hätätilanteessa tavoitettavissa minuuteissa. Liikematkabarometri: 57 % CEO:ista pitää Duty of Carea ykkösprioriteettina.</div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Säästöjen jakauma</h3>
+        <div class="chart-wrap"><canvas id="donut"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Oma varaus vs. Menestys (€ / vuosi)</h3>
+        <div class="chart-wrap"><canvas id="bars"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Ilman liikematkatoimistoa — mihin rahat oikeasti menevät?</h2>
+    <p class="lead">Et maksa kenellekään palvelumaksua, mutta kustannuksia syntyy hajaantuneesti — ja moni niistä piiloutuu palkkakuluihin, listahintoihin ja vastuullisuustiimin Excelin tunteihin. Yhteenlaskettuna ne ovat tyypillisesti suurempia kuin Menestyksen palvelumaksu.</p>
+    <div class="hidden-card">
+      <div class="hidden-grid">
+        <div class="hidden-list" id="hidden-list">
+          <!-- täytetään JS:llä -->
+        </div>
+        <div class="hidden-chart">
+          <div class="chart-wrap" style="height: 280px;"><canvas id="hidden-donut"></canvas></div>
+        </div>
+      </div>
+      <div class="hidden-total">
+        <div class="label">Piilevä kokonaiskustannus / vuosi</div>
+        <div class="v" id="hidden-total-v">—</div>
+        <div class="desc">Tämä on hajaantuneena yrityksen sisällä — palkoissa, listahinnoissa ja menetetyssä työajassa. Se ei näy yhdessä laskussa, mutta on todellinen.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Mitä Menestys maksaa — palvelumaksun avaus</h2>
+    <p class="lead">Hinnoittelu Menestyksen virallisesta hinnastosta 2025–2026. Mitä enemmän itsevarauksia käytetään, sitä halvempi vuosikustannus — säädä yläpuolelta <strong>Itsevarauksen osuus</strong> -slideria nähdäksesi vaikutus.</p>
+    <div class="fee-card">
+      <div class="fee-rows">
+        <div class="fee-row"><span class="k">Lentolippu-varausmaksut (mix online/palvelutiimi)</span><span class="v" id="fee-flight">—</span></div>
+        <div class="fee-row"><span class="k">Hotelli-varausmaksut</span><span class="v" id="fee-hotel">—</span></div>
+        <div class="fee-row"><span class="k">Cytric-lisenssi (12 kk)</span><span class="v" id="fee-license">—</span></div>
+        <div class="fee-row"><span class="k">24/7 päivystys (12 kk)</span><span class="v" id="fee-emergency">—</span></div>
+        <div class="fee-row total"><span class="k">Palvelumaksu yhteensä / vuosi</span><span class="v" id="fee-total">—</span></div>
+      </div>
+      <div class="fee-compare">
+        <div class="fee-vs bad">
+          <div class="label">Jos vain palvelutiimi</div>
+          <div class="v" id="fee-fullservice">—</div>
+          <div class="desc">100 % varauksista palvelutiimin kautta</div>
+        </div>
+        <div class="fee-vs good">
+          <div class="label">Säästö itsevarauksella</div>
+          <div class="v" id="fee-onlinesave">—</div>
+          <div class="desc">Cytric-itsevaraus on edullisempaa per varaus</div>
+        </div>
+      </div>
+      <p style="margin-top:18px;font-size:13px;color:var(--text-muted);">Hinnoittelu: Cytric itsevaraus 10 €/lentolippu + 2 €/hotelli, palvelutiimi 30 €/lentolippu + 10 €/hotelli (ka kotimaa-Eurooppa). Lisenssi 100 €/kk, päivystys 120 €/kk. Lähde: Menestys Travel hinnasto 2025-2026. Lopullinen tarjous tehdään asiakaskohtaisesti.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Mitä muuta saat — lisäarvo joka ei näy euroissa</h2>
+    <p class="lead">Rahasäästöjen lisäksi Menestys tuo asioita, joita ei voi suoraan laskea taulukkoon mutta jotka muuttavat arjen täysin.</p>
+    <div class="extras-grid">
+      <div class="extra"><h4>🇫🇮 Kotimainen henkilökohtainen tiimi</h4><p>Oma asiantuntijatiimi joka tuntee yrityksesi tarpeet. Tukea 4,91/5 — markkinassa 4,46/5.</p></div>
+      <div class="extra"><h4>📞 24/7 hätäpäivystys</h4><p>Soita milloin tahansa: jaa, vaihda, peruuta. Vastaava ammattilainen alle 15 minuutissa.</p></div>
+      <div class="extra"><h4>🛡 Duty of Care täyttyy</h4><p>Työturvallisuuslaki vaatii vastuun. Travel tracking + ISO 31030 -mukainen riskinhallinta.</p></div>
+      <div class="extra"><h4>♻ CSRD-päästödata valmiina</h4><p>Scope 3.6 -raportti suoraan vastuullisuustiimille — ei Excel-keruuta, ei laskuvirheitä.</p></div>
+      <div class="extra"><h4>📊 Travel Manager Dashboard</h4><p>Reaaliaikainen kulu-, varauskäyttäytymis- ja turvallisuusnäkymä. Sisältyy hintaan.</p></div>
+      <div class="extra"><h4>🤝 Sopimusneuvottelut puolestasi</h4><p>Lentoyhtiöiden ja hotellien volyymisopimukset → sinun ei tarvitse kilpailuttaa erikseen.</p></div>
+      <div class="extra"><h4>💼 Yksi lasku — ei kululaskuja</h4><p>Kaikki yhdessä laskussa. Työntekijöiden kuittiviidakko poistuu.</p></div>
+      <div class="extra"><h4>📜 Travel policy -konsultointi</h4><p>Ei vain järjestelmä vaan myös ohjaus: miten policy rakennetaan ja miten sitä noudatetaan.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Liikematkabarometri 2026 — mitä markkinat sanovat</h2>
+    <p class="lead">Menestys Travelin anonyymi tutkimus tammikuussa 2026, n=113 liikematkustuksen ammattilaista (travel managerit, johdon assistentit, CEO:t, hankinta). Valtaosa vastaajista <em>ei</em> ole Menestyksen asiakkaita.</p>
+    <div class="barometer-grid">
+      <div class="barometer-card">
+        <div class="big-pct">66 %</div>
+        <div class="title">Priorisoi kustannussäästöt</div>
+        <div class="desc">Ylivoimaisesti tärkein agenda 2026</div>
+      </div>
+      <div class="barometer-card">
+        <div class="big-pct">36 %</div>
+        <div class="title">Liikaa manuaalista työtä</div>
+        <div class="desc">Poikkeukset ja käsityö kuormittavat</div>
+      </div>
+      <div class="barometer-card">
+        <div class="big-pct">31 %</div>
+        <div class="title">Matkustajat kiertävät prosessia</div>
+        <div class="desc">Policy ei ohjaa, ostot hajaantuvat</div>
+      </div>
+      <div class="barometer-card">
+        <div class="big-pct">25 %</div>
+        <div class="title">Pitää nykyistä tukea puutteellisena</div>
+        <div class="desc">Häiriötilanteissa ei toimivaa apua</div>
+      </div>
+      <div class="barometer-card">
+        <div class="big-pct">57 %</div>
+        <div class="title">CEO:t: Duty of Care #1</div>
+        <div class="desc">Ylimmälle johdolle turvallisuus tärkein</div>
+      </div>
+      <div class="barometer-card">
+        <div class="big-pct">30 %</div>
+        <div class="title">CSRD &amp; vastuullisuus nousee</div>
+        <div class="desc">Päästödata raportointiin agendalle</div>
+      </div>
+    </div>
+
+    <div class="nps-card">
+      <h3>Menestys vs. markkinakeskiarvo (NPS 2026)</h3>
+      <div class="src">Lähde: Liikematkabarometri 2026 · n=113 (23 Menestys-asiakasta, 84 muun TMC:n asiakasta, 6 muu)</div>
+      <div class="nps-grid">
+        <div class="nps-col menestys">
+          <div class="label">Suomalainen kotimainen</div>
+          <div class="name">Menestys Travel</div>
+          <div class="stat"><div class="v">+44</div><div class="vl">NPS 2026<br>Erinomainen (yli 30)</div></div>
+          <div class="stat"><div class="v">4,91</div><div class="vl">/ 5 · Tuki häiriötilanteessa</div></div>
+          <div class="stat"><div class="v">9 %</div><div class="vl">Pitää tukea puutteellisena</div></div>
+        </div>
+        <div class="nps-col market">
+          <div class="label">Vertailutaso</div>
+          <div class="name">Markkinakeskiarvo</div>
+          <div class="stat"><div class="v">+6</div><div class="vl">NPS · Toimialan taso</div></div>
+          <div class="stat"><div class="v">4,46</div><div class="vl">/ 5 · Tuki häiriötilanteessa</div></div>
+          <div class="stat"><div class="v">31 %</div><div class="vl">Pitää tukea puutteellisena</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Menestyksen palvelumalli — ennen, aikana, jälkeen</h2>
+    <p class="lead">360°-matkapalvelu yhdellä kumppanilla. Asiakaslähtöinen palvelumme ratkaisee kaikki matkustamisen tarpeet.</p>
+    <div class="journey">
+      <div class="journey-col">
+        <div class="stage">Ennen matkaa</div>
+        <h3>Suunnittelu &amp; varaus</h3>
+        <ul>
+          <li>Travel Policy -konsultointi</li>
+          <li>Itsevarausjärjestelmät: Cytric &amp; Cytric Easy</li>
+          <li>Henkilökohtainen oma tiimi</li>
+          <li>Sopimushinnat &amp; volyymietuudet</li>
+          <li>Travel Manager Dashboard</li>
+        </ul>
+      </div>
+      <div class="journey-col">
+        <div class="stage">Matkan aikana</div>
+        <h3>Huolenpito &amp; tuki</h3>
+        <ul>
+          <li>24/7 kotimainen asiakaspalvelu</li>
+          <li>Duty of Care &amp; matkustajien turvallisuus</li>
+          <li>Tukea 4,91/5 (vs markkina 4,46)</li>
+          <li>Reaaliaikainen travel tracking</li>
+          <li>Vaihdot ja peruutukset hoidettuna puolestasi</li>
+        </ul>
+      </div>
+      <div class="journey-col">
+        <div class="stage">Matkan jälkeen</div>
+        <h3>Raportointi &amp; optimointi</h3>
+        <ul>
+          <li>Kulu- ja ostoraportointi (TCO)</li>
+          <li>Päästöraportointi GHG / CSRD-yhteensopiva</li>
+          <li>Maksu- ja kuluhallinta keskitetysti</li>
+          <li>Policy-suositukset &amp; optimointi</li>
+          <li>Tekoälyavusteinen analytiikka</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Itse varaaminen vs. Menestys liikematkatoimisto</h2>
+    <p class="lead">Mitä eroa käytännössä on?</p>
+    <div class="compare-card">
+      <div class="compare-grid">
+        <div class="compare-col bad">
+          <h4>Ilman liikematkatoimistoa</h4>
+          <ul>
+            <li>Jokainen varaa eri kanavista — vertailtavuus puuttuu</li>
+            <li>Kuitit &amp; kululaskut työntekijöiden vastuulla</li>
+            <li>Ei sopimushintoja → täysi listahinta</li>
+            <li>Muutokset &amp; peruutukset täysihintaisina</li>
+            <li>Ei tietoa missä työntekijät ovat (Duty of Care -riski)</li>
+            <li>CSRD-data kerätään käsin Excelistä</li>
+            <li>Ei näkyvyyttä kokonaiskuluihin reaaliajassa</li>
+            <li>Policyn rikkomukset huomataan vasta jälkikäteen</li>
+          </ul>
+        </div>
+        <div class="compare-col good">
+          <h4>Menestyksen kanssa</h4>
+          <ul>
+            <li>Yksi kanava: pyyntö → Menestys → vahvistus</li>
+            <li>Lasku yhdessä — kululaskutus poistuu työntekijöiltä</li>
+            <li>Sopimushinnat lentoyhtiöiden ja hotelliketjujen kanssa</li>
+            <li>Joustavat ehdot, useimmiten ilmaiset muutokset</li>
+            <li>24/7 hätäpäivystys + travel tracking</li>
+            <li>CSRD-päästödata valmiina raportointiin (Scope 3.6)</li>
+            <li>Reaaliaikainen kustannusseuranta &amp; raportit</li>
+            <li>Policy ohjaa varauksen heti, ei jälkikäteen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Duty of Care — laki vaatii vastuun työntekijöiden turvallisuudesta</h2>
+    <p class="lead">Työturvallisuuslaki, GDPR ja kansainväliset standardit (ISO 31030) edellyttävät että työnantaja tietää missä työntekijät matkustavat ja pystyy auttamaan kriisissä. Liikematkabarometri 2026: <strong>57 %</strong> CEO:ista pitää Duty of Carea ykkösprioriteettina.</p>
+    <div class="info-card">
+      <h3>Mitä Duty of Care tarkoittaa käytännössä?</h3>
+      <p>Kun työntekijä matkustaa työasioissa, työnantajan on lain mukaan varmistettava että:</p>
+      <ul style="margin-left:20px; color:var(--text-soft); margin-bottom:14px;">
+        <li>Matkareitti, majoituspaikka ja yhteystiedot ovat työnantajan tiedossa</li>
+        <li>Kriisitilanteessa (terrorismi, luonnonkatastrofi, sairastapaus) työntekijä on tavoitettavissa</li>
+        <li>Riskialueille matkustaessa työntekijä saa tarvittavan briefingin ja suojan</li>
+        <li>Korvaava matka tai paluu järjestyy nopeasti, jos olosuhteet muuttuvat</li>
+      </ul>
+      <p style="color:var(--text-soft);">Ilman keskitettyä liikematkatoimistoa nämä tiedot ovat hajaantuneina sähköposteissa, henkilökohtaisilla luottokorteilla ja työntekijöiden muistissa. Menestys tarjoaa <strong>yhden reaaliaikaisen näkymän</strong> jokaisesta matkasta.</p>
+      <div class="stat-row">
+        <div class="stat-item"><span class="n">24/7</span><span class="l">Hätäpäivystys ja matka-apu</span></div>
+        <div class="stat-item"><span class="n">&lt; 15 min</span><span class="l">Vasteaika kriisitilanteissa</span></div>
+        <div class="stat-item"><span class="n">100 %</span><span class="l">Matkat näkyvät yhdessä järjestelmässä</span></div>
+        <div class="stat-item"><span class="n">ISO 31030</span><span class="l">Travel risk management -standardin mukainen</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>CSRD-raportointi — vastuullisuustiimi säästää viikkoja</h2>
+    <p class="lead">EU:n CSRD-direktiivi (2024 → kaikki yli 250 hengen yritykset) vaatii Scope 3.6 -liikematkojen päästöraportoinnin. Datan kerääminen käsin Excelistä on viikkojen työ — Menestys toimittaa sen API:n yli valmiina.</p>
+    <div class="info-card">
+      <h3>Mitä Scope 3.6 sisältää?</h3>
+      <p>Liikematkojen kasvihuonepäästöt: lennot, junat, hotellit, vuokra-autot. Jokaisesta varauksesta tarvitaan päivämäärä, reitti, etäisyys ja CO₂e-päästö.</p>
+      <div class="stat-row">
+        <div class="stat-item"><span class="n">60–80 h</span><span class="l">Vastuullisuustiimin säästö / vuosi</span></div>
+        <div class="stat-item"><span class="n">99 %</span><span class="l">Vähemmän käsityötä datan keruussa</span></div>
+        <div class="stat-item"><span class="n">Scope 3.6</span><span class="l">Valmis raportti tilintarkastukseen</span></div>
+        <div class="stat-item"><span class="n">CO₂e</span><span class="l">Per matka, per yksikkö, per kuukausi</span></div>
+      </div>
+      <p style="margin-top:14px;color:var(--text-soft);">Menestyksen Travel Manager Dashboard toimittaa päästödatan suoraan vastuullisuustiimin työkaluihin (esim. Position Green, Worldfavor, ESG-rajapinta) — ei manuaalista Excel-keruuta, ei laskuvirheitä.</p>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <h2>Haluatko tarkemman laskelman omasta yrityksestäsi?</h2>
+    <p>Sovi 30 min etätapaaminen — käymme luvut läpi yhdessä ja teemme yrityksellesi räätälöidyn säästöanalyysin Menestyksen palvelumallin pohjalta.</p>
+    <a href="https://www.menestysliikematka.fi/yhteystiedot" class="btn">Pyydä tapaaminen →</a>
+  </div>
+</div>
+
+<footer>
+  <p><strong>Menestys Liikematkapalvelut</strong> · osa Elämys Groupia · Helsinki · Tampere · Malmö · Oslo</p>
+  <p style="margin-top:6px;">Säästöt perustuvat toimialan benchmark-lukuihin (SAP Concur, GBTA, Amex GBT). Liikematkabarometri 2026 -tilastot © Elämys Group, n=113. Tarkka analyysi tehdään yrityskohtaisesti.</p>
+  <p style="margin-top:14px;font-size:11px;opacity:0.6;">© 2026 Elämys Group · <a href="https://www.menestysliikematka.fi">menestysliikematka.fi</a></p>
+</footer>
+
+<script>
+// ====== BENCHMARK: anonymisoidut Menestys-asiakkaat ======
+// Lähtödata: 4 todellisen asiakkaan käyttäjäraportit (anonymisoitu A/B/C/D)
+const BENCHMARK = [
+  {
+    anon: "Asiakas A",
+    profile: "Teollisuus · noin 50 hlö · ulkomaanmatkat",
+    annual: 186000,
+    passengers: 48,        // 20 / 5kk × 12kk = ~48
+    trips: 55,             // 23 lentoa / 5kk × 12kk extrapoloitu
+    avgFlight: 890,
+    avgHotel: 429,
+    services: { lentolippu: 49, hotelli: 36 },
+  },
+  {
+    anon: "Asiakas B",
+    profile: "Vähittäiskauppa · ~200 hlö · kotimaapainotteinen",
+    annual: 261000,
+    passengers: 132,       // Q1 33 × 4
+    trips: 248,            // 62 lentoa × 4
+    avgFlight: 275,
+    avgHotel: 52,
+    services: { lentolippu: 248, hotelli: 216, juna: 16, emd: 84 },
+    co2: { flight_kg: 28074, hotel_kg: 2402, train_kg: 325, total_t: 30.8 },
+  },
+  {
+    anon: "Asiakas C",
+    profile: "Teollisuus · ~150 hlö · kansainvälinen",
+    annual: 452000,
+    passengers: 96,        // Q1 24 × 4
+    trips: 160,            // 40 × 4
+    avgFlight: 976,
+    avgHotel: 7,
+    services: { lentolippu: 160, hotelli: 24 },
+    co2: { flight_kg: 79924, hotel_kg: 5181, total_t: 85.1 },
+  },
+  {
+    anon: "Asiakas D",
+    profile: "B2B-palvelut · ~30 hlö · sekä koti- että ulkomaa",
+    annual: 82000,
+    passengers: 11,
+    trips: 59,
+    avgFlight: 682,
+    avgHotel: 218,
+    services: { lentolippu: 25, autonvuokra: 11, hotelli: 17, kuljetus: 2, juna: 2 },
+  },
+];
+
+// ====== CONFIG: realistiset benchmark-arvot ======
+// Säädetty Menestys-asiakasdataa (A/B/C/D) ja yleisiä TMC-toimialan tutkimuksia (GBTA, SAP Concur) vastaavaksi
+const CFG = {
+  // Aika: itse 25 min, TMC Cytric 8 min (varaus). Kululasku: self 20 min, TMC 5 min.
+  selfBookMin: 25,
+  tmcBookMin: 8,
+  selfExpenseMin: 20,
+  tmcExpenseMin: 5,
+  // Hinta: 5 % keskimäärin halvempi sopimushinnoilla (konservatiivinen)
+  contractDiscount: 0.05,
+  // Muutoskulu: 100 € per muutos, säästö 50 %
+  changePerTrip: 100,
+  changeSaveRatio: 0.5,
+  // Policy overrun: ilman 8 %, kanssa 3 % → delta 5 %-yksikköä
+  policyOverrunSelf: 0.08,
+  policyOverrunTmc: 0.03,
+  // CSRD: 60h vastuullisuustiimi @60€/h
+  csrdHoursSaved: 60,
+  csrdRate: 60,
+  // Menestyksen hinnasto 2025-2026 (Cytric + Pienet-asiakas, lähde: Hinnoittelu-Menestys-2025-2026)
+  // Itsevaraus per lentolippu: 10 € (Cytric Medium-tier), per hotelli (AVH): 2 €
+  selfBookFeeFlight: 10,
+  selfBookFeeHotel: 2,
+  selfBookLicenseMonth: 100,   // Cytric itsevaraus 100 €/kk asiakashinta
+  // Palvelutiimi per matka — kotimaa 20, Skandi 30, Eurooppa 40, muut 50 → ka 30 €/lento + 10 € hotelli
+  fullServiceFeeFlight: 30,
+  fullServiceFeeHotel: 10,
+  // Päivystys 24/7 (Pieni asiakas): 120 €/kk → 1440 €/vuosi
+  emergencyMonth: 120,
+  // Oletuksena: 60 % varauksista tehdään itsevarauksella (Cytric), 40 % palvelutiimin kautta
+  defaultOnlineMix: 60,
+  // Hotelli sis. matkoista oletuksena ~70 % (lento + hotelli)
+  hotelRatio: 0.7,
+};
+
+const $ = (id) => document.getElementById(id);
+const presets = {
+  100:  { headcount: 100,  traveler: 20, trips: 4, tripcost: 700,  wage: 55, changes: 8,  online: 60 },
+  500:  { headcount: 500,  traveler: 18, trips: 5, tripcost: 800,  wage: 60, changes: 8,  online: 60 },
+  1000: { headcount: 1000, traveler: 15, trips: 6, tripcost: 900,  wage: 65, changes: 10, online: 60 },
+};
+let state = { ...presets[500] };
+
+function applyState(s) {
+  $('i-headcount').value = s.headcount; $('r-headcount').value = s.headcount;
+  $('r-traveler').value = s.traveler; $('rv-traveler').textContent = s.traveler + ' %';
+  $('r-trips').value = s.trips; $('rv-trips').textContent = s.trips;
+  $('i-tripcost').value = s.tripcost; $('r-tripcost').value = s.tripcost;
+  $('i-wage').value = s.wage; $('r-wage').value = s.wage;
+  $('r-changes').value = s.changes; $('rv-changes').textContent = s.changes + ' %';
+  $('r-online').value = s.online; $('rv-online').textContent = s.online + ' %';
+}
+applyState(state);
+
+function fmt(n, decimals = 0) {
+  return new Intl.NumberFormat('fi-FI', { maximumFractionDigits: decimals }).format(Math.round(n)) + ' €';
+}
+function compute(s) {
+  const travelers = s.headcount * (s.traveler / 100);
+  const totalTrips = travelers * s.trips;
+  const totalSpend = totalTrips * s.tripcost;
+  const wagePerMin = s.wage / 60;
+  const minSavedPerTrip = (CFG.selfBookMin - CFG.tmcBookMin) + (CFG.selfExpenseMin - CFG.tmcExpenseMin);
+  const aikaEuros = totalTrips * minSavedPerTrip * wagePerMin;
+  const hintaEuros = totalTrips * s.tripcost * CFG.contractDiscount;
+  const changeTrips = totalTrips * (s.changes / 100);
+  const muutosEuros = changeTrips * CFG.changePerTrip * CFG.changeSaveRatio;
+  const overrunDelta = CFG.policyOverrunSelf - CFG.policyOverrunTmc;
+  const policyEuros = totalTrips * s.tripcost * overrunDelta;
+  const csrdEuros = CFG.csrdHoursSaved * CFG.csrdRate;
+  const savings = aikaEuros + hintaEuros + muutosEuros + policyEuros + csrdEuros;
+
+  // Palvelumaksu Menestykselle: per varaus + lisenssit
+  // Lentolippuja = totalTrips, hotelliyöt = totalTrips * hotelRatio
+  const onlineMix = (s.online || 0) / 100;
+  const flightFeePerBooking = CFG.selfBookFeeFlight * onlineMix + CFG.fullServiceFeeFlight * (1 - onlineMix);
+  const hotelFeePerBooking  = CFG.selfBookFeeHotel  * onlineMix + CFG.fullServiceFeeHotel  * (1 - onlineMix);
+  const flightFees = totalTrips * flightFeePerBooking;
+  const hotelFees  = totalTrips * CFG.hotelRatio * hotelFeePerBooking;
+  // Cytric-lisenssi vain jos käytössä (online > 0)
+  const license = onlineMix > 0 ? CFG.selfBookLicenseMonth * 12 : 0;
+  const emergency = CFG.emergencyMonth * 12;
+  const serviceFee = flightFees + hotelFees + license + emergency;
+
+  // Vertailu: maksimaalinen full-service vs nykyinen mix
+  const fullServiceOnlyFee = totalTrips * CFG.fullServiceFeeFlight + totalTrips * CFG.hotelRatio * CFG.fullServiceFeeHotel + emergency;
+  const onlineSavings = fullServiceOnlyFee - serviceFee;
+
+  const net = savings - serviceFee;
+  const roi = serviceFee > 0 ? (net / serviceFee) * 100 : 0;
+  const feePct = totalSpend > 0 ? (serviceFee / totalSpend) * 100 : 0;
+
+  return {
+    totalTrips, travelers, totalSpend,
+    aika: aikaEuros, hinta: hintaEuros, muutos: muutosEuros, policy: policyEuros, csrd: csrdEuros,
+    savings, serviceFee, net, roi, feePct,
+    flightFees, hotelFees, license, emergency, fullServiceOnlyFee, onlineSavings,
+    total: net,
+  };
+}
+
+let donutChart, barChart;
+function renderCharts(r) {
+  const labels = ['Aika', 'Hinta', 'Muutos', 'Policy', 'CSRD'];
+  const values = [r.aika, r.hinta, r.muutos, r.policy, r.csrd];
+  const colors = ['#7BD3F7', '#FF6D32', '#8B5CF6', '#10B981', '#EAB308'];
+
+  if (donutChart) donutChart.destroy();
+  donutChart = new Chart(document.getElementById('donut'), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 12 } } },
+        tooltip: { callbacks: { label: c => c.label + ': ' + fmt(c.parsed) } }
+      },
+      cutout: '60%',
+    }
+  });
+
+  const selfBook = r.totalTrips * CFG.selfBookMin * (state.wage/60);
+  const tmcBook  = r.totalTrips * CFG.tmcBookMin  * (state.wage/60);
+  const selfExp  = r.totalTrips * CFG.selfExpenseMin * (state.wage/60);
+  const tmcExp   = r.totalTrips * CFG.tmcExpenseMin  * (state.wage/60);
+  const selfTrip = r.totalTrips * state.tripcost;
+  const tmcTrip  = r.totalTrips * state.tripcost * (1 - CFG.contractDiscount);
+  const selfChg  = r.totalTrips * (state.changes/100) * CFG.changePerTrip;
+  const tmcChg   = selfChg * (1 - CFG.changeSaveRatio);
+  const selfPol  = r.totalTrips * state.tripcost * CFG.policyOverrunSelf;
+  const tmcPol   = r.totalTrips * state.tripcost * CFG.policyOverrunTmc;
+
+  if (barChart) barChart.destroy();
+  barChart = new Chart(document.getElementById('bars'), {
+    type: 'bar',
+    data: {
+      labels: ['Varaus', 'Kululasku', 'Matkahinta', 'Muutoskulut', 'Policy-ylitys'],
+      datasets: [
+        { label: 'Ilman BTA', data: [selfBook, selfExp, selfTrip, selfChg, selfPol], backgroundColor: '#EF4444' },
+        { label: 'Menestys', data: [tmcBook, tmcExp, tmcTrip, tmcChg, tmcPol], backgroundColor: '#10B981' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.x) } }
+      },
+      scales: {
+        x: { ticks: { callback: v => fmt(v) }, grid: { color: '#F1F5F9' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ====== HIDDEN COST rendering — mihin rahat menevät ilman BTA ======
+let hiddenChart;
+function renderHiddenCost(r) {
+  const wagePerMin = state.wage / 60;
+  // Brutto-kulut ilman BTA (ei säästöjä — todellisia kuluja)
+  const bookTime    = r.totalTrips * CFG.selfBookMin * wagePerMin;    // varausaika €
+  const expenseTime = r.totalTrips * CFG.selfExpenseMin * wagePerMin; // kululaskuaika €
+  const listPremium = r.totalTrips * state.tripcost * CFG.contractDiscount; // sopimushintaero
+  const changeCost  = r.totalTrips * (state.changes/100) * CFG.changePerTrip; // täysimittaiset muutoskulut
+  const policyLeak  = r.totalTrips * state.tripcost * CFG.policyOverrunSelf;  // 8% policy-ylitys
+  const csrdManual  = CFG.csrdHoursSaved * CFG.csrdRate;              // vastuullisuustiimi
+  const items = [
+    { k: "Työntekijöiden työaika — varauksissa",
+      sub: `${Math.round(r.totalTrips * CFG.selfBookMin)} min/vuosi · ${CFG.selfBookMin} min/matka`,
+      v: bookTime, color: "#7BD3F7" },
+    { k: "Työntekijöiden työaika — kululaskuissa & kuiteissa",
+      sub: `${Math.round(r.totalTrips * CFG.selfExpenseMin)} min/vuosi · ${CFG.selfExpenseMin} min/matka`,
+      v: expenseTime, color: "#4FB7E8" },
+    { k: "Listahinnat ilman sopimusalennuksia",
+      sub: `~${(CFG.contractDiscount*100).toFixed(0)} % enemmän per lento ja hotelli`,
+      v: listPremium, color: "#FF6D32" },
+    { k: "Muutokset & peruutukset täysimittaisina",
+      sub: `~${state.changes} % matkoista muuttuu · ${CFG.changePerTrip} €/muutos`,
+      v: changeCost, color: "#8B5CF6" },
+    { k: "Policy-ylitykset (työntekijät varaavat yli budjetin)",
+      sub: `~${(CFG.policyOverrunSelf*100).toFixed(0)} % matkoista yli policyn ilman ohjausta`,
+      v: policyLeak, color: "#EF4444" },
+    { k: "CSRD-data käsin kerätty (vastuullisuustiimi)",
+      sub: `~${CFG.csrdHoursSaved} h/vuosi · ${CFG.csrdRate} €/h`,
+      v: csrdManual, color: "#EAB308" },
+  ];
+  const total = items.reduce((s, i) => s + i.v, 0);
+
+  // Lista
+  $('hidden-list').innerHTML = items.map(i => `
+    <div class="hidden-row">
+      <div class="meta"><span class="k">${i.k}</span><span class="sub">${i.sub}</span></div>
+      <span class="v">${fmt(i.v)}</span>
+    </div>
+  `).join('');
+
+  $('hidden-total-v').textContent = fmt(total);
+
+  // Donut
+  if (hiddenChart) hiddenChart.destroy();
+  hiddenChart = new Chart($('hidden-donut'), {
+    type: 'doughnut',
+    data: {
+      labels: items.map(i => i.k.split(' — ')[0].split(' (')[0]),
+      datasets: [{ data: items.map(i => i.v), backgroundColor: items.map(i => i.color), borderColor: '#fff', borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } },
+        tooltip: { callbacks: { label: c => c.label + ': ' + fmt(c.parsed) } }
+      },
+      cutout: '55%',
+    }
+  });
+}
+
+// ====== BENCHMARK rendering ======
+let bmBars, bmCo2;
+function renderBenchmark(budget) {
+  const sec = $('benchmark-section');
+  if (!budget || budget <= 0) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+
+  // Etsi lähin asiakas budjetin perusteella
+  let closest = BENCHMARK[0];
+  let bestDelta = Math.abs(BENCHMARK[0].annual - budget);
+  for (const b of BENCHMARK) {
+    const d = Math.abs(b.annual - budget);
+    if (d < bestDelta) { bestDelta = d; closest = b; }
+  }
+  $('bm-match').textContent = `${closest.anon} (~${fmt(closest.annual)} / vuosi)`;
+
+  // Render cards
+  const grid = $('bm-grid');
+  grid.innerHTML = BENCHMARK.map(b => {
+    const isMatch = b === closest;
+    const co2 = b.co2 ? `<div class="co2">CO₂-päästöt: <strong>${b.co2.total_t.toFixed(1)} t / vuosi</strong> (CSRD Scope 3.6)</div>` : '';
+    return `<div class="bm-card${isMatch ? ' match' : ''}">
+      <div class="anon">${b.anon}${isMatch ? '<span class="badge">SINUN TASOSI</span>' : ''}</div>
+      <div class="annual">${fmt(b.annual)}<span class="l">Vuosibudjetti</span></div>
+      <div class="metrics">
+        <div class="metric"><span class="k">Profiili</span><span class="v" style="text-align:right;font-size:11px;max-width:60%;">${b.profile}</span></div>
+        <div class="metric"><span class="k">Matkustajia</span><span class="v">${b.passengers} hlö</span></div>
+        <div class="metric"><span class="k">Matkoja / vuosi</span><span class="v">${b.trips} kpl</span></div>
+        <div class="metric"><span class="k">Ka. lippuhinta</span><span class="v">${fmt(b.avgFlight)}</span></div>
+        <div class="metric"><span class="k">Ka. hotelliyö</span><span class="v">${fmt(b.avgHotel)}</span></div>
+      </div>
+      ${co2}
+    </div>`;
+  }).join('');
+
+  // Render bars: avg lippuhinta
+  if (bmBars) bmBars.destroy();
+  bmBars = new Chart($('bm-bars'), {
+    type: 'bar',
+    data: {
+      labels: BENCHMARK.map(b => b.anon),
+      datasets: [{ label: 'Ka. lentolippu', data: BENCHMARK.map(b => b.avgFlight), backgroundColor: '#7BD3F7' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmt(c.parsed.y) } } },
+      scales: { y: { ticks: { callback: v => fmt(v) } } }
+    }
+  });
+
+  // CO2 jakauma
+  const bC = BENCHMARK.find(b => b.anon === 'Asiakas B');
+  const bCC = BENCHMARK.find(b => b.anon === 'Asiakas C');
+  if (bmCo2) bmCo2.destroy();
+  bmCo2 = new Chart($('bm-co2'), {
+    type: 'bar',
+    data: {
+      labels: ['Lennot', 'Hotellit', 'Juna', 'Muut'],
+      datasets: [
+        { label: 'Asiakas B (kotimaa)', data: [bC.co2.flight_kg, bC.co2.hotel_kg, bC.co2.train_kg||0, 0], backgroundColor: '#7BD3F7' },
+        { label: 'Asiakas C (ulkomaa)', data: [bCC.co2.flight_kg, bCC.co2.hotel_kg, 0, 0], backgroundColor: '#FF6D32' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.parsed.y.toFixed(0) + ' kg CO₂e' } }
+      },
+      scales: { y: { ticks: { callback: v => v + ' kg' }, title: { display: true, text: 'kg CO₂e / Q1' } } }
+    }
+  });
+}
+
+function update() {
+  state.headcount = Math.max(10, +$('i-headcount').value || 0);
+  state.traveler  = +$('r-traveler').value;
+  state.trips     = +$('r-trips').value;
+  state.tripcost  = Math.max(100, +$('i-tripcost').value || 0);
+  state.wage      = Math.max(20, +$('i-wage').value || 0);
+  state.changes   = +$('r-changes').value;
+  state.online    = +$('r-online').value;
+  $('rv-traveler').textContent = state.traveler + ' %';
+  $('rv-trips').textContent = state.trips;
+  $('rv-changes').textContent = state.changes + ' %';
+  $('rv-online').textContent = state.online + ' %';
+  const r = compute(state);
+  $('big-total').textContent = fmt(r.net);
+  $('big-sub').innerHTML = `<strong>${Math.round(r.travelers).toLocaleString('fi-FI')} matkustajaa</strong> · <strong>${Math.round(r.totalTrips).toLocaleString('fi-FI')} matkaa</strong> · matkabudjetti <strong>${fmt(r.totalSpend)}</strong>`;
+  // ROI-paneeli
+  if ($('roi-save')) $('roi-save').textContent = fmt(r.savings);
+  if ($('roi-fee')) $('roi-fee').textContent = fmt(r.serviceFee);
+  if ($('roi-fee-pct')) $('roi-fee-pct').textContent = r.feePct.toFixed(1) + ' % matkabudjetista';
+  if ($('roi-pct')) $('roi-pct').textContent = (r.roi/100 + 1).toFixed(1) + 'x';
+  // Säästökortit
+  $('s-aika').textContent = fmt(r.aika);
+  $('s-hinta').textContent = fmt(r.hinta);
+  $('s-muutos').textContent = fmt(r.muutos);
+  $('s-policy').textContent = fmt(r.policy);
+  $('s-csrd').textContent = fmt(r.csrd);
+  // Palvelumaksu-paneeli (jos olemassa)
+  if ($('fee-flight')) $('fee-flight').textContent = fmt(r.flightFees);
+  if ($('fee-hotel')) $('fee-hotel').textContent = fmt(r.hotelFees);
+  if ($('fee-license')) $('fee-license').textContent = fmt(r.license);
+  if ($('fee-emergency')) $('fee-emergency').textContent = fmt(r.emergency);
+  if ($('fee-total')) $('fee-total').textContent = fmt(r.serviceFee);
+  if ($('fee-fullservice')) $('fee-fullservice').textContent = fmt(r.fullServiceOnlyFee);
+  if ($('fee-onlinesave')) $('fee-onlinesave').textContent = fmt(r.onlineSavings);
+  renderCharts(r);
+  renderHiddenCost(r);
+  renderBenchmark(+$('i-budget').value || 0);
+}
+
+$('i-budget').addEventListener('input', () => renderBenchmark(+$('i-budget').value || 0));
+
+['i-headcount','r-headcount','r-traveler','r-trips','i-tripcost','r-tripcost','i-wage','r-wage','r-changes','r-online'].forEach(id => {
+  $(id).addEventListener('input', () => {
+    if (id === 'i-headcount') $('r-headcount').value = Math.min(5000, +$('i-headcount').value);
+    if (id === 'r-headcount') $('i-headcount').value = +$('r-headcount').value;
+    if (id === 'i-tripcost') $('r-tripcost').value = Math.min(3000, +$('i-tripcost').value);
+    if (id === 'r-tripcost') $('i-tripcost').value = +$('r-tripcost').value;
+    if (id === 'i-wage') $('r-wage').value = Math.min(120, +$('i-wage').value);
+    if (id === 'r-wage') $('i-wage').value = +$('r-wage').value;
+    update();
+  });
+});
+
+document.querySelectorAll('.preset[data-preset]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const k = btn.getAttribute('data-preset');
+    if (k === 'custom') return;
+    document.querySelectorAll('.preset').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state = { ...presets[k] };
+    applyState(state);
+    update();
+  });
+});
+
+update();
+</script>
+</body>
+</html>
