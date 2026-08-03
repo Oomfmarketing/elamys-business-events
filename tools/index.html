@@ -59,6 +59,13 @@
         <h2>Valitse työkalu</h2>
         <button onclick="lockOut()">🔒 Lukitse</button>
       </div>
+            <a href="/katefokus" class="tool-card">
+        <div class="tool-icon" style="background:#FF6D32;">K</div>
+        <div>
+          <div class="tool-title">Kate 18 kk — missä olemme?</div>
+          <div class="tool-desc">Yksinkertaistettu käyttökate-seuranta yksiköittäin · 18 kk tilikausi.</div>
+        </div>
+      </a>
       <a href="/seuranta" class="tool-card">
         <div class="tool-icon dash">S</div>
         <div>
@@ -100,7 +107,7 @@
 </div>
 <script>
 const S = "huo2tbq2w8LFNvkEmpTYsw==", N = "T7RPRjdtSV99tTex", C = "TF5RMylzfVpvjA/PvwEA3d0JsvVOk5mQYSvjJrbi", ITER = 100000;
-const ALLOWED = ["/seuranta", "/seuranta.html", "/myynti", "/myynti.html", "/yoy", "/yoy.html", "/budjetti", "/budjetti.html", "/cuuma", "/cuuma.html"];
+const ALLOWED = ["/katefokus", "/katefokus.html", "/seuranta", "/seuranta.html", "/myynti", "/myynti.html", "/yoy", "/yoy.html", "/budjetti", "/budjetti.html", "/cuuma", "/cuuma.html"];
 
 function b(x) { const s=atob(x); const a=new Uint8Array(s.length); for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i); return a; }
 async function dk(p, salt) {
