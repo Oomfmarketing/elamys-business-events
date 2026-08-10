@@ -2,44 +2,100 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Elämys B&E Tools</title>
 <style>
+  :root {
+    --navy:#0A1A4D; --navy-dark:#050f2e; --blue:#1e40af; --blue-light:#3b82f6;
+    --orange:#FF6D32; --green:#059669; --purple:#8B5CF6; --amber:#d97706; --plum:#2E2E66;
+    --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb; --gray-500:#6b7280; --gray-700:#374151; --gray-900:#111827;
+    --red:#dc2626;
+  }
   * { box-sizing: border-box; }
-  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:#1f2937; }
-  .container { width:100%; max-width:560px; padding:24px; }
-  .card { background:white; padding:36px 32px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
-  .lock-icon { width:48px; height:48px; margin:0 auto 14px; background:#eff6ff; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-  .lock-icon svg { width:22px; height:22px; stroke:#1e40af; }
-  h1 { margin:0 0 6px 0; font-size:22px; text-align:center; }
-  .sub { margin:0 0 22px 0; color:#6b7280; font-size:13px; text-align:center; }
-  input { width:100%; padding:12px 14px; font-size:15px; font-family:inherit; border:1px solid #d1d5db; border-radius:8px; outline:none; margin-bottom:12px; }
-  input:focus { border-color:#1e40af; box-shadow:0 0 0 3px rgba(30,64,175,0.12); }
-  button.primary { width:100%; padding:12px; background:#1e40af; color:white; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; }
-  button.primary:hover { background:#1e3a8a; }
-  button.primary:disabled { background:#9ca3af; cursor:not-allowed; }
-  .err { color:#dc2626; font-size:13px; margin-top:10px; min-height:18px; text-align:center; }
-  .picker { display:none; gap:12px; flex-direction:column; }
-  .picker.show { display:flex; }
-  .picker h2 { margin:0 0 8px 0; font-size:18px; }
-  .tool-card { display:flex; gap:16px; padding:16px; border-radius:12px; background:#f9fafb; border:1px solid #e5e7eb; text-decoration:none; color:inherit; transition:all 0.15s; cursor:pointer; }
-  .tool-card:hover { background:#eff6ff; border-color:#1e40af; transform:translateY(-1px); }
-  .tool-icon { width:46px; height:46px; flex-shrink:0; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:white; }
-  .tool-icon.dash { background:#1e40af; }
-  .tool-icon.myyn { background:#059669; }
-  .tool-icon.budj { background:#d97706; }
-  .tool-icon.cuuma { background:#2E2E66; }
-  .tool-icon.yoy { background:#8B5CF6; }
-  .tool-title { font-weight:600; font-size:15px; margin-bottom:2px; }
-  .tool-desc { font-size:12px; color:#6b7280; }
+  body { margin:0; min-height:100vh;
+    background: linear-gradient(135deg, #0A1A4D 0%, #1e3a8a 50%, #1e40af 100%) fixed;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:var(--gray-900);
+    padding:24px 16px;
+  }
+
+  /* Login */
+  .login-wrap { min-height:calc(100vh - 48px); display:flex; align-items:center; justify-content:center; }
+  .login-card { background:white; padding:36px 32px; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.35); max-width:400px; width:100%; }
+  .lock-icon { width:52px; height:52px; margin:0 auto 16px; background:#eff6ff; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .lock-icon svg { width:24px; height:24px; stroke:var(--blue); }
+  .login-card h1 { margin:0 0 4px; font-size:22px; text-align:center; color:var(--navy); }
+  .login-card .sub { margin:0 0 22px; color:var(--gray-500); font-size:13px; text-align:center; }
+  input { width:100%; padding:12px 14px; font-size:15px; font-family:inherit; border:1px solid var(--gray-200); border-radius:8px; outline:none; margin-bottom:12px; }
+  input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(30,64,175,0.12); }
+  button.primary { width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; transition:background .15s; }
+  button.primary:hover { background:var(--navy); }
+  .err { color:var(--red); font-size:13px; margin-top:10px; min-height:18px; text-align:center; }
   .form.hide { display:none; }
-  .footer { margin-top:18px; text-align:center; font-size:11px; color:#9ca3af; }
-  .lock-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-  .lock-row button { background:transparent; border:1px solid #d1d5db; color:#6b7280; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:12px; font-family:inherit; }
-  .lock-row button:hover { background:#f3f4f6; }
+
+  /* Picker */
+  .picker { display:none; max-width:1100px; margin:0 auto; }
+  .picker.show { display:block; }
+
+  .hero-card { background:white; border-radius:16px; padding:28px 32px; margin-bottom:20px; box-shadow:0 10px 40px rgba(0,0,0,0.15); }
+  .hero-row { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+  .hero-title { font-size:26px; font-weight:800; color:var(--navy); margin:0 0 4px; }
+  .hero-sub { color:var(--gray-500); font-size:13px; }
+  .lock-btn { background:white; border:1px solid var(--gray-200); color:var(--gray-500); padding:6px 12px; border-radius:8px; cursor:pointer; font-size:12px; font-family:inherit; transition:all .15s; }
+  .lock-btn:hover { background:var(--gray-50); color:var(--gray-700); }
+
+  .hero-stats { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-top:20px; }
+  .stat { padding:14px; background:var(--gray-50); border-radius:10px; border-left:3px solid var(--navy); }
+  .stat.blue { border-left-color:var(--blue); }
+  .stat.green { border-left-color:var(--green); }
+  .stat.orange { border-left-color:var(--orange); }
+  .stat.red { border-left-color:var(--red); }
+  .stat .lbl { font-size:10px; font-weight:700; text-transform:uppercase; color:var(--gray-500); letter-spacing:.5px; }
+  .stat .val { font-size:20px; font-weight:800; color:var(--navy); margin-top:2px; line-height:1.1; }
+  .stat .sub2 { font-size:10px; color:var(--gray-500); margin-top:2px; }
+
+  /* Featured card */
+  .featured { background:linear-gradient(135deg, #059669 0%, #10b981 100%); color:white; border-radius:14px; padding:24px; margin-bottom:16px; text-decoration:none; display:block; box-shadow:0 8px 24px rgba(5,150,105,0.35); transition:transform .15s, box-shadow .15s; }
+  .featured:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(5,150,105,0.45); }
+  .featured .f-top { display:flex; align-items:center; gap:14px; margin-bottom:8px; }
+  .featured .f-icon { width:44px; height:44px; background:rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; }
+  .featured .f-title { font-size:20px; font-weight:800; margin:0; }
+  .featured .f-tag { display:inline-block; background:rgba(255,255,255,0.25); padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-left:8px; }
+  .featured .f-desc { font-size:14px; opacity:.95; margin:0 0 12px; line-height:1.5; }
+  .featured .f-meta { display:flex; gap:16px; font-size:11px; opacity:.85; flex-wrap:wrap; }
+
+  /* Tool grid */
+  .tool-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px; }
+  .tool-card { background:white; border-radius:12px; padding:18px; text-decoration:none; color:inherit; border:1px solid var(--gray-200); transition:all .15s; display:flex; flex-direction:column; gap:8px; }
+  .tool-card:hover { border-color:var(--blue); transform:translateY(-2px); box-shadow:0 8px 24px rgba(30,64,175,0.15); }
+  .tc-top { display:flex; align-items:center; gap:12px; }
+  .tc-icon { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:800; color:white; flex-shrink:0; }
+  .tc-icon.navy { background:var(--navy); }
+  .tc-icon.blue { background:var(--blue); }
+  .tc-icon.green { background:var(--green); }
+  .tc-icon.orange { background:var(--orange); }
+  .tc-icon.purple { background:var(--purple); }
+  .tc-icon.amber { background:var(--amber); }
+  .tc-icon.plum { background:var(--plum); }
+  .tc-title { font-size:15px; font-weight:700; color:var(--navy); }
+  .tc-desc { font-size:12px; color:var(--gray-700); line-height:1.5; margin:0; }
+  .tc-list { font-size:11px; color:var(--gray-500); margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:2px; }
+  .tc-list li:before { content:"·"; margin-right:6px; color:var(--gray-500); }
+  .tc-meta { display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:8px; border-top:1px solid var(--gray-100); font-size:10px; color:var(--gray-500); }
+  .tc-meta .updated { display:flex; align-items:center; gap:4px; }
+  .tc-meta .updated::before { content:""; width:6px; height:6px; background:var(--green); border-radius:50%; display:inline-block; }
+  .tc-meta .updated.stale::before { background:var(--gray-500); }
+  .tc-arrow { color:var(--blue); font-size:14px; font-weight:700; }
+
+  .picker-footer { text-align:center; color:rgba(255,255,255,0.6); font-size:11px; margin-top:24px; padding:16px; }
+
+  @media (max-width:700px) {
+    .hero-stats { grid-template-columns:repeat(2, 1fr); }
+    .hero-title { font-size:22px; }
+    .featured { padding:18px; }
+    .featured .f-title { font-size:17px; }
+  }
 </style></head>
 <body>
-<div class="container">
-  <div class="card">
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
     <div class="lock-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -47,71 +103,138 @@
     </div>
     <h1>Elämys B&amp;E Tools</h1>
     <p class="sub">Sisäinen työkalupakki. Anna salasana jatkaaksesi.</p>
-
     <form class="form" id="loginForm" autocomplete="off">
       <input type="password" id="pw" placeholder="Salasana" autofocus required>
       <button type="submit" class="primary" id="btn">Avaa</button>
       <div class="err" id="err"></div>
     </form>
-
-    <div class="picker" id="picker">
-      <div class="lock-row">
-        <h2>Valitse työkalu</h2>
-        <button onclick="lockOut()">🔒 Lukitse</button>
-      </div>
-            <a href="/yhteenveto" class="tool-card">
-        <div class="tool-icon" style="background:#059669;">Y</div>
-        <div>
-          <div class="tool-title">Yhteenveto ⭐</div>
-          <div class="tool-desc">18 kk laskutus + kate per kk × yksikkö, H2-status, käyttökate-tavoite, rolling forecast.</div>
-        </div>
-      </a>
-      <a href="/seuranta" class="tool-card">
-        <div class="tool-icon dash">S</div>
-        <div>
-          <div class="tool-title">Seuranta</div>
-          <div class="tool-desc">Kuukausittainen laskutus ja kate vs. budjetti · yksikkökohtaiset kortit.</div>
-        </div>
-      </a>
-      <a href="/myynti" class="tool-card">
-        <div class="tool-icon myyn">M</div>
-        <div>
-          <div class="tool-title">Myynti</div>
-          <div class="tool-desc">CRM-pipeline: avoimet, voitetut/hävityt, top deals, win rate yksiköittäin.</div>
-        </div>
-      </a>
-      <a href="/yoy" class="tool-card">
-        <div class="tool-icon yoy">Y</div>
-        <div>
-          <div class="tool-title">YoY-vertailu</div>
-          <div class="tool-desc">CRM ja laskutus edellisvuosivertailu · kuukausitasolla · yksiköittäin.</div>
-        </div>
-      </a>
-      <a href="/katefokus" class="tool-card">
-        <div class="tool-icon" style="background:#FF6D32;">K</div>
-        <div>
-          <div class="tool-title">Kate H2</div>
-          <div class="tool-desc">H2 2026 käyttökate-tavoite 600 k€ · yksikkökontribuutio · vaje.</div>
-        </div>
-      </a>
-      <a href="/budjetti" class="tool-card">
-        <div class="tool-icon budj">B</div>
-        <div>
-          <div class="tool-title">Budjetti</div>
-          <div class="tool-desc">Skenaariot 600 k€ EBITDA-tavoitteeseen · kasvu, kate, säästöt.</div>
-        </div>
-      </a>
-      <a href="/cuuma" class="tool-card">
-        <div class="tool-icon cuuma">C</div>
-        <div>
-          <div class="tool-title">Cuuma 2v</div>
-          <div class="tool-desc">Matkapojat / Tour Operators 2 v asiakas- ja myyntiprofiili.</div>
-        </div>
-      </a>
-    </div>
-    <div class="footer">Sisäinen · Elämys Group Business &amp; Events</div>
   </div>
 </div>
+
+<div class="picker" id="picker">
+  <div class="hero-card">
+    <div class="hero-row">
+      <div>
+        <h1 class="hero-title">Business &amp; Events · Työkalut</h1>
+        <div class="hero-sub">Tilikausi 1.7.2025 – 31.12.2026 (18 kk) · YTD heinäkuu 2026 · päivitetty 10.8.2026</div>
+      </div>
+      <button class="lock-btn" onclick="lockOut()">🔒 Lukitse</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat blue"><div class="lbl">Laskutus 13 kk</div><div class="val">24,12 M€</div><div class="sub2">67 % tavoitteesta</div></div>
+      <div class="stat green"><div class="lbl">Kate 13 kk</div><div class="val">2,91 M€</div><div class="sub2">12,1 %</div></div>
+      <div class="stat orange"><div class="lbl">H2 kate jäljellä</div><div class="val">951 k€</div><div class="sub2">budj 1 282 k€</div></div>
+      <div class="stat red"><div class="lbl">Käyttökate-tavoite</div><div class="val">600 k€</div><div class="sub2">vaje 2,34 M€</div></div>
+    </div>
+  </div>
+
+  <a href="/yhteenveto" class="featured">
+    <div class="f-top">
+      <div class="f-icon">Y</div>
+      <div>
+        <div class="f-title">Yhteenveto <span class="f-tag">⭐ Aloita tästä</span></div>
+      </div>
+    </div>
+    <p class="f-desc">Yhden sivun näkymä koko 18 kk tilikaudesta: laskutus ja kate per kuukausi × yksikkö, H2 2026 status budjettia vasten, käyttökate-tavoite ja rolling forecast miten päädytään tilikauden loppuun.</p>
+    <div class="f-meta">
+      <span>· 6 yksikköä × 18 kk matriisi</span>
+      <span>· H2 vs. tavoitebudjetti</span>
+      <span>· Ennustemalli</span>
+      <span>· Päivitetty 10.8.2026</span>
+    </div>
+  </a>
+
+  <div class="tool-grid">
+
+    <a href="/seuranta" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon blue">S</div>
+        <div class="tc-title">Seuranta</div>
+      </div>
+      <p class="tc-desc">Yksityiskohtainen kuukausiseuranta yksiköittäin: toteuma vs. budjetti kuukausikohtaisesti, kortit myynti- ja katetavoitteista.</p>
+      <ul class="tc-list">
+        <li>Kk-tarkkuudella laskutus + kate</li>
+        <li>Yksikkökohtaiset kortit (FI / Nordics)</li>
+        <li>Vertailu edellisvuoteen</li>
+      </ul>
+      <div class="tc-meta"><span class="updated">Päivitetty 10.8.2026</span><span class="tc-arrow">→</span></div>
+    </a>
+
+    <a href="/myynti" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon green">M</div>
+        <div class="tc-title">Myynti</div>
+      </div>
+      <p class="tc-desc">CRM-pipeline reaaliajassa: avoimet kaupat painotettuina, voitetut ja hävityt 2026, top deals, pipeline-vaiheet yksiköittäin.</p>
+      <ul class="tc-list">
+        <li>Avoin pipeline 23,23 M€ / 202 kpl</li>
+        <li>Voitetut YTD 5,08 M€</li>
+        <li>Win rate ja odotettu closing</li>
+      </ul>
+      <div class="tc-meta"><span class="updated">Päivitetty 10.8.2026 (Pipedrive)</span><span class="tc-arrow">→</span></div>
+    </a>
+
+    <a href="/yoy" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon purple">Y</div>
+        <div class="tc-title">YoY-vertailu</div>
+      </div>
+      <p class="tc-desc">Edellisvuosivertailu kuukausitasolla: CRM-voitot ja laskutus rinnakkain, yksikkökohtaiset trendit, H2 budjetti-vertailu.</p>
+      <ul class="tc-list">
+        <li>CRM + Laskutus rinnakkain</li>
+        <li>Kk-tason YoY-muutos</li>
+        <li>Yksikkösuodattimet</li>
+      </ul>
+      <div class="tc-meta"><span class="updated">Päivitetty 10.8.2026</span><span class="tc-arrow">→</span></div>
+    </a>
+
+    <a href="/katefokus" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon orange">K</div>
+        <div class="tc-title">Kate H2</div>
+      </div>
+      <p class="tc-desc">H2 2026 käyttökate-tavoite 600 k€ tracking: yksikkökontribuutio, kirjattu vs. budjetti vs. tavoite, vaje ja mitä tarvitaan.</p>
+      <ul class="tc-list">
+        <li>H2 tavoite 600 k€ · budjetti 305 k€</li>
+        <li>Yksikkökohtainen H2 kate-budjetti</li>
+        <li>Progress ja closing-vaatimukset</li>
+      </ul>
+      <div class="tc-meta"><span class="updated">Päivitetty 10.8.2026</span><span class="tc-arrow">→</span></div>
+    </a>
+
+    <a href="/budjetti" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon amber">B</div>
+        <div class="tc-title">Budjetti · Skenaariot</div>
+      </div>
+      <p class="tc-desc">EBITDA-tavoitteen skenaariosimulaatiot: kasvu, kate-%, kulusäästöt. Kokeile eri kombinaatioita tavoitteeseen pääsyyn.</p>
+      <ul class="tc-list">
+        <li>Interaktiiviset skenaariot</li>
+        <li>Kate- ja kuluslidersit</li>
+        <li>H2 2026 focus</li>
+      </ul>
+      <div class="tc-meta"><span class="updated stale">Päivitetty 27.7.2026</span><span class="tc-arrow">→</span></div>
+    </a>
+
+    <a href="/cuuma" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon plum">C</div>
+        <div class="tc-title">Cuuma 2v</div>
+      </div>
+      <p class="tc-desc">Matkapojat / Tour Operators -ryhmämyynnin 2 vuoden asiakas- ja myyntiprofiili. Segmentointi ja kohdennus.</p>
+      <ul class="tc-list">
+        <li>Asiakas- ja tuotesegmentit</li>
+        <li>Myyntikäyrä 2v</li>
+        <li>Winres-pilotti</li>
+      </ul>
+      <div class="tc-meta"><span class="updated stale">Päivitetty 27.7.2026</span><span class="tc-arrow">→</span></div>
+    </a>
+
+  </div>
+
+  <div class="picker-footer">Sisäinen · Elämys Group Business &amp; Events · Salasana suojattu</div>
+</div>
+
 <script>
 const S = "huo2tbq2w8LFNvkEmpTYsw==", N = "T7RPRjdtSV99tTex", C = "TF5RMylzfVpvjA/PvwEA3d0JsvVOk5mQYSvjJrbi", ITER = 100000;
 const ALLOWED = ["/yhteenveto", "/yhteenveto.html", "/katefokus", "/katefokus.html", "/seuranta", "/seuranta.html", "/myynti", "/myynti.html", "/yoy", "/yoy.html", "/budjetti", "/budjetti.html", "/cuuma", "/cuuma.html"];
@@ -129,7 +252,7 @@ async function checkPw(pw) {
   } catch (e) { return false; }
 }
 function showPicker() {
-  document.getElementById("loginForm").classList.add("hide");
+  document.getElementById("loginWrap").style.display = "none";
   document.getElementById("picker").classList.add("show");
 }
 function lockOut() {
