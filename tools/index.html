@@ -247,13 +247,27 @@
     <a href="/winres" class="tool-card">
       <div class="tc-top">
         <div class="tc-icon plum">W</div>
-        <div class="tc-title">Winres · Matkapojat</div>
+        <div class="tc-title">Winres · Matkapojat (kaikki)</div>
       </div>
-      <p class="tc-desc">Matkapoikien 2 v asiakasanalyysi Winres-datasta: profiilit, tuoteperheet, RFM, cohort ja ristiinmyyntimatriisi.</p>
+      <p class="tc-desc">Kokonaiskuva 2 v datasta: 78,7 M€ · 70 862 varausta · sis. ryhmätuotanto (ORY, AGT, OTLENRY, VLRY).</p>
       <ul class="tc-list">
         <li>RFM-segmentointi (9 segmenttiä)</li>
         <li>Cohort-retention kk-tasolla</li>
         <li>Ristiinmyyntimahdollisuudet</li>
+      </ul>
+      <div class="tc-meta"><span class="updated">Päivitetty 12.8.2026</span><span class="tc-arrow">→</span></div>
+    </a>
+
+    <a href="/winres-b2c" class="tool-card">
+      <div class="tc-top">
+        <div class="tc-icon" style="background:#059669">B</div>
+        <div class="tc-title">Winres B2C (ilman ryhmiä)</div>
+      </div>
+      <p class="tc-desc">B2C-kuluttajakuva: 56,7 M€ · 67 123 varausta · ryhmätuotanto (ORY, AGT, OTLENRY, VLRY) pois.</p>
+      <ul class="tc-list">
+        <li>Sama laajuus kuin Winres-raportti</li>
+        <li>Puhtaampi kuluttaja-analytiikka</li>
+        <li>Premium-risteilyt + kaupunkilomat esiin</li>
       </ul>
       <div class="tc-meta"><span class="updated">Päivitetty 12.8.2026</span><span class="tc-arrow">→</span></div>
     </a>
@@ -265,7 +279,7 @@
 
 <script>
 const S = "huo2tbq2w8LFNvkEmpTYsw==", N = "T7RPRjdtSV99tTex", C = "TF5RMylzfVpvjA/PvwEA3d0JsvVOk5mQYSvjJrbi", ITER = 100000;
-const ALLOWED = ["/yhteenveto", "/yhteenveto.html", "/katefokus", "/katefokus.html", "/seuranta", "/seuranta.html", "/myynti", "/myynti.html", "/yoy", "/yoy.html", "/budjetti", "/budjetti.html", "/ryhmat", "/ryhmat.html", "/etd", "/etd.html", "/winres", "/winres.html"];
+const ALLOWED = ["/yhteenveto", "/yhteenveto.html", "/katefokus", "/katefokus.html", "/seuranta", "/seuranta.html", "/myynti", "/myynti.html", "/yoy", "/yoy.html", "/budjetti", "/budjetti.html", "/ryhmat", "/ryhmat.html", "/etd", "/etd.html", "/winres", "/winres.html", "/winres-b2c", "/winres-b2c.html"];
 
 function b(x) { const s=atob(x); const a=new Uint8Array(s.length); for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i); return a; }
 async function dk(p, salt) {
